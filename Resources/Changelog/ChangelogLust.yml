@@ -1262,3 +1262,12 @@
     message: Исправлено выравнивание блока гениталий в панели взаимодействий
   id: 316
   url: https://github.com/makura-games/lust-station/pull/590
+- author: Orvex
+  time: '2026-09-08T14:03:03.0000000+00:00'
+  changes:
+  - type: Tweak
+    message: Добавлены возрастные ограничения для командных и ведущих ролей, а также смотрителя...
+  - type: Tweak
+    message: Порог пожилого возраста фелинидов повышен.
+  id: 317
+  url: https://github.com/makura-games/lust-station/pull/570
