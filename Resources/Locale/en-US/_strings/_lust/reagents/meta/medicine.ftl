@@ -19,17 +19,17 @@ reagent-desc-brutedon = An advanced cryogenic agent for treating mechanical dama
 reagent-name-hemostatic-powder = hemostatic powder
 reagent-desc-hemostatic-powder = Hemostatic powder based on a mixture of tranexamic acid and iron silicide. Overdose severely poisons the body with toxins.
 
-reagent-name-artiplasm = artiplasm
-reagent-desc-artiplasm = Advanced blood substitute based on synthetic plasmoid particles. Quickly restores blood volume and stops bleeding. Accumulation over 10 units causes uncontrolled internal vessel ruptures.
+reagent-name-lust-artiplasm = artiplasm
+reagent-desc-lust-artiplasm = Advanced blood substitute based on synthetic plasmoid particles. Quickly restores blood volume and stops bleeding. Accumulation over 10 units causes uncontrolled internal vessel ruptures.
 
-reagent-name-genocillin = genocillin
-reagent-desc-genocillin = Experimental gene inhibitor repairs cellular damage and weakly treats exhaustion. Overdose causes cellular damage and toxicity.
+reagent-name-lust-genocillin = genocillin
+reagent-desc-lust-genocillin = Experimental gene inhibitor repairs cellular damage and weakly treats exhaustion. Overdose causes cellular damage and toxicity.
 
-reagent-name-thyreostate = thyreostate
-reagent-desc-thyreostate = Synthetic metabolic depressant. Seriously treats asphyxiation but slows movement. Overdose over 15 units worsens asphyxiation, causes blood loss, and slows movement further.
+reagent-name-lust-thyreostate = thyreostate
+reagent-desc-lust-thyreostate = Synthetic metabolic depressant. Seriously treats asphyxiation but slows movement. Overdose over 15 units worsens asphyxiation, causes blood loss, and slows movement further.
 
-reagent-name-salicylicacid = salicylic acid
-reagent-desc-salicylicacid = Powerful healing agent that restores bruises, cuts, and punctures. Accumulation of 25 units or more damages tissue instead of healing it.
+reagent-name-lust-salicylicacid = salicylic acid
+reagent-desc-lust-salicylicacid = Powerful healing agent that restores bruises, cuts, and punctures. Accumulation of 25 units or more damages tissue instead of healing it.
 
-reagent-name-oxanderm = oxanderm
-reagent-desc-oxanderm = Powerful healing agent that restores thermal, electrical, cold, and acid burns. Accumulation of 25 units or more causes thermal damage instead of healing.
+reagent-name-lust-oxanderm = oxanderm
+reagent-desc-lust-oxanderm = Powerful healing agent that restores thermal, electrical, cold, and acid burns. Accumulation of 25 units or more causes thermal damage instead of healing.

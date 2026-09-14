@@ -1,9 +1,9 @@
 ﻿- type: reagent
-  id: Artiplasm
-  name: reagent-name-artiplasm
+  id: LustArtiplasm
+  name: reagent-name-lust-artiplasm
   group: Medicine
-  desc: reagent-desc-artiplasm
-  physicalDesc: reagent-physical-desc-artiplasm
+  desc: reagent-desc-lust-artiplasm
+  physicalDesc: reagent-physical-desc-lust-artiplasm
   flavor: medicine
   color: "#E8EEF2"
   metabolisms:
@@ -23,18 +23,18 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Artiplasm
+          reagent: LustArtiplasm
           min: 10.1
         damage:
           types:
             Slash: 4
 
 - type: reagent
-  id: Genocillin
-  name: reagent-name-genocillin
+  id: LustGenocillin
+  name: reagent-name-lust-genocillin
   group: Medicine
-  desc: reagent-desc-genocillin
-  physicalDesc: reagent-physical-desc-genocillin
+  desc: reagent-desc-lust-genocillin
+  physicalDesc: reagent-physical-desc-lust-genocillin
   flavor: medicine
   color: "#CCFF00"
   metabolisms:
@@ -48,7 +48,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Genocillin
+          reagent: LustGenocillin
           min: 15.1
         damage:
           types:
@@ -56,11 +56,11 @@
             Poison: 2
 
 - type: reagent
-  id: Thyreostate
-  name: reagent-name-thyreostate
+  id: LustThyreostate
+  name: reagent-name-lust-thyreostate
   group: Medicine
-  desc: reagent-desc-thyreostate
-  physicalDesc: reagent-physical-desc-thyreostate
+  desc: reagent-desc-lust-thyreostate
+  physicalDesc: reagent-physical-desc-lust-thyreostate
   flavor: medicine
   color: "#FFF2E0"
   metabolisms:
@@ -82,14 +82,14 @@
       - !type:MovementSpeedModifier
         conditions:
         - !type:ReagentCondition
-          reagent: Thyreostate
+          reagent: LustThyreostate
           min: 15
         walkSpeedModifier: 0.4
         sprintSpeedModifier: 0.4
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Thyreostate
+          reagent: LustThyreostate
           min: 15
         damage:
           types:
@@ -97,11 +97,11 @@
             Bloodloss: 2.5
 
 - type: reagent
-  id: SalicylicAcid
-  name: reagent-name-salicylicacid
+  id: LustSalicylicAcid
+  name: reagent-name-lust-salicylicacid
   group: Medicine
-  desc: reagent-desc-salicylicacid
-  physicalDesc: reagent-physical-desc-salicylicacid
+  desc: reagent-desc-lust-salicylicacid
+  physicalDesc: reagent-physical-desc-lust-salicylicacid
   flavor: medicine
   color: "#E0E0E0"
   metabolisms:
@@ -110,7 +110,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: SalicylicAcid
+          reagent: LustSalicylicAcid
           min: 25
         damage:
           types:
@@ -120,7 +120,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: SalicylicAcid
+          reagent: LustSalicylicAcid
           max: 24.9
         damage:
           types:
@@ -133,11 +133,11 @@
             Mangleness: 0.5
 
 - type: reagent
-  id: Oxanderm
-  name: reagent-name-oxanderm
+  id: LustOxanderm
+  name: reagent-name-lust-oxanderm
   group: Medicine
-  desc: reagent-desc-oxanderm
-  physicalDesc: reagent-physical-desc-oxanderm
+  desc: reagent-desc-lust-oxanderm
+  physicalDesc: reagent-physical-desc-lust-oxanderm
   flavor: medicine
   color: "#E0E0E0"
   metabolisms:
@@ -146,7 +146,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Oxanderm
+          reagent: LustOxanderm
           min: 25
         damage:
           types:
@@ -154,7 +154,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Oxanderm
+          reagent: LustOxanderm
           min: 25
         damage:
           types:
@@ -165,7 +165,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition
-          reagent: Oxanderm
+          reagent: LustOxanderm
           max: 24.9
         damage:
           types:

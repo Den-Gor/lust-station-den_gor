@@ -1,5 +1,5 @@
 ﻿- type: reaction
-  id: Fentamyl
+  id: LustFentamyl
   impact: Medium
   minTemp: 419
   maxTemp: 420
@@ -17,4 +17,4 @@
     Retroindralyne:
       amount: 2
   products:
-    Fentamyl: 4
+    LustFentamyl: 4

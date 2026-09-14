@@ -1,5 +1,5 @@
 ﻿- type: reaction
-  id: Artiplasm
+  id: LustArtiplasm
   impact: Medium
   minTemp: 320
   reactants:
@@ -14,10 +14,10 @@
     Copper:
       amount: 2
   products:
-    Artiplasm: 10
+    LustArtiplasm: 10
 
 - type: reaction
-  id: Genocillin
+  id: LustGenocillin
   impact: Medium
   reactants:
     Phalanximine:
@@ -31,10 +31,10 @@
     Sugar:
       amount: 2
   products:
-    Genocillin: 10
+    LustGenocillin: 10
 
 - type: reaction
-  id: Thyreostate
+  id: LustThyreostate
   impact: Medium
   reactants:
     Acetone:
@@ -44,10 +44,10 @@
     SulfuricAcid:
       amount: 2
   products:
-    Thyreostate: 6
+    LustThyreostate: 6
 
 - type: reaction
-  id: SalicylicAcid
+  id: LustSalicylicAcid
   impact: Medium
   priority: 1
   minTemp: 370
@@ -61,10 +61,10 @@
     Bicaridine:
       amount: 1
   products:
-    SalicylicAcid: 4
+    LustSalicylicAcid: 4
 
 - type: reaction
-  id: Oxanderm
+  id: LustOxanderm
   impact: Medium
   reactants:
     SodiumCarbonate:
@@ -76,4 +76,4 @@
     Leporazine:
       amount: 1
   products:
-    Oxanderm: 4
+    LustOxanderm: 4
