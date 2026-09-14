@@ -23,7 +23,7 @@ reagent-name-artiplasm = artiplasm
 reagent-desc-artiplasm = Advanced blood substitute based on synthetic plasmoid particles. Quickly restores blood volume and stops bleeding. Accumulation over 10 units causes uncontrolled internal vessel ruptures.
 
 reagent-name-genocillin = genocillin
-reagent-desc-genocillin = Experimental gene inhibitor repairs cellular damage and weakly treats exhaustion. Overdose causes chaotic internal bleeding.
+reagent-desc-genocillin = Experimental gene inhibitor repairs cellular damage and weakly treats exhaustion. Overdose causes cellular damage and toxicity.
 
 reagent-name-thyreostate = thyreostate
 reagent-desc-thyreostate = Synthetic metabolic depressant. Seriously treats asphyxiation but slows movement. Overdose over 15 units worsens asphyxiation, causes blood loss, and slows movement further.

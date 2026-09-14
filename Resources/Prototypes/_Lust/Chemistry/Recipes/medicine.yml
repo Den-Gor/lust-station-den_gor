@@ -49,6 +49,7 @@
 - type: reaction
   id: SalicylicAcid
   impact: Medium
+  priority: 1
   minTemp: 370
   reactants:
     HemostaticPowder:
