@@ -64,7 +64,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
     private HashSet<string> _customInteractionIds = new();
     private readonly HashSet<string> _openCategories = new();
     private readonly HashSet<string> _favoriteInteractions = new();
-    private NetEntity _targetEntity;
+    private NetEntity _userEntity;
 
     private static readonly Dictionary<GenitalSlot, int> GenitalDisplayOrder = new()
     {
@@ -177,7 +177,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
 
     private void UpdateLoveProgress()
     {
-        if (!_entityManager.TryGetEntity(_targetEntity, out var entity) ||
+        if (!_entityManager.TryGetEntity(_userEntity, out var entity) ||
             !_entityManager.TryGetComponent<InteractionsComponent>(entity, out var component))
             return;
 
@@ -270,7 +270,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         NetEntity targetEntity,
         List<string> availableInteractionIds)
     {
-        _targetEntity = targetEntity;
+        _userEntity = userEntity;
         UpdateEntityInformation(userEntity, targetEntity);
         _currentInteractionIds = availableInteractionIds;
         _buttonInteractions.Clear();
