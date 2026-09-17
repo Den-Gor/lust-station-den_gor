@@ -4,6 +4,8 @@
   group: Narcotics
   desc: reagent-desc-lust-fentamyl
   physicalDesc: reagent-physical-desc-oily
+  allowedDepartments:
+  - Medical
   flavor: medicine
   color: "#6B4C3B"
   metabolisms:
