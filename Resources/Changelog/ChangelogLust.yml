@@ -1271,3 +1271,10 @@
     message: Порог пожилого возраста фелинидов повышен.
   id: 317
   url: https://github.com/makura-games/lust-station/pull/570
+- author: Matizze
+  time: '2026-09-18T21:00:28.0000000+00:00'
+  changes:
+  - type: Tweak
+    message: Регенерации ампулы мурмило выставлено КД в 3 минуты.
+  id: 318
+  url: https://github.com/makura-games/lust-station/pull/596
