@@ -4,9 +4,9 @@ using Content.Shared.Popups;
 
 namespace Content.Shared._Lust.LockableEquipment;
 
-public sealed class SexEquipRestrictionSystem : EntitySystem
+public sealed partial class SexEquipRestrictionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
