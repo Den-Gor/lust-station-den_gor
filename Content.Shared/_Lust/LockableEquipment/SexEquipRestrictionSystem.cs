@@ -48,6 +48,6 @@ public sealed class SexEquipRestrictionSystem : EntitySystem
         _popup.PopupClient(
             Loc.GetString("sex-equip-restriction-blocked"),
             args.EquipTarget,
-            args.Equipee);
+            args.User);
     }
 }

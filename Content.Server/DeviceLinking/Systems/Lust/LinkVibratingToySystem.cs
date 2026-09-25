@@ -6,6 +6,7 @@ using Content.Shared.Verbs;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Jittering;
+using Content.Shared.Speech.Components;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeviceLinking.Systems.Lust;

@@ -234,12 +234,11 @@
       - ReagentId: DarkRedRum
         Quantity: 20
   - type: SolutionRegeneration
-    solution: beaker # Lust-Edit
-    duration: 180 # Lust-Edit
     generated:
       reagents:
       - ReagentId: DarkRedRum
         Quantity: 20
+    duration: 180 # Lust-Edit
   - type: Tag
     tags:
     - FitsHardsuit

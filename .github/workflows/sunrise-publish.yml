@@ -151,6 +151,11 @@ jobs:
       if: ${{ inputs.use_private_content }}
       run: python3 ../automation/Tools/_sunrise/move_private.py --clone-dir "PrivateContent" --target-dirs "Resources"
 
+    # Lust edit start - обработка названий в локализации
+    - name: Process localization
+      run: python3 Tools/_lust/replace_nt.py --path Resources/Locale
+    # Lust edit end
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
       with:
