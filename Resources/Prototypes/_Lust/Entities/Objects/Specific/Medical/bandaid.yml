@@ -5,10 +5,10 @@
   components:
   - type: Sprite
     state: bandaid-clown
-  - type: SolutionContainerManager
+  - type: Solution
+    id: patch
     solutions:
-      patch:
-        maxVol: 20
-        reagents:
-        - ReagentId: Aphrodisiac
-          Quantity: 20
+      maxVol: 20
+      reagents:
+      - ReagentId: Aphrodisiac
+        Quantity: 20
