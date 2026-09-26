@@ -98,7 +98,7 @@
   - type: Dumpable
   #Lust start
   - type: ScentEmitter
-      spot: AnySlot
-      scent: LustGunpowder
-      duration: 400
+    spot: AnySlot
+    scent: LustGunpowder
+    duration: 400
   #Lust end

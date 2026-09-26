@@ -117,12 +117,12 @@
     - Recyclable
     - Trash
     - BananaPeel
-    # Lust edit start
-    - type: ScentEmitter
-      spot: AnySlot
-      scent: LustGunpowder
-      duration: 400
-    # Lust edit end
+  # Lust edit start
+  - type: ScentEmitter
+    spot: AnySlot
+    scent: LustGunpowder
+    duration: 400
+  # Lust edit end
 
 - type: entity
   parent: BaseItem

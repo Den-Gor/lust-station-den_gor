@@ -11,10 +11,6 @@ scent-temp-bruise = кислого пота и адреналина
 scent-temp-poison = горькой желчи и ядовитого пота
 scent-temp-drug = приторного дурмана и едкой химии
 scent-temp-stimulant = едкой медицинской химии
-scent-temp-arousal = феромонов возбуждения
-scent-temp-arousal-attractive = пьянящих феромонов возбуждения
-scent-temp-arousal-plain = феромонов возбуждения
-scent-temp-orgasm = мускуса половых выделений и пота
 
 smell-verb = Понюхать
 
