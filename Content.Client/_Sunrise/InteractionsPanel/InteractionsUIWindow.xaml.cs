@@ -64,7 +64,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
     private HashSet<string> _customInteractionIds = new();
     private readonly HashSet<string> _openCategories = new();
     private readonly HashSet<string> _favoriteInteractions = new();
-    private NetEntity _userEntity;
+    private NetEntity _userEntity; // Lust-Edit
 
     private static readonly Dictionary<GenitalSlot, int> GenitalDisplayOrder = new()
     {
@@ -178,7 +178,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
     private void UpdateLoveProgress()
     {
         if (!_entityManager.TryGetEntity(_userEntity, out var entity) ||
-            !_entityManager.TryGetComponent<InteractionsComponent>(entity, out var component))
+            !_entityManager.TryGetComponent<InteractionsComponent>(entity, out var component)) // Lust-Edit
             return;
 
         var loveAmount = component.LoveAmount;
@@ -270,7 +270,7 @@ public sealed partial class InteractionsUIWindow : DefaultWindow
         NetEntity targetEntity,
         List<string> availableInteractionIds)
     {
-        _userEntity = userEntity;
+        _userEntity = userEntity; // Lust-Edit
         UpdateEntityInformation(userEntity, targetEntity);
         _currentInteractionIds = availableInteractionIds;
         _buttonInteractions.Clear();
