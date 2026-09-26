@@ -1,21 +1,21 @@
-using Content.Server.Speech.Components;
 using Content.Server._Lust.Toys.Components;
+using Content.Server.DeviceLinking.Systems;
 using Content.Shared._Lust.Toys.Components;
 using Content.Shared.DeviceLinking.Events;
-using Content.Shared.Verbs;
+using Content.Shared.Jittering;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
-using Content.Shared.Jittering;
 using Content.Shared.Speech.Components;
+using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 
-namespace Content.Server.DeviceLinking.Systems.Lust;
+namespace Content.Server._Lust.DeviceLinking.Systems;
 
 public sealed partial class LinkVibratingToySystem : EntitySystem
 {
-    [Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private DeviceLinkSystem _signalSystem = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<VibratingToyComponent, MapInitEvent>(OnInit);
