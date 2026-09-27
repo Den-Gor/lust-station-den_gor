@@ -4,6 +4,7 @@ namespace Content.Shared._Lust.Smell;
 /// Broadcast event from the interactions panel life system: the entity has crossed
 /// the arousal threshold and is now "emitting" it. Raised by the ERP system;
 /// subscribers refresh the corresponding temporary scent on the bearer.
+/// Event Path: Content.Server/_Sunrise/InteractionsPanel/InteractionsPanel.Interactions.cs
 /// </summary>
 public sealed class ArousalStartedEvent : EntityEventArgs
 {
@@ -13,6 +14,7 @@ public sealed class ArousalStartedEvent : EntityEventArgs
 /// <summary>
 /// Broadcast event of the life system: the entity had an orgasm. User — who finished.
 /// Raised by the ERP system; subscribers refresh the corresponding temporary scent on the bearer.
+/// Event Path: Content.Server/_Sunrise/InteractionsPanel/InteractionsPanel.Interactions.cs
 /// </summary>
 public sealed class OrgasmPerformedEvent : EntityEventArgs
 {
