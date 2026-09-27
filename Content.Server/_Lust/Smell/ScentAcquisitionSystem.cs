@@ -89,10 +89,6 @@ public sealed partial class ScentAcquisitionSystem : EntitySystem
     private void OnOrgasmPerformed(OrgasmPerformedEvent args)
     {
         AddTemporaryScent(args.User, ScentIds.Orgasm, _cache.Config.OrgasmScentDuration);
-        // проверка нужна, так как эвент наделяет запахом обоих участников ерп, а не только того,
-        // у кого произошёл оргазм; поэтому проверка не даёт задвоить запах, если ерп занимался лишь игрок сам с собой
-        if (args.Target != args.User)
-            AddTemporaryScent(args.Target, ScentIds.Orgasm, _cache.Config.OrgasmScentDuration);
     }
 
     /// <summary>

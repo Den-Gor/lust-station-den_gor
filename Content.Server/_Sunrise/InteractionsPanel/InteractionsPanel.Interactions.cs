@@ -497,7 +497,6 @@ public partial class InteractionsPanel
         RaiseLocalEvent(new OrgasmPerformedEvent
         {
             User = uid,
-            Target = comp.CurrentTarget ?? uid,
         });
         // Lust-Edit-End
         SetCooldown(uid, "orgasm", TimeSpan.FromSeconds(OrgasmCooldownSeconds));

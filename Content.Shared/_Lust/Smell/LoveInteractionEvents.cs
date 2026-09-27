@@ -11,11 +11,10 @@ public sealed class ArousalStartedEvent : EntityEventArgs
 }
 
 /// <summary>
-/// Broadcast event of the life system: the entity had an orgasm. User — who finished,
-/// Target — the receiver of the effect (the partner or the user themselves). Raised by the ERP system.
+/// Broadcast event of the life system: the entity had an orgasm. User — who finished.
+/// Raised by the ERP system; subscribers refresh the corresponding temporary scent on the bearer.
 /// </summary>
 public sealed class OrgasmPerformedEvent : EntityEventArgs
 {
     public EntityUid User;
-    public EntityUid Target;
 }
