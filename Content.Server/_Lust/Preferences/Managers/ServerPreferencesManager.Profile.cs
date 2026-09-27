@@ -32,4 +32,30 @@ public sealed partial class ServerPreferencesManager
             .WithVirginity(virginity)
             .WithAnalVirginity(analVirginity);
     }
+
+    private static HumanoidCharacterProfile ApplyLustPortfolioData(
+        HumanoidCharacterProfile humanoid,
+        Profile profile)
+    {
+        if (profile.PortfolioData is not { } portfolio)
+            return humanoid.WithAgeIsUnknown(profile.AgeIsUnknown);
+
+        return humanoid
+            .WithAgeIsUnknown(profile.AgeIsUnknown)
+            .WithPortfolio(
+                portfolio.DistinguishingFeatures,
+                portfolio.Region,
+                portfolio.PlanetOrColony,
+                portfolio.StreetOrBlock,
+                portfolio.Apartment,
+                portfolio.Education,
+                portfolio.MaritalStatus,
+                portfolio.CloseRelatives,
+                portfolio.EmergencyContact,
+                portfolio.PhysiologicalTraits,
+                portfolio.PsychologicalTraits,
+                portfolio.ArrestHistory,
+                portfolio.ConvictionHistory);
+    }
+
 }

@@ -15,7 +15,7 @@ namespace Content.Server.Database.Migrations.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.6");
 
             modelBuilder.Entity("Content.Server.Database.AHelpMessage", b =>
                 {
@@ -1168,6 +1168,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("age");
 
+                    b.Property<bool>("AgeIsUnknown")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("age_is_unknown");
+
                     b.Property<string>("BodyType")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -1378,6 +1382,104 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("profile_loadout_group", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.ProfilePortfolio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_portfolio_id");
+
+                    b.Property<string>("Apartment")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("apartment");
+
+                    b.Property<string>("ArrestHistory")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("arrest_history");
+
+                    b.Property<string>("CloseRelatives")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("close_relatives");
+
+                    b.Property<string>("ConvictionHistory")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("conviction_history");
+
+                    b.Property<string>("DistinguishingFeatures")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("distinguishing_features");
+
+                    b.Property<string>("Education")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("education");
+
+                    b.Property<string>("EmergencyContact")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("emergency_contact");
+
+                    b.Property<string>("MaritalStatus")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("marital_status");
+
+                    b.Property<string>("PhysiologicalTraits")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("physiological_traits");
+
+                    b.Property<string>("PlanetOrColony")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("planet_or_colony");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("PsychologicalTraits")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("psychological_traits");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("region");
+
+                    b.Property<string>("StreetOrBlock")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("street_or_block");
+
+                    b.HasKey("Id")
+                        .HasName("PK_profile_portfolio");
+
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
+
+                    b.ToTable("profile_portfolio", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
                 {
                     b.Property<int>("Id")
@@ -1539,31 +1641,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("trait", (string)null);
                 });
 
-            modelBuilder.Entity("Content.Server.Database.UiLike", b =>
-                {
-                    b.Property<string>("ScopeId")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("scope_id");
-
-                    b.Property<string>("ItemId")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("item_id");
-
-                    b.Property<Guid>("PlayerUserId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("player_user_id");
-
-                    b.HasKey("ScopeId", "ItemId", "PlayerUserId")
-                        .HasName("PK_ui_likes");
-
-                    b.HasIndex("PlayerUserId", "ScopeId")
-                        .HasDatabaseName("IX_ui_likes_player_user_id_scope_id");
-
-                    b.ToTable("ui_likes", (string)null);
-                });
-
             modelBuilder.Entity("Content.Server.Database.TutorialCompletion", b =>
                 {
                     b.Property<Guid>("PlayerUserId")
@@ -1596,6 +1673,31 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasDatabaseName("IX_tutorial_completion_tutorial_id");
 
                     b.ToTable("tutorial_completion", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.UiLike", b =>
+                {
+                    b.Property<string>("ScopeId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("scope_id");
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("item_id");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("ScopeId", "ItemId", "PlayerUserId")
+                        .HasName("PK_ui_likes");
+
+                    b.HasIndex("PlayerUserId", "ScopeId")
+                        .HasDatabaseName("IX_ui_likes_player_user_id_scope_id");
+
+                    b.ToTable("ui_likes", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.Unban", b =>
@@ -2180,6 +2282,18 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("ProfileRoleLoadout");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.ProfilePortfolio", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithOne("PortfolioData")
+                        .HasForeignKey("Content.Server.Database.ProfilePortfolio", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_profile_portfolio_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("Content.Server.Database.ProfileRoleLoadout", b =>
                 {
                     b.HasOne("Content.Server.Database.Profile", "Profile")
@@ -2362,13 +2476,15 @@ namespace Content.Server.Database.Migrations.Sqlite
                 {
                     b.Navigation("Antags");
 
-                    b.Navigation("JobAlternativeTitles");
-
                     b.Navigation("ErpData");
+
+                    b.Navigation("JobAlternativeTitles");
 
                     b.Navigation("Jobs");
 
                     b.Navigation("Loadouts");
+
+                    b.Navigation("PortfolioData");
 
                     b.Navigation("Traits");
                 });

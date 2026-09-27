@@ -49,6 +49,7 @@ namespace Content.Server.Database
                 .Include(p => p.Profiles).ThenInclude(h => h.Traits)
                 .Include(p => p.Profiles).ThenInclude(h => h.JobAlternativeTitles) // Sunrise-Edit - альтернативные названия должностей
                 .Include(p => p.Profiles).ThenInclude(h => h.ErpData) // Lust edit - ERP-настройки персонажа
+                .Include(p => p.Profiles).ThenInclude(h => h.PortfolioData) // Lust edit - портфолио персонажа
                 .Include(p => p.Profiles)
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
@@ -109,6 +110,7 @@ namespace Content.Server.Database
                 .Include(p => p.Traits)
                 .Include(p => p.JobAlternativeTitles) // Sunrise-Edit - альтернативные названия должностей
                 .Include(p => p.ErpData) // Lust edit - обновляем существующую запись ERP
+                .Include(p => p.PortfolioData) // Lust edit - обновляем существующую запись портфолио
                 .Include(p => p.Loadouts)
                     .ThenInclude(l => l.Groups)
                     .ThenInclude(group => group.Loadouts)
@@ -218,6 +220,7 @@ namespace Content.Server.Database
             profile.Species = humanoid.Species;
             StoreSunriseProfileData(profile, humanoid); // Sunrise-Edit - сохраняем fork-поля профиля
             StoreLustProfileData(profile, humanoid); // Lust edit - сохраняем ERP-настройки
+            StoreLustPortfolioData(profile, humanoid); // Lust edit - сохраняем портфолио персонажа
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();
             profile.Gender = humanoid.Gender.ToString();
