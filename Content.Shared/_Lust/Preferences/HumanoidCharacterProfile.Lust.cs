@@ -37,6 +37,9 @@ public sealed partial class HumanoidCharacterProfile
     public string PortfolioEducation { get; set; } = string.Empty;
 
     [DataField]
+    public string PortfolioWorkExperience { get; set; } = string.Empty;
+
+    [DataField]
     public string PortfolioMaritalStatus { get; set; } = string.Empty;
 
     [DataField]
@@ -84,6 +87,7 @@ public sealed partial class HumanoidCharacterProfile
         string streetOrBlock,
         string apartment,
         string education,
+        string workExperience,
         string maritalStatus,
         string closeRelatives,
         string emergencyContact,
@@ -100,6 +104,7 @@ public sealed partial class HumanoidCharacterProfile
             PortfolioStreetOrBlock = streetOrBlock,
             PortfolioApartment = apartment,
             PortfolioEducation = education,
+            PortfolioWorkExperience = workExperience,
             PortfolioMaritalStatus = maritalStatus,
             PortfolioCloseRelatives = closeRelatives,
             PortfolioEmergencyContact = emergencyContact,
@@ -123,6 +128,7 @@ public sealed partial class HumanoidCharacterProfile
         PortfolioStreetOrBlock = other.PortfolioStreetOrBlock;
         PortfolioApartment = other.PortfolioApartment;
         PortfolioEducation = other.PortfolioEducation;
+        PortfolioWorkExperience = other.PortfolioWorkExperience;
         PortfolioMaritalStatus = other.PortfolioMaritalStatus;
         PortfolioCloseRelatives = other.PortfolioCloseRelatives;
         PortfolioEmergencyContact = other.PortfolioEmergencyContact;
@@ -145,6 +151,7 @@ public sealed partial class HumanoidCharacterProfile
                 PortfolioStreetOrBlock == other.PortfolioStreetOrBlock &&
                 PortfolioApartment == other.PortfolioApartment &&
                 PortfolioEducation == other.PortfolioEducation &&
+                PortfolioWorkExperience == other.PortfolioWorkExperience &&
                 PortfolioMaritalStatus == other.PortfolioMaritalStatus &&
                 PortfolioCloseRelatives == other.PortfolioCloseRelatives &&
                 PortfolioEmergencyContact == other.PortfolioEmergencyContact &&
@@ -169,6 +176,7 @@ public sealed partial class HumanoidCharacterProfile
         hashCode.Add(PortfolioStreetOrBlock);
         hashCode.Add(PortfolioApartment);
         hashCode.Add(PortfolioEducation);
+        hashCode.Add(PortfolioWorkExperience);
         hashCode.Add(PortfolioMaritalStatus);
         hashCode.Add(PortfolioCloseRelatives);
         hashCode.Add(PortfolioEmergencyContact);

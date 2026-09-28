@@ -1,0 +1,22 @@
+### Lust-Edit: портфолио персонажа
+humanoid-profile-editor-portfolio-tab = Портфолио
+humanoid-profile-editor-portfolio-age-unknown = Возраст неизвестен
+humanoid-profile-editor-portfolio-generate = Сгенерировать
+humanoid-profile-editor-portfolio-group-residence = Место проживания
+humanoid-profile-editor-portfolio-group-personal = Личная информация
+humanoid-profile-editor-portfolio-group-medical = Медицинские данные
+humanoid-profile-editor-portfolio-group-legal = Правовая история
+humanoid-profile-editor-portfolio-distinguishing-features = Отличительные черты
+humanoid-profile-editor-portfolio-region = Регион
+humanoid-profile-editor-portfolio-planet-or-colony = Планета или колония
+humanoid-profile-editor-portfolio-street-or-block = Улица или блок
+humanoid-profile-editor-portfolio-apartment = Квартира
+humanoid-profile-editor-portfolio-education = Образование
+humanoid-profile-editor-portfolio-work-experience = Трудовой опыт
+humanoid-profile-editor-portfolio-marital-status = Семейное положение
+humanoid-profile-editor-portfolio-close-relatives = Близкие родственники
+humanoid-profile-editor-portfolio-emergency-contact = Экстренный контакт
+humanoid-profile-editor-portfolio-physiological-traits = Физиологические черты
+humanoid-profile-editor-portfolio-psychological-traits = Психологические черты
+humanoid-profile-editor-portfolio-arrest-history = История арестов
+humanoid-profile-editor-portfolio-conviction-history = История судимостей

@@ -49,6 +49,7 @@ public sealed partial class ServerPreferencesManager
                 portfolio.StreetOrBlock,
                 portfolio.Apartment,
                 portfolio.Education,
+                portfolio.WorkExperience,
                 portfolio.MaritalStatus,
                 portfolio.CloseRelatives,
                 portfolio.EmergencyContact,

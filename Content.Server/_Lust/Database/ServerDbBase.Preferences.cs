@@ -34,6 +34,7 @@ public abstract partial class ServerDbBase
         profile.PortfolioData.StreetOrBlock = humanoid.PortfolioStreetOrBlock;
         profile.PortfolioData.Apartment = humanoid.PortfolioApartment;
         profile.PortfolioData.Education = humanoid.PortfolioEducation;
+        profile.PortfolioData.WorkExperience = humanoid.PortfolioWorkExperience;
         profile.PortfolioData.MaritalStatus = humanoid.PortfolioMaritalStatus;
         profile.PortfolioData.CloseRelatives = humanoid.PortfolioCloseRelatives;
         profile.PortfolioData.EmergencyContact = humanoid.PortfolioEmergencyContact;

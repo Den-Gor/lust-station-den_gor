@@ -1397,7 +1397,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.Property<string>("ArrestHistory")
                         .IsRequired()
-                        .HasMaxLength(1024)
+                        .HasMaxLength(512)
                         .HasColumnType("TEXT")
                         .HasColumnName("arrest_history");
 
@@ -1409,7 +1409,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.Property<string>("ConvictionHistory")
                         .IsRequired()
-                        .HasMaxLength(1024)
+                        .HasMaxLength(512)
                         .HasColumnType("TEXT")
                         .HasColumnName("conviction_history");
 
@@ -1470,6 +1470,12 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasMaxLength(128)
                         .HasColumnType("TEXT")
                         .HasColumnName("street_or_block");
+
+                    b.Property<string>("WorkExperience")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("work_experience");
 
                     b.HasKey("Id")
                         .HasName("PK_profile_portfolio");
@@ -2069,7 +2075,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                             b1.HasKey("BanHwidId");
 
-                            b1.ToTable("ban_hwid");
+                            b1.ToTable("ban_hwid", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("BanHwidId")
@@ -2155,7 +2161,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                             b1.HasKey("ConnectionLogId");
 
-                            b1.ToTable("connection_log");
+                            b1.ToTable("connection_log", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ConnectionLogId")
@@ -2224,7 +2230,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                             b1.HasKey("PlayerId");
 
-                            b1.ToTable("player");
+                            b1.ToTable("player", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PlayerId")

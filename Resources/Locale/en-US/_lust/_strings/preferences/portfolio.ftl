@@ -1,0 +1,22 @@
+### Lust-Edit: character portfolio
+humanoid-profile-editor-portfolio-tab = Portfolio
+humanoid-profile-editor-portfolio-age-unknown = Age is unknown
+humanoid-profile-editor-portfolio-generate = Generate
+humanoid-profile-editor-portfolio-group-residence = Residence
+humanoid-profile-editor-portfolio-group-personal = Personal information
+humanoid-profile-editor-portfolio-group-medical = Medical data
+humanoid-profile-editor-portfolio-group-legal = Legal history
+humanoid-profile-editor-portfolio-distinguishing-features = Distinguishing features
+humanoid-profile-editor-portfolio-region = Region
+humanoid-profile-editor-portfolio-planet-or-colony = Planet or colony
+humanoid-profile-editor-portfolio-street-or-block = Street or block
+humanoid-profile-editor-portfolio-apartment = Apartment
+humanoid-profile-editor-portfolio-education = Education
+humanoid-profile-editor-portfolio-work-experience = Work experience
+humanoid-profile-editor-portfolio-marital-status = Marital status
+humanoid-profile-editor-portfolio-close-relatives = Close relatives
+humanoid-profile-editor-portfolio-emergency-contact = Emergency contact
+humanoid-profile-editor-portfolio-physiological-traits = Physiological traits
+humanoid-profile-editor-portfolio-psychological-traits = Psychological traits
+humanoid-profile-editor-portfolio-arrest-history = Arrest history
+humanoid-profile-editor-portfolio-conviction-history = Conviction history

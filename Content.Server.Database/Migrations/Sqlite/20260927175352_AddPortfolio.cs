@@ -30,13 +30,14 @@ namespace Content.Server.Database.Migrations.Sqlite
                     street_or_block = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     apartment = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
                     education = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
+                    work_experience = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
                     marital_status = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     close_relatives = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
                     emergency_contact = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
                     physiological_traits = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
                     psychological_traits = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
-                    arrest_history = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: false),
-                    conviction_history = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: false)
+                    arrest_history = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false),
+                    conviction_history = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false)
                 },
                 constraints: table =>
                 {

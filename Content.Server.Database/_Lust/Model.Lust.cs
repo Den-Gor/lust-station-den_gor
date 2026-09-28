@@ -35,6 +35,9 @@ public class ProfilePortfolio
     [Required, MaxLength(512)]
     public string Education { get; set; } = string.Empty;
 
+    [Required, MaxLength(512)]
+    public string WorkExperience { get; set; } = string.Empty;
+
     [Required, MaxLength(128)]
     public string MaritalStatus { get; set; } = string.Empty;
 
@@ -50,9 +53,9 @@ public class ProfilePortfolio
     [Required, MaxLength(512)]
     public string PsychologicalTraits { get; set; } = string.Empty;
 
-    [Required, MaxLength(1024)]
+    [Required, MaxLength(512)]
     public string ArrestHistory { get; set; } = string.Empty;
 
-    [Required, MaxLength(1024)]
+    [Required, MaxLength(512)]
     public string ConvictionHistory { get; set; } = string.Empty;
 }
