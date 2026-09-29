@@ -3,7 +3,11 @@
                          xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
     <ScrollContainer VerticalExpand="True" ReturnMeasure="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8" SeparationOverride="4">
-            <CheckBox Name="AgeUnknownBox" Text="{Loc 'humanoid-profile-editor-portfolio-age-unknown'}" />
+            <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'humanoid-profile-editor-portfolio-age-unknown'}" />
+                    <Control HorizontalExpand="True"/>
+                    <OptionButton Name="AgeUnknownButton" HorizontalAlignment="Right" />
+                </BoxContainer>
 
             <Label Text="{Loc 'humanoid-profile-editor-portfolio-distinguishing-features'}" />
             <BoxContainer Orientation="Horizontal" VerticalExpand="False">
@@ -64,11 +68,11 @@
                 <Button Name="WorkExperienceGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" VerticalAlignment="Top" />
             </BoxContainer>
 
-            <Label Text="{Loc 'humanoid-profile-editor-portfolio-marital-status'}" />
             <BoxContainer Orientation="Horizontal">
-                <LineEdit Name="MaritalStatusEdit" HorizontalExpand="True" SizeFlagsStretchRatio="3" MinWidth="180" />
-                <Button Name="MaritalStatusGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" />
-            </BoxContainer>
+                    <Label Text="{Loc 'humanoid-profile-editor-portfolio-marital-status'}" />
+                    <Control HorizontalExpand="True"/>
+                    <OptionButton Name="MaritalStatusButton" HorizontalAlignment="Right" />
+                </BoxContainer>
 
             <Label Text="{Loc 'humanoid-profile-editor-portfolio-close-relatives'}" />
             <BoxContainer Orientation="Horizontal" VerticalExpand="False">

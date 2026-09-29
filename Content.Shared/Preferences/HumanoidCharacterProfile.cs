@@ -647,6 +647,7 @@ namespace Content.Shared.Preferences
             }
 
             EnsureSunriseProfileValid(speciesPrototype, sex, session, collection, sponsorPrototypes); // Sunrise-Edit
+            EnsureLustProfileValid(); // Lust edit - валидация наполнения портфолио
 
             PreferenceUnavailable = prefsUnavailableMode;
 

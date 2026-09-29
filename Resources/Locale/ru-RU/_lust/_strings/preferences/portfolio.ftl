@@ -1,6 +1,11 @@
 ### Lust-Edit: портфолио персонажа
 humanoid-profile-editor-portfolio-tab = Портфолио
 humanoid-profile-editor-portfolio-age-unknown = Возраст неизвестен
+humanoid-profile-editor-portfolio-age-unknown-yes = Да
+humanoid-profile-editor-portfolio-age-unknown-no = Нет
+humanoid-profile-editor-portfolio-marital-single-text = Не в браке
+humanoid-profile-editor-portfolio-marital-married-text = В браке
+humanoid-profile-editor-portfolio-marital-divorced-text = В разводе
 humanoid-profile-editor-portfolio-generate = Сгенерировать
 humanoid-profile-editor-portfolio-group-residence = Место проживания
 humanoid-profile-editor-portfolio-group-personal = Личная информация

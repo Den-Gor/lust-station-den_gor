@@ -185,4 +185,38 @@ public sealed partial class HumanoidCharacterProfile
         hashCode.Add(PortfolioArrestHistory);
         hashCode.Add(PortfolioConvictionHistory);
     }
+
+    // лимиты полей
+    private const int MaxPortfolioText = 512;
+    private const int MaxPortfolioShortText = 128;
+    private const int MaxPortfolioApartment = 64;
+
+    // валидация полей портфолио, вызывается из EnsureValid().
+    private void EnsureLustProfileValid()
+    {
+        PortfolioDistinguishingFeatures = ValidatePortfolioEntry(PortfolioDistinguishingFeatures, MaxPortfolioText);
+        PortfolioEducation = ValidatePortfolioEntry(PortfolioEducation, MaxPortfolioText);
+        PortfolioWorkExperience = ValidatePortfolioEntry(PortfolioWorkExperience, MaxPortfolioText);
+        PortfolioCloseRelatives = ValidatePortfolioEntry(PortfolioCloseRelatives, MaxPortfolioText);
+        PortfolioEmergencyContact = ValidatePortfolioEntry(PortfolioEmergencyContact, MaxPortfolioText);
+        PortfolioPhysiologicalTraits = ValidatePortfolioEntry(PortfolioPhysiologicalTraits, MaxPortfolioText);
+        PortfolioPsychologicalTraits = ValidatePortfolioEntry(PortfolioPsychologicalTraits, MaxPortfolioText);
+        PortfolioArrestHistory = ValidatePortfolioEntry(PortfolioArrestHistory, MaxPortfolioText);
+        PortfolioConvictionHistory = ValidatePortfolioEntry(PortfolioConvictionHistory, MaxPortfolioText);
+
+        PortfolioRegion = ValidatePortfolioEntry(PortfolioRegion, MaxPortfolioShortText);
+        PortfolioPlanetOrColony = ValidatePortfolioEntry(PortfolioPlanetOrColony, MaxPortfolioShortText);
+        PortfolioStreetOrBlock = ValidatePortfolioEntry(PortfolioStreetOrBlock, MaxPortfolioShortText);
+        PortfolioMaritalStatus = ValidatePortfolioEntry(PortfolioMaritalStatus, MaxPortfolioShortText);
+
+        PortfolioApartment = ValidatePortfolioEntry(PortfolioApartment, MaxPortfolioApartment);
+    }
+
+    private static string ValidatePortfolioEntry(string value, int maxLength)
+    {
+        var trimmed = value.Trim();
+        return trimmed.Length <= maxLength
+            ? trimmed
+            : trimmed[..maxLength];
+    }
 }
