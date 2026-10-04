@@ -33,16 +33,10 @@
                 <Button Name="PlanetOrColonyGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" />
             </BoxContainer>
 
-            <Label Text="{Loc 'humanoid-profile-editor-portfolio-street-or-block'}" />
+            <Label Text="{Loc 'humanoid-profile-editor-portfolio-address'}" />
             <BoxContainer Orientation="Horizontal">
-                <LineEdit Name="StreetOrBlockEdit" HorizontalExpand="True" SizeFlagsStretchRatio="3" MinWidth="180" />
-                <Button Name="StreetOrBlockGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" />
-            </BoxContainer>
-
-            <Label Text="{Loc 'humanoid-profile-editor-portfolio-apartment'}" />
-            <BoxContainer Orientation="Horizontal">
-                <LineEdit Name="ApartmentEdit" HorizontalExpand="True" SizeFlagsStretchRatio="3" MinWidth="180" />
-                <Button Name="ApartmentGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" />
+                <LineEdit Name="AddressEdit" HorizontalExpand="True" SizeFlagsStretchRatio="3" MinWidth="180" />
+                <Button Name="AddressGen" Text="{Loc 'humanoid-profile-editor-portfolio-generate'}" StyleClasses="OpenLeft" />
             </BoxContainer>
 
             <Label Text="{Loc 'humanoid-profile-editor-portfolio-group-personal'}" StyleClasses="LabelHeading" Margin="0 6" />

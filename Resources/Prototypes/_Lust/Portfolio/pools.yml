@@ -1,0 +1,89 @@
+﻿- type: portfolioPool
+  id: PortfolioLustRegion
+  general:
+  - portfolio-lust-region-general-1
+  - portfolio-lust-region-general-2
+  - portfolio-lust-region-general-3
+  species:
+    Human:
+    - portfolio-lust-region-human-1
+    - portfolio-lust-region-human-2
+    Vox:
+    - portfolio-lust-region-vox-1
+
+- type: portfolioPool
+  id: PortfolioLustPlanetOrColony
+  general:
+  - portfolio-lust-planet-or-colony-general-1
+  - portfolio-lust-planet-or-colony-general-2
+  - portfolio-lust-planet-or-colony-general-3
+
+- type: portfolioPool
+  id: PortfolioLustAddress
+  general:
+  - portfolio-lust-address-general-1
+  - portfolio-lust-address-general-2
+  - portfolio-lust-address-general-3
+
+- type: portfolioPool
+  id: PortfolioLustDistinguishingFeatures
+  general:
+  - portfolio-lust-distinguishing-features-general-1
+  - portfolio-lust-distinguishing-features-general-2
+  - portfolio-lust-distinguishing-features-general-3
+
+- type: portfolioPool
+  id: PortfolioLustEducation
+  general:
+  - portfolio-lust-education-general-1
+  - portfolio-lust-education-general-2
+  - portfolio-lust-education-general-3
+
+- type: portfolioPool
+  id: PortfolioLustWorkExperience
+  general:
+  - portfolio-lust-work-experience-general-1
+  - portfolio-lust-work-experience-general-2
+  - portfolio-lust-work-experience-general-3
+
+- type: portfolioPool
+  id: PortfolioLustCloseRelatives
+  general:
+  - portfolio-lust-close-relatives-general-1
+  - portfolio-lust-close-relatives-general-2
+  - portfolio-lust-close-relatives-general-3
+
+- type: portfolioPool
+  id: PortfolioLustEmergencyContact
+  general:
+  - portfolio-lust-emergency-contact-general-1
+  - portfolio-lust-emergency-contact-general-2
+  - portfolio-lust-emergency-contact-general-3
+
+- type: portfolioPool
+  id: PortfolioLustPhysiologicalTraits
+  general:
+  - portfolio-lust-physiological-traits-general-1
+  - portfolio-lust-physiological-traits-general-2
+  - portfolio-lust-physiological-traits-general-3
+
+- type: portfolioPool
+  id: PortfolioLustPsychologicalTraits
+  general:
+  - portfolio-lust-psychological-traits-general-1
+  - portfolio-lust-psychological-traits-general-2
+  - portfolio-lust-psychological-traits-general-3
+
+- type: portfolioPool
+  id: PortfolioLustArrestHistory
+  general:
+  - portfolio-lust-arrest-history-general-1
+  - portfolio-lust-arrest-history-general-2
+  - portfolio-lust-arrest-history-general-3
+
+- type: portfolioPool
+  id: PortfolioLustConvictionHistory
+  general:
+  - portfolio-lust-conviction-history-general-1
+  - portfolio-lust-conviction-history-general-2
+  - portfolio-lust-conviction-history-general-3

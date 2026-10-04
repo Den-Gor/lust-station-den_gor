@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._Lust.Preferences;
 using Content.Shared._Sunrise.Preferences;
 using Content.Shared._Sunrise.SunriseCCVars;
 using Content.Shared.CCVar;
@@ -277,6 +278,7 @@ namespace Content.Shared.Preferences
                 Species = species,
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
                 SunriseProfile = SunriseCharacterProfile.RandomForSpecies(speciesPrototype, sex, random, prototypeManager), // Sunrise-Edit
+                Portfolio = PortfolioProfile.RandomForSpecies(species), // Lust edit - генерируем портфолио
             };
         }
 

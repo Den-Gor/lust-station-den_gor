@@ -1,4 +1,5 @@
 using Content.Server.Database;
+using Content.Shared._Lust.Preferences;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 
@@ -37,26 +38,29 @@ public sealed partial class ServerPreferencesManager
         HumanoidCharacterProfile humanoid,
         Profile profile)
     {
-        if (profile.PortfolioData is not { } portfolio)
+        if (profile.PortfolioData is not { } portfolioData)
             return humanoid.WithAgeIsUnknown(profile.AgeIsUnknown);
+
+        var portfolio = new PortfolioProfile
+        {
+            DistinguishingFeatures = portfolioData.DistinguishingFeatures,
+            Region = portfolioData.Region,
+            PlanetOrColony = portfolioData.PlanetOrColony,
+            Address = portfolioData.Address,
+            Education = portfolioData.Education,
+            WorkExperience = portfolioData.WorkExperience,
+            MaritalStatus = portfolioData.MaritalStatus,
+            CloseRelatives = portfolioData.CloseRelatives,
+            EmergencyContact = portfolioData.EmergencyContact,
+            PhysiologicalTraits = portfolioData.PhysiologicalTraits,
+            PsychologicalTraits = portfolioData.PsychologicalTraits,
+            ArrestHistory = portfolioData.ArrestHistory,
+            ConvictionHistory = portfolioData.ConvictionHistory,
+        };
 
         return humanoid
             .WithAgeIsUnknown(profile.AgeIsUnknown)
-            .WithPortfolio(
-                portfolio.DistinguishingFeatures,
-                portfolio.Region,
-                portfolio.PlanetOrColony,
-                portfolio.StreetOrBlock,
-                portfolio.Apartment,
-                portfolio.Education,
-                portfolio.WorkExperience,
-                portfolio.MaritalStatus,
-                portfolio.CloseRelatives,
-                portfolio.EmergencyContact,
-                portfolio.PhysiologicalTraits,
-                portfolio.PsychologicalTraits,
-                portfolio.ArrestHistory,
-                portfolio.ConvictionHistory);
+            .WithPortfolio(portfolio);
     }
 
 }

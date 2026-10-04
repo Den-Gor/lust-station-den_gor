@@ -1468,16 +1468,10 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Apartment")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("apartment");
-
                     b.Property<string>("ArrestHistory")
                         .IsRequired()
                         .HasMaxLength(512)
-                        .HasColumnType("character varying(1024)")
+                        .HasColumnType("character varying(512)")
                         .HasColumnName("arrest_history");
 
                     b.Property<string>("CloseRelatives")
@@ -1489,7 +1483,7 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<string>("ConvictionHistory")
                         .IsRequired()
                         .HasMaxLength(512)
-                        .HasColumnType("character varying(1024)")
+                        .HasColumnType("character varying(512)")
                         .HasColumnName("conviction_history");
 
                     b.Property<string>("DistinguishingFeatures")
@@ -1512,8 +1506,8 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     b.Property<string>("MaritalStatus")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("marital_status");
 
                     b.Property<string>("PhysiologicalTraits")
@@ -1549,11 +1543,11 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("character varying(128)")
                         .HasColumnName("region");
 
-                    b.Property<string>("StreetOrBlock")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
-                        .HasColumnName("street_or_block");
+                        .HasColumnName("address");
 
                     b.HasKey("Id")
                         .HasName("PK_profile_portfolio");

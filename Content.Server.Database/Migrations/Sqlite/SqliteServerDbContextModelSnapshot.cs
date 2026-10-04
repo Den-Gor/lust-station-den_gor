@@ -1389,12 +1389,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("profile_portfolio_id");
 
-                    b.Property<string>("Apartment")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("apartment");
-
                     b.Property<string>("ArrestHistory")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -1433,7 +1427,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.Property<string>("MaritalStatus")
                         .IsRequired()
-                        .HasMaxLength(128)
+                        .HasMaxLength(32)
                         .HasColumnType("TEXT")
                         .HasColumnName("marital_status");
 
@@ -1465,11 +1459,11 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("region");
 
-                    b.Property<string>("StreetOrBlock")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("TEXT")
-                        .HasColumnName("street_or_block");
+                        .HasColumnName("address");
 
                     b.Property<string>("WorkExperience")
                         .IsRequired()

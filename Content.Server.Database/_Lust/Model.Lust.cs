@@ -27,10 +27,7 @@ public class ProfilePortfolio
     public string PlanetOrColony { get; set; } = string.Empty;
 
     [Required, MaxLength(128)]
-    public string StreetOrBlock { get; set; } = string.Empty;
-
-    [Required, MaxLength(64)]
-    public string Apartment { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
 
     [Required, MaxLength(512)]
     public string Education { get; set; } = string.Empty;
@@ -38,7 +35,7 @@ public class ProfilePortfolio
     [Required, MaxLength(512)]
     public string WorkExperience { get; set; } = string.Empty;
 
-    [Required, MaxLength(128)]
+    [Required, MaxLength(32)]
     public string MaritalStatus { get; set; } = string.Empty;
 
     [Required, MaxLength(512)]
