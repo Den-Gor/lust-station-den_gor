@@ -1374,3 +1374,13 @@
   url: https://github.com/makura-games/lust-station/pull/597
   media:
   - url: https://youtu.be/TU5iU7gih_E
+- author: 4_ydo
+  time: '2026-10-05T01:30:20.0000000+00:00'
+  changes:
+  - type: Tweak
+    message: изменен спрайт маркера заячих поднятых ушей
+  id: 326
+  url: https://github.com/makura-games/lust-station/pull/612
+  media:
+  - url: https://github.com/user-attachments/assets/ac960f84-a317-4751-8e17-0287193689c8
+    description: image
