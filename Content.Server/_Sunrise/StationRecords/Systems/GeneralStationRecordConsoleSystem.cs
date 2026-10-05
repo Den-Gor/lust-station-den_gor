@@ -58,24 +58,38 @@ public sealed partial class GeneralStationRecordConsoleSystem
             return;
         }
 
-        // Удаляем старую запись
-        if (!_stationRecords.RemoveRecord(new StationRecordKey(args.Id, owning.Value)))
+        // Lust-edit start
+        // Раньше тут был RemoveRecord + AddRecordEntry. RemoveRecord внутри зовёт
+        // StationRecordSet.RemoveAllRecords, который чистит ВСЕ таблицы на ключе —
+        // вместе с общей записью стирался CriminalRecordStatus с историей нарушений.
+        // Плюс AddRecordEntry выдавал новый id, из-за чего StationRecordKeyStorageComponent
+        // на ID-картах оставался со старым ключом. Теперь обновляем запись по месту.
+        var key = new StationRecordKey(args.Id, owning.Value);
+
+        // Проверку существования раньше неявно делал RemoveRecord, возвращая false.
+        // Без неё AddRecordEntry(key, ...) создал бы запись с произвольным id от клиента.
+        if (!_stationRecords.TryGetRecord<GeneralStationRecord>(key, out _))
         {
             _audio.PlayPvs(ent.Comp.FailedSound, ent);
             return;
         }
 
-        // Добавляем новую
         var record = GeneralStationRecord.SanitizeRecord(args.Record, in _prototype);
-        var id = _stationRecords.AddRecordEntry(owning.Value, record);
-        ent.Comp.ActiveKey = id.Id;
+        _stationRecords.AddRecordEntry(key, record);
+        ent.Comp.ActiveKey = key.Id;
+        // Lust-edit end
 
         var message = Loc.GetString("station-record-updated", ("name", args.Record.Name));
         var popup = Loc.GetString("station-record-updated-successfully");
 
         DoFeedback(ent, message, popup);
 
-        UpdateUserInterface(ent);
+        // Lust-edit start
+        // Synchronize поднимает RecordModifiedEvent, на который подписаны манифест экипажа,
+        // кримконсоли и сам станучёт. Раньше событие не поднималось вовсе
+        // из-за чего манифест и кримконсоль показывали устаревшие данные.
+        _stationRecords.Synchronize(key);
+        // Lust-edit end
     }
 
     private void OnEmagged(Entity<GeneralStationRecordConsoleComponent> ent, ref GotEmaggedEvent args)

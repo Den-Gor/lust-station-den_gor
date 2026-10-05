@@ -1,4 +1,4 @@
-using Content.Client._Sunrise.StationRecords;
+using Content.Client._Lust.StationRecords; // Lust added
 using Content.Client.Lobby;
 using Content.Client.Roles;
 using Content.Shared.StationRecords;
@@ -167,10 +167,10 @@ public sealed partial class GeneralStationRecordConsoleWindow : DefaultWindow
     private void PopulateRecordContainer(GeneralStationRecord record, bool enableDelete, bool canRedactSensitiveData, bool hasAccess, uint? id)
     {
         RecordContainer.RemoveAllChildren();
-        // Sunrise edit start
+        // Lust added start
         var newRecord =
-            new SunriseGeneralRecord(record, enableDelete, canRedactSensitiveData, hasAccess, id, in _entity, in _prototypeManager, in _loc, in _job, in _controller);
-        // Sunrise edit end
+            new LustGeneralRecord(record, enableDelete, canRedactSensitiveData, hasAccess, id, in _entity, in _prototypeManager, in _loc, in _job, in _controller);
+        // Lust added end
         newRecord.OnDeletePressed = OnDeleted;
         newRecord.OnPrintPressed = OnPrinted;
         newRecord.OnSaveButtonPressed = OnSaved;

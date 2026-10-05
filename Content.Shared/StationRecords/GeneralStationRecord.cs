@@ -1,3 +1,4 @@
+using Content.Shared._Lust.Preferences; // Lust added start
 using Content.Shared._Sunrise.Helpers;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
@@ -109,8 +110,28 @@ public sealed record GeneralStationRecord
             Personality = original.Personality.SanitizeInput(MaxPersonalityLength),
         };
 
-        return updated;
+        return SanitizeLustProfile(updated); //  Lust-edit
     }
 
     // Sunrise added end
+
+    // Lust added start
+    /// <summary>
+    ///     Санитизация портфолио: лимиты длин накладывает PortfolioProfile.EnsureValid.
+    ///     Профиль, которого нет, остаётся null — консоль это переживает.
+    /// </summary>
+    private static GeneralStationRecord SanitizeLustProfile(GeneralStationRecord original)
+    {
+        if (original.HumanoidProfile is null)
+            return original;
+
+        var portfolio = new PortfolioProfile(original.HumanoidProfile.Portfolio);
+        portfolio.EnsureValid();
+
+        return original with
+        {
+            HumanoidProfile = original.HumanoidProfile.WithPortfolio(portfolio),
+        };
+    }
+    // Lust added end
 }

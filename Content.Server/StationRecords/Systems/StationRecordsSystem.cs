@@ -108,7 +108,8 @@ public sealed partial class StationRecordsSystem : SharedStationRecordsSystem
         TryComp<FingerprintComponent>(player, out var fingerprintComponent);
         TryComp<DnaComponent>(player, out var dnaComponent);
 
-        CreateGeneralRecord(station, idUid, name, profile.Age, profile.Species, profile.Gender, jobId, fingerprintComponent?.Fingerprint, dnaComponent?.DNA, profile, records, silicon); // Sunrise-Edit
+        var recordAge = profile.AgeIsUnknown ? -1 : profile.Age; // Lust: не показывать возраст в станучёте, если скрыт
+        CreateGeneralRecord(station, idUid, name, recordAge, profile.Species, profile.Gender, jobId, fingerprintComponent?.Fingerprint, dnaComponent?.DNA, profile, records, silicon); // Sunrise-Edit
     }
 
 

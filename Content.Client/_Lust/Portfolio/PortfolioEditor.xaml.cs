@@ -12,52 +12,44 @@ namespace Content.Client._Lust.Portfolio;
 public sealed partial class PortfolioEditor : Control
 {
     private sealed record PortfolioField(
-        string LocKey,
-        Func<HumanoidCharacterProfile, string> Get,
-        Action<HumanoidCharacterProfile, string> Set);
+        Func<PortfolioProfile, string> Get,
+        Action<PortfolioProfile, string> Set);
 
-    private static readonly PortfolioField[] Fields =
-    [
-        new("humanoid-profile-editor-portfolio-distinguishing-features",
-            p => p.Portfolio.DistinguishingFeatures,
-            (p, v) => p.Portfolio.DistinguishingFeatures = v),
-        new("humanoid-profile-editor-portfolio-region",
-            p => p.Portfolio.Region,
-            (p, v) => p.Portfolio.Region = v),
-        new("humanoid-profile-editor-portfolio-planet-or-colony",
-            p => p.Portfolio.PlanetOrColony,
-            (p, v) => p.Portfolio.PlanetOrColony = v),
-        new("humanoid-profile-editor-portfolio-address",
-            p => p.Portfolio.Address,
-            (p, v) => p.Portfolio.Address = v),
-        new("humanoid-profile-editor-portfolio-education",
-            p => p.Portfolio.Education,
-            (p, v) => p.Portfolio.Education = v),
-        new("humanoid-profile-editor-portfolio-work-experience",
-            p => p.Portfolio.WorkExperience,
-            (p, v) => p.Portfolio.WorkExperience = v),
-        new("humanoid-profile-editor-portfolio-marital-status",
-            p => p.Portfolio.MaritalStatus,
-            (p, v) => p.Portfolio.MaritalStatus = v),
-        new("humanoid-profile-editor-portfolio-close-relatives",
-            p => p.Portfolio.CloseRelatives,
-            (p, v) => p.Portfolio.CloseRelatives = v),
-        new("humanoid-profile-editor-portfolio-emergency-contact",
-            p => p.Portfolio.EmergencyContact,
-            (p, v) => p.Portfolio.EmergencyContact = v),
-        new("humanoid-profile-editor-portfolio-physiological-traits",
-            p => p.Portfolio.PhysiologicalTraits,
-            (p, v) => p.Portfolio.PhysiologicalTraits = v),
-        new("humanoid-profile-editor-portfolio-psychological-traits",
-            p => p.Portfolio.PsychologicalTraits,
-            (p, v) => p.Portfolio.PsychologicalTraits = v),
-        new("humanoid-profile-editor-portfolio-arrest-history",
-            p => p.Portfolio.ArrestHistory,
-            (p, v) => p.Portfolio.ArrestHistory = v),
-        new("humanoid-profile-editor-portfolio-conviction-history",
-            p => p.Portfolio.ConvictionHistory,
-            (p, v) => p.Portfolio.ConvictionHistory = v),
-    ];
+    private static readonly PortfolioField DistinguishingFeatures =
+        new(p => p.DistinguishingFeatures, (p, v) => p.DistinguishingFeatures = v);
+
+    private static readonly PortfolioField Region =
+        new(p => p.Region, (p, v) => p.Region = v);
+
+    private static readonly PortfolioField PlanetOrColony =
+        new(p => p.PlanetOrColony, (p, v) => p.PlanetOrColony = v);
+
+    private static readonly PortfolioField Address =
+        new(p => p.Address, (p, v) => p.Address = v);
+
+    private static readonly PortfolioField Education =
+        new(p => p.Education, (p, v) => p.Education = v);
+
+    private static readonly PortfolioField WorkExperience =
+        new(p => p.WorkExperience, (p, v) => p.WorkExperience = v);
+
+    private static readonly PortfolioField CloseRelatives =
+        new(p => p.CloseRelatives, (p, v) => p.CloseRelatives = v);
+
+    private static readonly PortfolioField EmergencyContact =
+        new(p => p.EmergencyContact, (p, v) => p.EmergencyContact = v);
+
+    private static readonly PortfolioField PhysiologicalTraits =
+        new(p => p.PhysiologicalTraits, (p, v) => p.PhysiologicalTraits = v);
+
+    private static readonly PortfolioField PsychologicalTraits =
+        new(p => p.PsychologicalTraits, (p, v) => p.PsychologicalTraits = v);
+
+    private static readonly PortfolioField ArrestHistory =
+        new(p => p.ArrestHistory, (p, v) => p.ArrestHistory = v);
+
+    private static readonly PortfolioField ConvictionHistory =
+        new(p => p.ConvictionHistory, (p, v) => p.ConvictionHistory = v);
 
     private HumanoidCharacterProfile _profile = new();
 
@@ -90,20 +82,20 @@ public sealed partial class PortfolioEditor : Control
         };
 
         // Однострочные поля (128/32 символа), пишем по Enter и уходу фокуса.
-        SubscribeSingle(1, RegionEdit);
-        SubscribeSingle(2, PlanetOrColonyEdit);
-        SubscribeSingle(3, AddressEdit);
+        SubscribeSingle(Region, RegionEdit);
+        SubscribeSingle(PlanetOrColony, PlanetOrColonyEdit);
+        SubscribeSingle(Address, AddressEdit);
 
         // Многострочные поля (512 символов), у TextEdit нет OnTextEntered и OnFocusExit.
-        SubscribeMulti(0, DistinguishingFeaturesEdit);
-        SubscribeMulti(4, EducationEdit);
-        SubscribeMulti(5, WorkExperienceEdit);
-        SubscribeMulti(7, CloseRelativesEdit);
-        SubscribeMulti(8, EmergencyContactEdit);
-        SubscribeMulti(9, PhysiologicalTraitsEdit);
-        SubscribeMulti(10, PsychologicalTraitsEdit);
-        SubscribeMulti(11, ArrestHistoryEdit);
-        SubscribeMulti(12, ConvictionHistoryEdit);
+        SubscribeMulti(DistinguishingFeatures, DistinguishingFeaturesEdit);
+        SubscribeMulti(Education, EducationEdit);
+        SubscribeMulti(WorkExperience, WorkExperienceEdit);
+        SubscribeMulti(CloseRelatives, CloseRelativesEdit);
+        SubscribeMulti(EmergencyContact, EmergencyContactEdit);
+        SubscribeMulti(PhysiologicalTraits, PhysiologicalTraitsEdit);
+        SubscribeMulti(PsychologicalTraits, PsychologicalTraitsEdit);
+        SubscribeMulti(ArrestHistory, ArrestHistoryEdit);
+        SubscribeMulti(ConvictionHistory, ConvictionHistoryEdit);
 
         DistinguishingFeaturesGen.OnPressed += _ => GenerateDistinguishingFeatures();
         RegionGen.OnPressed += _ => GenerateRegion();
@@ -122,19 +114,19 @@ public sealed partial class PortfolioEditor : Control
     /// <summary>
     /// однострочное поле, пишем по Enter и при уходе фокуса.
     /// </summary>
-    private void SubscribeSingle(int index, LineEdit edit)
+    private void SubscribeSingle(PortfolioField field, LineEdit edit)
     {
-        edit.OnTextEntered += e => WriteField(index, e.Text);
-        edit.OnFocusExit += e => WriteField(index, e.Text);
+        edit.OnTextEntered += e => WriteField(field, e.Text);
+        edit.OnFocusExit += e => WriteField(field, e.Text);
     }
 
     /// <summary>
     ///  многострочное поле, у TextEdit нет OnTextEntered и OnFocusExit,
     /// поэтому пишем при каждом изменении текста.
     /// </summary>
-    private void SubscribeMulti(int index, TextEdit edit)
+    private void SubscribeMulti(PortfolioField field, TextEdit edit)
     {
-        edit.OnTextChanged += _ => WriteField(index, Rope.Collapse(edit.TextRope));
+        edit.OnTextChanged += _ => WriteField(field, Rope.Collapse(edit.TextRope));
     }
 
     private static void WriteMulti(TextEdit edit, string value)
@@ -149,27 +141,27 @@ public sealed partial class PortfolioEditor : Control
     {
         _profile = profile;
 
-        WriteMulti(DistinguishingFeaturesEdit, Fields[0].Get(profile));
-        RegionEdit.Text = Fields[1].Get(profile);
-        PlanetOrColonyEdit.Text = Fields[2].Get(profile);
-        AddressEdit.Text = Fields[3].Get(profile);
-        WriteMulti(EducationEdit, Fields[4].Get(profile));
-        WriteMulti(WorkExperienceEdit, Fields[5].Get(profile));
+        WriteMulti(DistinguishingFeaturesEdit, DistinguishingFeatures.Get(profile.Portfolio));
+        RegionEdit.Text = Region.Get(profile.Portfolio);
+        PlanetOrColonyEdit.Text = PlanetOrColony.Get(profile.Portfolio);
+        AddressEdit.Text = Address.Get(profile.Portfolio);
+        WriteMulti(EducationEdit, Education.Get(profile.Portfolio));
+        WriteMulti(WorkExperienceEdit, WorkExperience.Get(profile.Portfolio));
         MaritalStatusButton.SelectId(PickMaritalStatus(profile));
-        WriteMulti(CloseRelativesEdit, Fields[7].Get(profile));
-        WriteMulti(EmergencyContactEdit, Fields[8].Get(profile));
-        WriteMulti(PhysiologicalTraitsEdit, Fields[9].Get(profile));
-        WriteMulti(PsychologicalTraitsEdit, Fields[10].Get(profile));
-        WriteMulti(ArrestHistoryEdit, Fields[11].Get(profile));
-        WriteMulti(ConvictionHistoryEdit, Fields[12].Get(profile));
+        WriteMulti(CloseRelativesEdit, CloseRelatives.Get(profile.Portfolio));
+        WriteMulti(EmergencyContactEdit, EmergencyContact.Get(profile.Portfolio));
+        WriteMulti(PhysiologicalTraitsEdit, PhysiologicalTraits.Get(profile.Portfolio));
+        WriteMulti(PsychologicalTraitsEdit, PsychologicalTraits.Get(profile.Portfolio));
+        WriteMulti(ArrestHistoryEdit, ArrestHistory.Get(profile.Portfolio));
+        WriteMulti(ConvictionHistoryEdit, ConvictionHistory.Get(profile.Portfolio));
 
         AgeUnknownButton.SelectId(profile.AgeIsUnknown ? 1 : 0);
     }
 
-    private void WriteField(int index, string value)
+    private void WriteField(PortfolioField field, string value)
     {
         var next = new HumanoidCharacterProfile(_profile);
-        Fields[index].Set(next, value);
+        field.Set(next.Portfolio, value);
         _profile = next;
         OnProfileChanged?.Invoke(_profile);
     }
@@ -180,7 +172,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(0, value);
+        WriteField(DistinguishingFeatures, value);
         WriteMulti(DistinguishingFeaturesEdit, value);
     }
 
@@ -190,7 +182,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(1, value);
+        WriteField(Region, value);
         RegionEdit.Text = value;
     }
 
@@ -200,7 +192,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(2, value);
+        WriteField(PlanetOrColony, value);
         PlanetOrColonyEdit.Text = value;
     }
 
@@ -210,7 +202,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(3, value);
+        WriteField(Address, value);
         AddressEdit.Text = value;
     }
 
@@ -220,7 +212,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(4, value);
+        WriteField(Education, value);
         WriteMulti(EducationEdit, value);
     }
 
@@ -230,7 +222,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(5, value);
+        WriteField(WorkExperience, value);
         WriteMulti(WorkExperienceEdit, value);
     }
 
@@ -240,7 +232,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(7, value);
+        WriteField(CloseRelatives, value);
         WriteMulti(CloseRelativesEdit, value);
     }
 
@@ -250,7 +242,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(8, value);
+        WriteField(EmergencyContact, value);
         WriteMulti(EmergencyContactEdit, value);
     }
 
@@ -260,7 +252,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(9, value);
+        WriteField(PhysiologicalTraits, value);
         WriteMulti(PhysiologicalTraitsEdit, value);
     }
 
@@ -270,7 +262,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(10, value);
+        WriteField(PsychologicalTraits, value);
         WriteMulti(PsychologicalTraitsEdit, value);
     }
 
@@ -280,7 +272,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(11, value);
+        WriteField(ArrestHistory, value);
         WriteMulti(ArrestHistoryEdit, value);
     }
 
@@ -290,7 +282,7 @@ public sealed partial class PortfolioEditor : Control
         if (string.IsNullOrEmpty(value))
             return;
 
-        WriteField(12, value);
+        WriteField(ConvictionHistory, value);
         WriteMulti(ConvictionHistoryEdit, value);
     }
 
