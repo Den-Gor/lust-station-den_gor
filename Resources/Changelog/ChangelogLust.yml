@@ -1356,3 +1356,10 @@
     description: Снимок экрана 2026-09-14 234342
   - url: https://github.com/user-attachments/assets/78c64647-feac-475d-ac93-952b79d295fb
     description: Снимок экрана 2026-09-14 234417
+- author: я - оливка
+  time: '2026-10-05T00:25:42.0000000+00:00'
+  changes:
+  - type: Add
+    message: Добавлен плащ Инспектора Qillu
+  id: 324
+  url: https://github.com/makura-games/lust-station/pull/608
