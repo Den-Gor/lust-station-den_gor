@@ -1,0 +1,46 @@
+lust-medical-records-empty-state = Select a crewmember on the left.
+lust-medical-records-section-notes = Medical notes
+lust-medical-records-field-name = Name:
+lust-medical-records-field-age = Age:
+lust-medical-records-field-gender = Gender:
+lust-medical-records-field-species = Species:
+lust-medical-records-field-job = Job:
+lust-medical-records-field-fingerprint = Fingerprints:
+lust-medical-records-field-dna = DNA:
+lust-medical-records-save = Save
+lust-medical-records-print = Print
+lust-medical-records-biometrics-unlocked = Console unlocked. DNA and fingerprints can now be edited.
+lust-medical-records-biometrics-locked = Console locked. DNA and fingerprints can no longer be edited.
+lust-medical-records-advanced-access-locked = Advanced access: Locked
+lust-medical-records-advanced-access-unlocked = Advanced access: Unlocked
+lust-medical-records-print-name = Medical record for { $name }
+lust-medical-records-print-content =
+    ​
+    ​
+    ​[head=1]NanoTrasen[/head]
+    ​[bold]Employee medical record[/bold]
+    ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
+    ​[head=2]Personal information[/head]
+
+    ​[bullet] [color=#594D4A][bold]Name:[/bold][/color] [italic]{ $name }[/italic]
+    ​[bullet] [color=#594D4A][bold]Age:[/bold][/color] [italic]{ $age }[/italic]
+    ​[bullet] [color=#594D4A][bold]Gender:[/bold][/color] [italic]{ $gender }[/italic]
+    ​[bullet] [color=#594D4A][bold]Species:[/bold][/color] [italic]{ $species }[/italic]
+    ​[bullet] [color=#594D4A][bold]Job:[/bold][/color] [italic]{ $job }[/italic]
+
+    ​[head=2]Biometric data[/head]
+
+    ​[bullet] [color=#5BA4CF][bold]Fingerprints:[/bold][/color] [mono]{ $fingerprint }[/mono]
+    ​[bullet] [color=#5BA4CF][bold]DNA:[/bold][/color] [mono]{ $dna }[/mono]
+
+    ​[head=2]Medical information[/head]
+
+    ​[bullet] [color=#594D4A][bold]Close relatives:[/bold][/color] [italic]{ $closeRelatives }[/italic]
+    ​[bullet] [color=#594D4A][bold]Emergency contact:[/bold][/color] [italic]{ $emergencyContact }[/italic]
+    ​[bullet] [color=#594D4A][bold]Physiological details:[/bold][/color] [italic]{ $physiologicalTraits }[/italic]
+    ​[bullet] [color=#594D4A][bold]Psychological details:[/bold][/color] [italic]{ $psychologicalTraits }[/italic]
+
+    ​[head=2]Physician's notes[/head]
+
+    ​[italic]{ $notes }[/italic]

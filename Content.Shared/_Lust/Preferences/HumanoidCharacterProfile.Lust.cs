@@ -17,7 +17,7 @@ public sealed partial class HumanoidCharacterProfile
     public Virginity AnalVirginity { get; set; } = Virginity.Yes;
 
     [DataField]
-    public bool AgeIsUnknown { get; set; } = true;
+    public bool AgeIsUnknown { get; set; }
 
     /// <summary>
     /// портфолио персонажа.
