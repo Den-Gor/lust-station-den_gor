@@ -39,8 +39,17 @@ public sealed partial class SunriseCriminalRecordsDetailsControl : Control
     {
         PersonName.Text = state.SelectedName ?? Loc.GetString("sunrise-records-unknown-name");
         PersonJob.Text = state.JobTitle ?? Loc.GetString("sunrise-records-unknown-job");
-        AgeLabel.Text = state.Age?.ToString() ?? Loc.GetString("sunrise-records-unknown-age");
-        
+        // Lust edit start
+        if (state.Age is null || state.Age <= 0)
+        {
+            AgeLabel.Text = Loc.GetString("humanoid-profile-data-null");
+        }
+        else
+        {
+            AgeLabel.Text = state.Age.Value.ToString();
+        }
+        // Lust edit end
+
         if (state.Gender != null)
             GenderLabel.Text = Loc.GetString("station-records-gender", ("gender", state.Gender));
         else
@@ -53,6 +62,8 @@ public sealed partial class SunriseCriminalRecordsDetailsControl : Control
 
         DnaLabel.Text = state.DNA ?? Loc.GetString("sunrise-records-none");
         FingerprintsLabel.Text = state.Fingerprints ?? Loc.GetString("sunrise-records-none");
+
+        PortfolioControl.SetProfile(state.HumanoidProfile); // Lust-edit
 
         StatusOption.SelectId((int) state.Status);
         StatusReasonLabel.Text = state.StatusReason;

@@ -6,7 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Utility;
 
-namespace Content.Client._Lust.Portfolio;
+namespace Content.Client._Lust.Preference;
 
 [GenerateTypedNameReferences]
 public sealed partial class PortfolioEditor : Control

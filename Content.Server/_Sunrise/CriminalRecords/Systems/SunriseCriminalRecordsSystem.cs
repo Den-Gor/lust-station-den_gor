@@ -10,6 +10,7 @@ using Content.Server._Sunrise.Laws.Systems;
 using Content.Shared.Access.Systems;
 using Content.Server.CriminalRecords.Systems;
 using Content.Shared.CriminalRecords;
+using Content.Shared.Preferences; // Lust-edit
 using Content.Shared.Security;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
@@ -315,6 +316,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
         string? dna = null;
         SecurityStatus status = SecurityStatus.None;
         string? statusReason = null;
+        HumanoidCharacterProfile? humanoidProfile = null; // Lust edit
         List<CriminalCase> cases = new();
 
         if (component.SelectedKey != null)
@@ -329,6 +331,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
                 species = general.Species;
                 fingerprints = general.Fingerprint;
                 dna = general.DNA;
+                humanoidProfile = general.HumanoidProfile; // Lust edit
             }
 
             if (_stationRecords.TryGetRecord<CriminalRecord>(component.SelectedKey.Value, out var criminal))
@@ -361,7 +364,8 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
             fingerprints,
             dna,
             status,
-            statusReason);
+            statusReason,
+            humanoidProfile); // Lust edit
         _ui.SetUiState(uid, SunriseCriminalRecordsConsoleKey.Key, state);
     }
 

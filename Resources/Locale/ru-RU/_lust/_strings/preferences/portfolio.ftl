@@ -1,5 +1,6 @@
 ### портфолио персонажа
 humanoid-profile-editor-portfolio-tab = Портфолио:
+humanoid-profile-editor-portfolio-additional-information = Дополнительные сведения
 humanoid-profile-editor-portfolio-age-unknown = Возраст неизвестен:
 humanoid-profile-editor-portfolio-age-unknown-yes = Да
 humanoid-profile-editor-portfolio-age-unknown-no = Нет

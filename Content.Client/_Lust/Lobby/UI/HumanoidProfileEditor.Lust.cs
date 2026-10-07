@@ -1,4 +1,4 @@
-using Content.Client._Lust.Portfolio;
+using Content.Client._Lust.Preference;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 

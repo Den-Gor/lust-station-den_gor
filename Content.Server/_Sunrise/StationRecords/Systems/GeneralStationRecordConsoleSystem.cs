@@ -3,6 +3,7 @@ using Content.Server.Popups;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Roles.Jobs;
 using Content.Server.StationRecords.Components;
+using Content.Shared._Lust.Preferences;
 using Content.Shared._Sunrise.StationRecords;
 using Content.Shared.Access.Systems;
 using Content.Shared.Emag.Systems;
@@ -15,6 +16,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.StationRecords.Systems;
 
@@ -149,18 +151,52 @@ public sealed partial class GeneralStationRecordConsoleSystem
 
         var documentName = Loc.GetString("printed-station-records-document-name", ("name", record.Name));
         _metaData.SetEntityName(printed, documentName);
+        // Lust edit start
+        var portfolio = record.HumanoidProfile?.Portfolio;
+        var missing = Loc.GetString("printed-station-records-unrecognized");
+
+        string PrintableField(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value)
+                ? missing
+                : FormattedMessage.EscapeText(value);
+        }
+
+        var maritalStatus = Enum.TryParse<MaritalStatus>(
+            portfolio?.MaritalStatus,
+            true,
+            out var status)
+            ? Loc.GetString(
+                $"humanoid-profile-editor-portfolio-marital-{status.ToString().ToLowerInvariant()}-text")
+            : missing;
+
+        var age = record.Age > 0
+            ? record.Age.ToString()
+            : missing;
+        // Lust edit end
 
         var text = Loc.GetString(
             "printed-station-records-content",
             ("name", record.Name),
             ("job", GetJobName(record.JobPrototype)),
             ("department", GetDepartmentName(record.JobPrototype)),
-            ("age", record.Age),
+            ("age", age), // Lust edit
             ("gender", GetGenderName(record.Gender)),
             ("species", GetSpeciesName(record.Species)),
             ("dna", record.DNA ?? Loc.GetString("printed-station-records-unrecognized")),
             ("fingerprint", record.Fingerprint ?? Loc.GetString("printed-station-records-unrecognized")),
-            ("personality", GetPersonality(record.Personality))
+            ("personality", GetPersonality(record.Personality)),
+            //  Lust edit start
+            ("distinguishingFeatures", PrintableField(portfolio?.DistinguishingFeatures)),
+            ("education", PrintableField(portfolio?.Education)),
+            ("workExperience", PrintableField(portfolio?.WorkExperience)),
+            ("region", PrintableField(portfolio?.Region)),
+            ("planetOrColony", PrintableField(portfolio?.PlanetOrColony)),
+            ("address", PrintableField(portfolio?.Address)),
+            ("maritalStatus", maritalStatus),
+            ("closeRelatives", PrintableField(portfolio?.CloseRelatives)),
+            ("emergencyContact", PrintableField(portfolio?.EmergencyContact))
+            // Lust edit end
         );
 
         _paper.SetContent((printed, paperComp), text);
