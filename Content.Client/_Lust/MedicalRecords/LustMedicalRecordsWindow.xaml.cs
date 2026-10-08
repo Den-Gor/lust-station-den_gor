@@ -67,7 +67,7 @@ public sealed partial class LustMedicalRecordsWindow : DefaultWindow
         var placeholder = new Rope.Leaf(_loc.GetString("humanoid-profile-data-null"));
         PhysiologicalTraits.Placeholder = placeholder;
         PsychologicalTraits.Placeholder = placeholder;
-        Notes.Placeholder = placeholder;
+        Notes.Placeholder = new Rope.Leaf(_loc.GetString("lust-medical-records-notes-placeholder"));
 
         RecordListing.OnItemSelected += args =>
         {

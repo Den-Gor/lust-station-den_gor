@@ -44,6 +44,7 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<AfterGeneralRecordCreatedEvent>(OnGeneralRecordCreated);
+        SubscribeLocalEvent<LustMedicalRecordsConsoleComponent, RecordModifiedEvent>(OnRecordModified);
         SubscribeLocalEvent<LustMedicalRecordsConsoleComponent, AfterInteractUsingEvent>(OnCardUsed);
         SubscribeLocalEvent<LustMedicalRecordsConsoleComponent, GotEmaggedEvent>(OnEmagged);
 
@@ -90,6 +91,13 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
         UpdateUserInterface(uid, component, component.BiometricsUnlocked);
     }
 
+    private void OnRecordModified(
+        Entity<LustMedicalRecordsConsoleComponent> ent,
+        ref RecordModifiedEvent args)
+    {
+        UpdateUserInterface(ent.Owner, ent.Comp, ent.Comp.BiometricsUnlocked);
+    }
+
     private void OnSaveRecord(Entity<LustMedicalRecordsConsoleComponent> ent, ref LustMedicalRecordsSaveMessage msg)
     {
         if (!_access.IsAllowed(msg.Actor, ent.Owner)
@@ -134,7 +142,6 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
         _records.AddRecordEntry(key, updatedRecord);
         _records.AddRecordEntry(key, medicalRecord);
         _records.Synchronize(key);
-        UpdateUserInterface(ent.Owner, ent.Comp, canEditBiometrics);
         _audio.PlayPvs(ent.Comp.SuccessfulSound, ent.Owner);
     }
 

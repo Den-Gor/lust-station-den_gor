@@ -1,18 +1,4 @@
-lust-medical-records-empty-state = Выберите сотрудника слева.
-lust-medical-records-section-notes = Заметки врача
-lust-medical-records-field-name = Имя:
-lust-medical-records-field-age = Возраст:
-lust-medical-records-field-gender = Пол:
-lust-medical-records-field-species = Раса:
-lust-medical-records-field-job = Должность:
-lust-medical-records-field-fingerprint = Отпечатки пальцев:
-lust-medical-records-field-dna = ДНК:
-lust-medical-records-save = Сохранить
-lust-medical-records-print = Распечатать
-lust-medical-records-biometrics-unlocked = Консоль разблокирована. Редактирование ДНК и отпечатков разрешено.
-lust-medical-records-biometrics-locked = Консоль заблокирована. Редактирование ДНК и отпечатков запрещено.
-lust-medical-records-advanced-access-locked = Продвинутый доступ: Заблокирован
-lust-medical-records-advanced-access-unlocked = Продвинутый доступ: Разблокирован
+### Печатная форма медицинской карты
 lust-medical-records-print-name = Медицинская карта на { $name }
 lust-medical-records-print-content =
     ​

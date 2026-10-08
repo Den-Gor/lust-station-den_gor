@@ -1,18 +1,4 @@
-lust-medical-records-empty-state = Select a crewmember on the left.
-lust-medical-records-section-notes = Medical notes
-lust-medical-records-field-name = Name:
-lust-medical-records-field-age = Age:
-lust-medical-records-field-gender = Gender:
-lust-medical-records-field-species = Species:
-lust-medical-records-field-job = Job:
-lust-medical-records-field-fingerprint = Fingerprints:
-lust-medical-records-field-dna = DNA:
-lust-medical-records-save = Save
-lust-medical-records-print = Print
-lust-medical-records-biometrics-unlocked = Console unlocked. DNA and fingerprints can now be edited.
-lust-medical-records-biometrics-locked = Console locked. DNA and fingerprints can no longer be edited.
-lust-medical-records-advanced-access-locked = Advanced access: Locked
-lust-medical-records-advanced-access-unlocked = Advanced access: Unlocked
+### Medical record print template
 lust-medical-records-print-name = Medical record for { $name }
 lust-medical-records-print-content =
     ​
