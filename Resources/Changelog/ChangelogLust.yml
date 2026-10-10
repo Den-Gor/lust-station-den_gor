@@ -1527,3 +1527,10 @@
     message: Шанс зомби инфекции у фентамила понижен в 2 раза
   id: 338
   url: https://github.com/makura-games/lust-station/pull/631
+- author: 'Имя: olivka'
+  time: '2026-10-10T21:24:58.0000000+00:00'
+  changes:
+  - type: Add
+    message: 'Новая обувь: тяпки'
+  id: 339
+  url: https://github.com/makura-games/lust-station/pull/628
