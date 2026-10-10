@@ -1534,3 +1534,10 @@
     message: 'Новая обувь: тяпки'
   id: 339
   url: https://github.com/makura-games/lust-station/pull/628
+- author: Matizze
+  time: '2026-10-10T21:30:01.0000000+00:00'
+  changes:
+  - type: Fix
+    message: Исправление возможности стрельбы, находясь внутри меха.
+  id: 340
+  url: https://github.com/makura-games/lust-station/pull/633
