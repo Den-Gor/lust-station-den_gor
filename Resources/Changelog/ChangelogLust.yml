@@ -1520,3 +1520,10 @@
     message: Исправлен баг, позволяющий стрелять под столом. Теперь стрелок под столом попадает по столу, пока тот не сломается. Но скоро будет заменено на иную систему.
   id: 337
   url: https://github.com/makura-games/lust-station/pull/630
+- author: Den_Gor
+  time: '2026-10-10T21:20:06.0000000+00:00'
+  changes:
+  - type: Tweak
+    message: Шанс зомби инфекции у фентамила понижен в 2 раза
+  id: 338
+  url: https://github.com/makura-games/lust-station/pull/631
