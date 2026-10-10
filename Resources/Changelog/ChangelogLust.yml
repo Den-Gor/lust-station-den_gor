@@ -1486,3 +1486,13 @@
     message: Мыло научилось смывать временные запахи и на время перебивать собственный аромат резким мыльным духом.
   id: 334
   url: https://github.com/makura-games/lust-station/pull/605
+- author: Bebronya
+  time: '2026-10-10T20:32:21.0000000+00:00'
+  changes:
+  - type: Add
+    message: Добавлены декоративные тыквы к празднику
+  id: 335
+  url: https://github.com/makura-games/lust-station/pull/627
+  media:
+  - url: https://github.com/user-attachments/assets/005e8888-9b25-4757-8175-64c7e514e8bd
+    description: Снимок экрана 2026-10-08 232325
