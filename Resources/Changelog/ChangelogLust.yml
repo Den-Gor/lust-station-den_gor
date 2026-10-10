@@ -1496,3 +1496,20 @@
   media:
   - url: https://github.com/user-attachments/assets/005e8888-9b25-4757-8175-64c7e514e8bd
     description: Снимок экрана 2026-10-08 232325
+- author: Matizze
+  time: '2026-10-10T20:40:22.0000000+00:00'
+  changes:
+  - type: Add
+    message: В список закупок, в раздел инженерии добавлена противометеоритная турель за 4500 кредитов.
+  - type: Tweak
+    message: Добавление локализации упаковке с турелью.
+  - type: Tweak
+    message: Убрано требование в предварительном изучении "Механизированная подготовка" за счёт увеличения стоимости изучения.
+  - type: Tweak
+    message: Изменение локализации плюшки Улавы-Бриц на мужское местоимение.
+  - type: Tweak
+    message: Урановые патроны перенесены на тир 3 изучения.
+  - type: Tweak
+    message: Исправлен инвентарь китоглава.
+  id: 336
+  url: https://github.com/makura-games/lust-station/pull/632
