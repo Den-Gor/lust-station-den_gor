@@ -53,8 +53,14 @@ public sealed partial class PortfolioEditor : Control
 
     private HumanoidCharacterProfile _profile = new();
 
+    /// <summary>
+    /// Вызывается при любом изменении профиля во вкладке. Аргумент — обновлённый профиль.
+    /// </summary>
     public event Action<HumanoidCharacterProfile>? OnProfileChanged;
 
+    /// <summary>
+    /// Создаёт вкладку редактора портфолио и подписывает контролы на ввод и генерацию.
+    /// </summary>
     public PortfolioEditor()
     {
         RobustXamlLoader.Load(this);
@@ -137,23 +143,28 @@ public sealed partial class PortfolioEditor : Control
         edit.TextRope = new Rope.Leaf(value);
     }
 
+    /// <summary>
+    /// Заливает контролы данными профиля. Нормализует отсутствие портфолио в пустое.
+    /// </summary>
+    /// <param name="profile">Профиль для отображения. Запоминается для последующих правок.</param>
     public void SetProfile(HumanoidCharacterProfile profile)
     {
-        _profile = profile;
+        _profile = profile.Portfolio is null ? profile.WithPortfolio(new PortfolioProfile()) : profile;
 
-        WriteMulti(DistinguishingFeaturesEdit, DistinguishingFeatures.Get(profile.Portfolio));
-        RegionEdit.Text = Region.Get(profile.Portfolio);
-        PlanetOrColonyEdit.Text = PlanetOrColony.Get(profile.Portfolio);
-        AddressEdit.Text = Address.Get(profile.Portfolio);
-        WriteMulti(EducationEdit, Education.Get(profile.Portfolio));
-        WriteMulti(WorkExperienceEdit, WorkExperience.Get(profile.Portfolio));
-        MaritalStatusButton.SelectId(PickMaritalStatus(profile));
-        WriteMulti(CloseRelativesEdit, CloseRelatives.Get(profile.Portfolio));
-        WriteMulti(EmergencyContactEdit, EmergencyContact.Get(profile.Portfolio));
-        WriteMulti(PhysiologicalTraitsEdit, PhysiologicalTraits.Get(profile.Portfolio));
-        WriteMulti(PsychologicalTraitsEdit, PsychologicalTraits.Get(profile.Portfolio));
-        WriteMulti(ArrestHistoryEdit, ArrestHistory.Get(profile.Portfolio));
-        WriteMulti(ConvictionHistoryEdit, ConvictionHistory.Get(profile.Portfolio));
+        var portfolio = _profile.Portfolio;
+        WriteMulti(DistinguishingFeaturesEdit, DistinguishingFeatures.Get(portfolio));
+        RegionEdit.Text = Region.Get(portfolio);
+        PlanetOrColonyEdit.Text = PlanetOrColony.Get(portfolio);
+        AddressEdit.Text = Address.Get(portfolio);
+        WriteMulti(EducationEdit, Education.Get(portfolio));
+        WriteMulti(WorkExperienceEdit, WorkExperience.Get(portfolio));
+        MaritalStatusButton.SelectId(PickMaritalStatus(portfolio));
+        WriteMulti(CloseRelativesEdit, CloseRelatives.Get(portfolio));
+        WriteMulti(EmergencyContactEdit, EmergencyContact.Get(portfolio));
+        WriteMulti(PhysiologicalTraitsEdit, PhysiologicalTraits.Get(portfolio));
+        WriteMulti(PsychologicalTraitsEdit, PsychologicalTraits.Get(portfolio));
+        WriteMulti(ArrestHistoryEdit, ArrestHistory.Get(portfolio));
+        WriteMulti(ConvictionHistoryEdit, ConvictionHistory.Get(portfolio));
 
         AgeUnknownButton.SelectId(profile.AgeIsUnknown ? 1 : 0);
     }
@@ -294,9 +305,9 @@ public sealed partial class PortfolioEditor : Control
         OnProfileChanged?.Invoke(_profile);
     }
 
-    private static int PickMaritalStatus(HumanoidCharacterProfile profile)
+    private static int PickMaritalStatus(PortfolioProfile portfolio)
     {
-        return Enum.TryParse<MaritalStatus>(profile.Portfolio.MaritalStatus, ignoreCase: true, out var status)
+        return Enum.TryParse<MaritalStatus>(portfolio.MaritalStatus, ignoreCase: true, out var status)
             ? (int) status
             : (int) MaritalStatus.Single;
     }

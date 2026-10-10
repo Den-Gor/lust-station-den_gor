@@ -193,6 +193,7 @@ namespace Content.Shared.Preferences
         {
             SunriseProfile = new SunriseCharacterProfile(other.SunriseProfile); // Sunrise-Edit
             CopyLustProfile(other); // Lust-edit - копируем ERP-настройки из partial-класса
+            CopyPortfolio(other); // Lust-edit - копируем портфолио
         }
 
         /// <summary>
@@ -480,6 +481,7 @@ namespace Content.Shared.Preferences
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
             if (!LustProfileEquals(other)) return false; // Lust-edit
+            if (!PortfolioEquals(other)) return false; // Lust-edit
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
             if (!SunriseProfile.Equals(other.SunriseProfile)) return false; // Sunrise-Edit
@@ -649,7 +651,7 @@ namespace Content.Shared.Preferences
             }
 
             EnsureSunriseProfileValid(speciesPrototype, sex, session, collection, sponsorPrototypes); // Sunrise-Edit
-            EnsureLustProfileValid(); // Lust-edit - валидация наполнения портфолио
+            EnsurePortfolioValid(); // Lust-edit - валидация наполнения портфолио
 
             PreferenceUnavailable = prefsUnavailableMode;
 
@@ -761,6 +763,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             AddLustHashCode(ref hashCode); // Lust-edit
+            AddPortfolioHashCode(ref hashCode); // Lust-edit
             hashCode.Add((int)Gender);
             hashCode.Add(Appearance);
             hashCode.Add(SunriseProfile); // Sunrise-Edit

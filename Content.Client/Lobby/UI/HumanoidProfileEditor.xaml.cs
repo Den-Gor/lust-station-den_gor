@@ -379,6 +379,7 @@ namespace Content.Client.Lobby.UI
             UpdateSaveButton();
             UpdateMarkings();
             UpdateSunriseControls(); // Sunrise-Edit — обновление расширенных настроек профиля
+            UpdatePortfolioControls(); // Lust-edit - обновление вкладки портфолио
             UpdateLustControls(); // Lust-edit - обновление настроек ERP
 
             RefreshAntags();

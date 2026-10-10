@@ -96,10 +96,17 @@ public sealed partial class PortfolioProfile : IEquatable<PortfolioProfile>
     [DataField]
     public string ConvictionHistory = string.Empty;
 
+    /// <summary>
+    /// Создаёт пустое портфолио. Используется для новых профилей и как заглушка при отсутствии данных.
+    /// </summary>
     public PortfolioProfile()
     {
     }
 
+    /// <summary>
+    /// Копирует портфолио. Используется при клонировании профиля, чтобы правки не задевали оригинал.
+    /// </summary>
+    /// <param name="other">Портфолио-источник.</param>
     public PortfolioProfile(PortfolioProfile other)
     {
         DistinguishingFeatures = other.DistinguishingFeatures;
@@ -140,6 +147,11 @@ public sealed partial class PortfolioProfile : IEquatable<PortfolioProfile>
         };
     }
 
+    /// <summary>
+    /// Сравнивает портфолио по всем полям. Используется для определения грязности профиля в редакторе.
+    /// </summary>
+    /// <param name="other">Портфолио для сравнения.</param>
+    /// <returns>True, если все поля совпадают.</returns>
     public bool Equals(PortfolioProfile? other)
     {
         return other is not null &&
@@ -158,11 +170,13 @@ public sealed partial class PortfolioProfile : IEquatable<PortfolioProfile>
                ConvictionHistory == other.ConvictionHistory;
     }
 
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
         return ReferenceEquals(this, obj) || obj is PortfolioProfile other && Equals(other);
     }
 
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         var code = HashCode.Combine(
