@@ -192,7 +192,7 @@ namespace Content.Shared.Preferences
                 new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
             SunriseProfile = new SunriseCharacterProfile(other.SunriseProfile); // Sunrise-Edit
-            CopyLustProfile(other); // Lust edit - копируем ERP-настройки из partial-класса
+            CopyLustProfile(other); // Lust-edit - копируем ERP-настройки из partial-класса
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Content.Shared.Preferences
                     gender = Gender.Male;
                     break;
                 case Sex.Female:
-                case Sex.Futanari: // Lust edit - используем женский род по умолчанию
+                case Sex.Futanari: // Lust-edit - используем женский род по умолчанию
                     gender = Gender.Female;
                     break;
             }
@@ -278,7 +278,7 @@ namespace Content.Shared.Preferences
                 Species = species,
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
                 SunriseProfile = SunriseCharacterProfile.RandomForSpecies(speciesPrototype, sex, random, prototypeManager), // Sunrise-Edit
-                Portfolio = PortfolioProfile.RandomForSpecies(species), // Lust edit - генерируем портфолио
+                Portfolio = PortfolioProfile.RandomForSpecies(species), // Lust-edit - генерируем портфолио
             };
         }
 
@@ -479,7 +479,7 @@ namespace Content.Shared.Preferences
             if (Name != other.Name) return false;
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
-            if (!LustProfileEquals(other)) return false; // Lust edit
+            if (!LustProfileEquals(other)) return false; // Lust-edit
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
             if (!SunriseProfile.Equals(other.SunriseProfile)) return false; // Sunrise-Edit
@@ -510,7 +510,7 @@ namespace Content.Shared.Preferences
             {
                 Sex.Male => Sex.Male,
                 Sex.Female => Sex.Female,
-                Sex.Futanari => Sex.Futanari, // Lust edit
+                Sex.Futanari => Sex.Futanari, // Lust-edit
                 Sex.Unsexed => Sex.Unsexed,
                 _ => Sex.Male // Invalid enum values.
             };
@@ -649,7 +649,7 @@ namespace Content.Shared.Preferences
             }
 
             EnsureSunriseProfileValid(speciesPrototype, sex, session, collection, sponsorPrototypes); // Sunrise-Edit
-            EnsureLustProfileValid(); // Lust edit - валидация наполнения портфолио
+            EnsureLustProfileValid(); // Lust-edit - валидация наполнения портфолио
 
             PreferenceUnavailable = prefsUnavailableMode;
 
@@ -760,7 +760,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(Species);
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
-            AddLustHashCode(ref hashCode); // Lust edit
+            AddLustHashCode(ref hashCode); // Lust-edit
             hashCode.Add((int)Gender);
             hashCode.Add(Appearance);
             hashCode.Add(SunriseProfile); // Sunrise-Edit

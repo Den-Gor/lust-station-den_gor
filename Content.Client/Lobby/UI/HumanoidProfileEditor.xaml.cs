@@ -106,7 +106,7 @@ namespace Content.Client.Lobby.UI
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
             InitializeSunriseProfileEditor(); // Sunrise-Edit — инициализация расширенных настроек профиля
-            InitializeLustProfileEditor(); // Lust edit - инициализация настроек ERP
+            InitializeLustProfileEditor(); // Lust-edit - инициализация настроек ERP
 
             Markings.SetModel(_markingsModel);
 
@@ -379,7 +379,7 @@ namespace Content.Client.Lobby.UI
             UpdateSaveButton();
             UpdateMarkings();
             UpdateSunriseControls(); // Sunrise-Edit — обновление расширенных настроек профиля
-            UpdateLustControls(); // Lust edit - обновление настроек ERP
+            UpdateLustControls(); // Lust-edit - обновление настроек ERP
 
             RefreshAntags();
             RefreshJobs();

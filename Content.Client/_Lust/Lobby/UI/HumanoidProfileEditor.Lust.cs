@@ -32,7 +32,7 @@ public sealed partial class HumanoidProfileEditor
 
     private void UpdateLustControls()
     {
-        // Lust-Edit: вкладка портфолио создаётся здесь, до проверки Profile,
+        // вкладка портфолио создаётся здесь, до проверки Profile,
         // чтобы она не зависела ни от наличия описания, ни от ic.flavor_text.
         EnsurePortfolioTab();
 
@@ -69,7 +69,7 @@ public sealed partial class HumanoidProfileEditor
     }
 
     /// <summary>
-    /// Lust-Edit: создаёт собственную вкладку портфолио.
+    /// создаёт собственную вкладку портфолио.
     /// Не зависит от вкладки описания и от CVar ic.flavor_text, вызывается повторно безопасно.
     /// </summary>
     private void EnsurePortfolioTab()

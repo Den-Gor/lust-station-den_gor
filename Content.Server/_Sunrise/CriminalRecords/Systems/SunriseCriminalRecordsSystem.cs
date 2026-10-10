@@ -316,7 +316,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
         string? dna = null;
         SecurityStatus status = SecurityStatus.None;
         string? statusReason = null;
-        HumanoidCharacterProfile? humanoidProfile = null; // Lust edit
+        HumanoidCharacterProfile? humanoidProfile = null; // Lust-edit
         List<CriminalCase> cases = new();
 
         if (component.SelectedKey != null)
@@ -331,7 +331,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
                 species = general.Species;
                 fingerprints = general.Fingerprint;
                 dna = general.DNA;
-                humanoidProfile = general.HumanoidProfile; // Lust edit
+                humanoidProfile = general.HumanoidProfile; // Lust-edit
             }
 
             if (_stationRecords.TryGetRecord<CriminalRecord>(component.SelectedKey.Value, out var criminal))
@@ -365,7 +365,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
             dna,
             status,
             statusReason,
-            humanoidProfile); // Lust edit
+            humanoidProfile); // Lust-edit
         _ui.SetUiState(uid, SunriseCriminalRecordsConsoleKey.Key, state);
     }
 

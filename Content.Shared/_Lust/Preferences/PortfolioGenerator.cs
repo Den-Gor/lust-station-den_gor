@@ -6,6 +6,9 @@ namespace Content.Shared._Lust.Preferences;
 
 public static class PortfolioGenerator
 {
+    // Шанс взять расовый вариант из пула вместо общего.
+    private const float RacialVariantChance = 0.5f;
+
     /// <summary>
     /// Выбирает строку из пула. Пустая строка, если пула нет или он пуст.
     /// </summary>
@@ -20,7 +23,7 @@ public static class PortfolioGenerator
         var strings = pool.General;
         if (pool.Species.TryGetValue(species.Id, out var racial)
             && racial.Count > 0
-            && random.Prob(0.5f))
+            && random.Prob(RacialVariantChance))
         {
             strings = racial;
         }

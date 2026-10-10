@@ -110,12 +110,12 @@ public sealed record GeneralStationRecord
             Personality = original.Personality.SanitizeInput(MaxPersonalityLength),
         };
 
-        return SanitizeLustProfile(updated); //  Lust-edit
+        return SanitizeLustProfile(updated); // Lust-edit
     }
 
     // Sunrise added end
 
-    // Lust added start
+    // Lust-edit-start
     /// <summary>
     ///     Санитизация портфолио: лимиты длин накладывает PortfolioProfile.EnsureValid.
     ///     Профиль, которого нет, остаётся null — консоль это переживает.
@@ -133,5 +133,5 @@ public sealed record GeneralStationRecord
             HumanoidProfile = original.HumanoidProfile.WithPortfolio(portfolio),
         };
     }
-    // Lust added end
+    // Lust-edit-end
 }

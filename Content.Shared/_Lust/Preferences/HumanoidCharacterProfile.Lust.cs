@@ -2,6 +2,8 @@ using Content.Shared.Humanoid;
 using Content.Shared._Lust.Preferences;
 using Robust.Shared.Serialization;
 
+// Partial к HumanoidCharacterProfile: неймспейс обязан совпадать с основной частью класса,
+// поэтому здесь корень Content.Shared.Preferences, а не Content.Shared._Lust.Preferences.
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Content.Shared.Preferences;
 

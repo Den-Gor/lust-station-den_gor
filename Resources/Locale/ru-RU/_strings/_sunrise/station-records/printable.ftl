@@ -1,4 +1,4 @@
-# Lust edit start - добавление портфолио в распечатку станции
+# Lust-edit-start - добавление портфолио в распечатку станции
 printed-station-records-content =
     ​
     ​
@@ -35,6 +35,6 @@ printed-station-records-content =
     ​[head=2]Характеристика[/head]
     
     ​[italic]{ $personality }[/italic]
-# Lust edit end
+# Lust-edit-end
 printed-station-records-document-name = Распечатка на { $name }
 printed-station-records-unrecognized = Неустановлено

@@ -5,13 +5,19 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._Lust.Preferences;
 
 /// <summary>
-/// Lust-Edit: портфолио персонажа, по аналогии с SunriseCharacterProfile.
+/// Lust-edit: портфолио персонажа, по аналогии с SunriseCharacterProfile.
 /// Хранится объектом внутри HumanoidCharacterProfile, колонки БД остаются те же.
 /// </summary>
 [DataDefinition]
 [Serializable, NetSerializable]
 public sealed partial class PortfolioProfile : IEquatable<PortfolioProfile>
 {
+    // Лимиты длин. Должны совпадать с MaxLength в БД (Model.Lust.cs),
+    // иначе Postgres уронит сохранение, а SQLite молча пропустит мусор.
+    private const int MaxTextLength = 512;
+    private const int MaxShortTextLength = 128;
+    private const int MaxMaritalStatusLength = 32;
+
     /// <summary>
     /// Отличительные признаки (многострочное).
     /// </summary>
@@ -179,28 +185,25 @@ public sealed partial class PortfolioProfile : IEquatable<PortfolioProfile>
 
     /// <summary>
     /// Санитизирует поля портфолио, вызывается из EnsureValid() профиля.
+    /// Лимиты должны совпадать с MaxLength в Content.Server.Database/_Lust/Model.Lust.cs.
     /// </summary>
     public void EnsureValid()
     {
-        const int maxText = 512;
-        const int maxShortText = 128;
-        const int maxEnum = 32;
+        DistinguishingFeatures = ValidateEntry(DistinguishingFeatures, MaxTextLength);
+        Education = ValidateEntry(Education, MaxTextLength);
+        WorkExperience = ValidateEntry(WorkExperience, MaxTextLength);
+        CloseRelatives = ValidateEntry(CloseRelatives, MaxTextLength);
+        EmergencyContact = ValidateEntry(EmergencyContact, MaxTextLength);
+        PhysiologicalTraits = ValidateEntry(PhysiologicalTraits, MaxTextLength);
+        PsychologicalTraits = ValidateEntry(PsychologicalTraits, MaxTextLength);
+        ArrestHistory = ValidateEntry(ArrestHistory, MaxTextLength);
+        ConvictionHistory = ValidateEntry(ConvictionHistory, MaxTextLength);
 
-        DistinguishingFeatures = ValidateEntry(DistinguishingFeatures, maxText);
-        Education = ValidateEntry(Education, maxText);
-        WorkExperience = ValidateEntry(WorkExperience, maxText);
-        CloseRelatives = ValidateEntry(CloseRelatives, maxText);
-        EmergencyContact = ValidateEntry(EmergencyContact, maxText);
-        PhysiologicalTraits = ValidateEntry(PhysiologicalTraits, maxText);
-        PsychologicalTraits = ValidateEntry(PsychologicalTraits, maxText);
-        ArrestHistory = ValidateEntry(ArrestHistory, maxText);
-        ConvictionHistory = ValidateEntry(ConvictionHistory, maxText);
+        Region = ValidateEntry(Region, MaxShortTextLength);
+        PlanetOrColony = ValidateEntry(PlanetOrColony, MaxShortTextLength);
+        Address = ValidateEntry(Address, MaxShortTextLength);
 
-        Region = ValidateEntry(Region, maxShortText);
-        PlanetOrColony = ValidateEntry(PlanetOrColony, maxShortText);
-        Address = ValidateEntry(Address, maxShortText);
-
-        MaritalStatus = ValidateEntry(MaritalStatus, maxEnum);
+        MaritalStatus = ValidateEntry(MaritalStatus, MaxMaritalStatusLength);
     }
 
     private static string ValidateEntry(string value, int maxLength)

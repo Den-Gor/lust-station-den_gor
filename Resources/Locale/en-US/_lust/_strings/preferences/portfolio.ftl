@@ -1,4 +1,4 @@
-### Lust-Edit: character portfolio
+### Lust-edit: character portfolio
 humanoid-profile-editor-portfolio-tab = Portfolio
 humanoid-profile-editor-portfolio-age-unknown = Age is unknown
 humanoid-profile-editor-portfolio-age-unknown-yes = Yes

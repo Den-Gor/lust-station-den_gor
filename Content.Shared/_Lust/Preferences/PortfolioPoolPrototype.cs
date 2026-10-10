@@ -5,7 +5,7 @@ namespace Content.Shared._Lust.Preferences;
 /// <summary>
 /// This is a prototype for...
 /// </summary>
-[Prototype()]
+[Prototype]
 public sealed partial class PortfolioPoolPrototype : IPrototype
 {
     /// <inheritdoc/>
@@ -16,7 +16,5 @@ public sealed partial class PortfolioPoolPrototype : IPrototype
     public List<string> General = new();
 
     [DataField]
-    public Dictionary<string,List<string>>  Species = new Dictionary<string, List<string>>();
-
-
+    public Dictionary<string, List<string>> Species = new();
 }

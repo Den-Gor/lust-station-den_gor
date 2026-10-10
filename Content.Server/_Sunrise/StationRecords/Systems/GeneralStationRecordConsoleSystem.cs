@@ -60,7 +60,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
             return;
         }
 
-        // Lust-edit start
+        // Lust-edit-start
         // Раньше тут был RemoveRecord + AddRecordEntry. RemoveRecord внутри зовёт
         // StationRecordSet.RemoveAllRecords, который чистит ВСЕ таблицы на ключе —
         // вместе с общей записью стирался CriminalRecordStatus с историей нарушений.
@@ -79,19 +79,19 @@ public sealed partial class GeneralStationRecordConsoleSystem
         var record = GeneralStationRecord.SanitizeRecord(args.Record, in _prototype);
         _stationRecords.AddRecordEntry(key, record);
         ent.Comp.ActiveKey = key.Id;
-        // Lust-edit end
+        // Lust-edit-end
 
         var message = Loc.GetString("station-record-updated", ("name", args.Record.Name));
         var popup = Loc.GetString("station-record-updated-successfully");
 
         DoFeedback(ent, message, popup);
 
-        // Lust-edit start
+        // Lust-edit-start
         // Synchronize поднимает RecordModifiedEvent, на который подписаны манифест экипажа,
         // кримконсоли и сам станучёт. Раньше событие не поднималось вовсе
         // из-за чего манифест и кримконсоль показывали устаревшие данные.
         _stationRecords.Synchronize(key);
-        // Lust-edit end
+        // Lust-edit-end
     }
 
     private void OnEmagged(Entity<GeneralStationRecordConsoleComponent> ent, ref GotEmaggedEvent args)
@@ -151,7 +151,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
 
         var documentName = Loc.GetString("printed-station-records-document-name", ("name", record.Name));
         _metaData.SetEntityName(printed, documentName);
-        // Lust edit start
+        // Lust-edit-start
         var portfolio = record.HumanoidProfile?.Portfolio;
         var missing = Loc.GetString("printed-station-records-unrecognized");
 
@@ -173,20 +173,20 @@ public sealed partial class GeneralStationRecordConsoleSystem
         var age = record.Age > 0
             ? record.Age.ToString()
             : missing;
-        // Lust edit end
+        // Lust-edit-end
 
         var text = Loc.GetString(
             "printed-station-records-content",
             ("name", record.Name),
             ("job", GetJobName(record.JobPrototype)),
             ("department", GetDepartmentName(record.JobPrototype)),
-            ("age", age), // Lust edit
+            ("age", age), // Lust-edit
             ("gender", GetGenderName(record.Gender)),
             ("species", GetSpeciesName(record.Species)),
             ("dna", record.DNA ?? Loc.GetString("printed-station-records-unrecognized")),
             ("fingerprint", record.Fingerprint ?? Loc.GetString("printed-station-records-unrecognized")),
             ("personality", GetPersonality(record.Personality)),
-            //  Lust edit start
+            // Lust-edit-start
             ("distinguishingFeatures", PrintableField(portfolio?.DistinguishingFeatures)),
             ("education", PrintableField(portfolio?.Education)),
             ("workExperience", PrintableField(portfolio?.WorkExperience)),
@@ -196,7 +196,7 @@ public sealed partial class GeneralStationRecordConsoleSystem
             ("maritalStatus", maritalStatus),
             ("closeRelatives", PrintableField(portfolio?.CloseRelatives)),
             ("emergencyContact", PrintableField(portfolio?.EmergencyContact))
-            // Lust edit end
+            // Lust-edit-end
         );
 
         _paper.SetContent((printed, paperComp), text);

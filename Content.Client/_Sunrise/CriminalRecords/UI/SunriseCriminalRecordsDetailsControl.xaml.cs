@@ -39,7 +39,7 @@ public sealed partial class SunriseCriminalRecordsDetailsControl : Control
     {
         PersonName.Text = state.SelectedName ?? Loc.GetString("sunrise-records-unknown-name");
         PersonJob.Text = state.JobTitle ?? Loc.GetString("sunrise-records-unknown-job");
-        // Lust edit start
+        // Lust-edit-start
         if (state.Age is null || state.Age <= 0)
         {
             AgeLabel.Text = Loc.GetString("humanoid-profile-data-null");
@@ -48,7 +48,7 @@ public sealed partial class SunriseCriminalRecordsDetailsControl : Control
         {
             AgeLabel.Text = state.Age.Value.ToString();
         }
-        // Lust edit end
+        // Lust-edit-end
 
         if (state.Gender != null)
             GenderLabel.Text = Loc.GetString("station-records-gender", ("gender", state.Gender));
