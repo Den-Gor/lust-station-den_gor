@@ -46,7 +46,7 @@ public sealed partial class CopyMachineComponent : Component
     /// Шанс на расклинивание
     /// </summary>
     [DataField]
-    public float UnjamChance = 0.10f;
+    public float UnjamChance = 0.2f;
     /// <summary>
     /// Предмет который будет выдовать принтер если заклинет
     /// </summary>
