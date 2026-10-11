@@ -70,6 +70,15 @@
       ]
     },
     {
+      "name": "lust-jammed",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
       "name": "inserting",
       "delays": [
         [

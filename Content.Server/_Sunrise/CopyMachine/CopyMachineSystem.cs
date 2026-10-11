@@ -217,6 +217,7 @@ public sealed partial class CopyMachineSystem : EntitySystem
             ent.Comp.IsJammed = false;
             Dirty(ent);
             QueueUIUpdate(ent);
+            UpdateJamAppearance(ent, false);
             _popup.PopupEntity(Loc.GetString("copy-machine-lust-unjammed"), ent, args.User, PopupType.Medium);
             _audioSystem.PlayPvs(ent.Comp.UnjamSound, ent);
         }
@@ -275,6 +276,7 @@ public sealed partial class CopyMachineSystem : EntitySystem
     {
         _itemSlots.AddItemSlot(ent, CopyMachineComponent.CopySlotId, ent.Comp.CopySlot);
         UpdateRunningAppearance(ent, false);
+        UpdateJamAppearance(ent, ent.Comp.IsJammed); // Lust-edit
 
         UpdateAvailableTemplates(ent);
 
@@ -361,24 +363,27 @@ public sealed partial class CopyMachineSystem : EntitySystem
             {
                 Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
             }
+            else if (_random.Prob(ent.Comp.JamChance))
+            {
+                // Заклинило прямо во время этого задания — лист испорчен, выдаём макулатуру вместо документа.
+                ent.Comp.IsJammed = true;
+                Dirty(ent);
+                QueueUIUpdate(ent);
+                UpdateJamAppearance(ent, true);
+                _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
+                _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
+                Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
+            }
             else
             {
                 var jobType = jobView.Type;
                 var templateId = jobView.TemplateId;
-                var ok = jobType switch
+                _ = jobType switch
                 {
                     CopyMachineJobType.Print when templateId != null => TryPrintFromTemplate(ent, templateId),
                     CopyMachineJobType.Copy => TryCopyFromSlotOrButtScan(ent),
                     _ => false
                 };
-                if (ok && _random.Prob(ent.Comp.JamChance))
-                {
-                    ent.Comp.IsJammed = true;
-                    Dirty(ent);
-                    QueueUIUpdate(ent);
-                    _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
-                    _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
-                }
             }
             // Lust-edit-end
         }
@@ -540,4 +545,11 @@ public sealed partial class CopyMachineSystem : EntitySystem
     {
         _appearance.SetData(uid, CopyMachineVisuals.IsRunning, isRunning);
     }
+
+    // Lust-edit-start
+    private void UpdateJamAppearance(EntityUid uid, bool isJammed)
+    {
+        _appearance.SetData(uid, CopyMachineVisuals.IsJammed, isJammed);
+    }
+    // Lust-edit-end
 }
