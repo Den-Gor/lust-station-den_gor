@@ -29,6 +29,43 @@ public sealed partial class CopyMachineComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     public float JobDuration = 4f;
 
+    // Lust-edit-start
+    /// <summary>
+    /// Шанс поломки принтера
+    /// </summary>
+    [DataField]
+    public float JamChance = 0.07f; // шанс на заклинивания принтера
+
+    /// <summary>
+    /// Флаг поломон ли принтер
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool IsJammed;
+
+    /// <summary>
+    /// Шанс на расклинивание
+    /// </summary>
+    [DataField]
+    public float UnjamChance = 0.10f;
+    /// <summary>
+    /// Предмет который будет выдовать принтер если заклинет
+    /// </summary>
+    [DataField]
+    public EntProtoId JammedPaperProtoId = "PaperScrap";
+
+    /// <summary>
+    /// Звук заклинивания принтера
+    /// </summary>
+    [DataField]
+    public SoundSpecifier JamSound { get; set; } = new SoundPathSpecifier("/Audio/Machines/diagnoser_printing.ogg");
+
+    /// <summary>
+    /// Звук расклинивания принтера
+    /// </summary>
+    [DataField]
+    public SoundSpecifier UnjamSound { get; set; } = new SoundPathSpecifier("/Audio/Machines/screwdriverclose.ogg");
+    // Lust-edit-end
+
     /// <summary>
     /// Очередь заданий на печать или копирование
     /// </summary>
