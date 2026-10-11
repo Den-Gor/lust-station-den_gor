@@ -1,4 +1,5 @@
 ﻿using Content.Server._Lust.MedicalRecords.Systems;
+using Content.Shared.Access;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -21,6 +22,12 @@ public sealed partial class LustMedicalRecordsConsoleComponent : Component
     /// </summary>
     [DataField]
     public bool BiometricsUnlocked;
+
+    /// <summary>
+    /// Доступ, открывающий редактирование биометрии. Настраивается на прототипе консоли.
+    /// </summary>
+    [DataField]
+    public ProtoId<AccessLevelPrototype> BiometricsAccess = "Captain";
 
     /// <summary>
     /// Время, когда консоль снова сможет печатать карту.

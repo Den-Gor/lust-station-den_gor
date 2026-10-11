@@ -20,14 +20,28 @@ public sealed partial class LustMedicalRecordsWindow : DefaultWindow
     private readonly Gender[] _genders = Enum.GetValues<Gender>();
     private readonly List<SpeciesPrototype> _species;
 
+    /// <summary>
+    /// Вызывается при выборе записи в листинге. Аргумент — id записи, null не используется.
+    /// </summary>
     public Action<uint?>? OnRecordSelected;
+    /// <summary>
+    /// Вызывается при нажатии Save. Аргументы — id и все редактируемые поля записи.
+    /// </summary>
     public Action<uint, Gender, string, string, string, string, string, string>? OnSaveRequested;
+    /// <summary>
+    /// Вызывается при нажатии Print. Аргумент — id записи.
+    /// </summary>
     public Action<uint>? OnPrintRequested;
 
     private bool _isPopulating;
     private bool _isFormattingBiometric;
     private uint? _selectedKey;
 
+    private uint? _detailsKey;
+
+    /// <summary>
+    /// Создаёт окно медконсоли: контролы, подписки, плейсхолдеры.
+    /// </summary>
     public LustMedicalRecordsWindow()
     {
         RobustXamlLoader.Load(this);
@@ -74,10 +88,15 @@ public sealed partial class LustMedicalRecordsWindow : DefaultWindow
             if (_isPopulating || RecordListing[args.ItemIndex].Metadata is not uint selectedKey)
                 return;
 
+            _detailsKey = null;
             OnRecordSelected?.Invoke(selectedKey);
         };
     }
 
+    /// <summary>
+    /// Обновляет листинг, выбор и флаг доступа. Детали записи сюда не входят:
+    /// они приезжают отдельно направленным сообщением только проверенному зрителю.
+    /// </summary>
     public void UpdateState(LustMedicalRecordsUiState state)
     {
         var listing = state.RecordListing;
@@ -115,51 +134,58 @@ public sealed partial class LustMedicalRecordsWindow : DefaultWindow
         _isPopulating = false;
         RecordListing.SortItemsByText();
 
-        RecordDetails.Visible = state.SelectedKey != null && state.Name != null;
+        RecordDetails.Visible = state.SelectedKey != null && _detailsKey == state.SelectedKey;
         SaveButton.Disabled = true;
         PrintButton.Disabled = !RecordDetails.Visible;
         FingerprintValue.Editable = state.CanEditBiometrics;
         DnaValue.Editable = state.CanEditBiometrics;
 
-        if (RecordDetails.Visible)
-            UpdateRecordDetails(state);
-        else
-            SaveButton.Disabled = true;
+        if (RecordDetails.Visible && state.SelectedKey is { } selectedKey)
+            OnRecordSelected?.Invoke(selectedKey);
     }
 
-    private void UpdateRecordDetails(LustMedicalRecordsUiState state)
+    /// <summary>
+    /// Заливает детали выбранной записи. Опоздавшие (не под текущий выбор) отбрасываются.
+    /// </summary>
+    public void UpdateRecordDetails(LustMedicalRecordsRecordDetailsMessage details)
     {
+        // Если инфа от прошлого выбора прилетели позже нового выходим
+        if (details.SelectedKey != _selectedKey)
+            return;
+
         var missing = Loc.GetString("humanoid-profile-data-null");
-        var profile = state.HumanoidProfile;
+        var profile = details.HumanoidProfile;
         var portfolio = profile?.Portfolio;
-        var selectedGender = state.Gender is { } gender
+        var selectedGender = details.Gender is { } gender
             ? Array.IndexOf(_genders, gender)
             : 0;
-        var selectedSpecies = _species.FindIndex(species => species.ID == state.Species);
+        var selectedSpecies = _species.FindIndex(species => species.ID == details.Species);
 
         _isPopulating = true;
         GenderOption.SelectId(selectedGender < 0 ? 0 : selectedGender);
         SpeciesOption.SelectId(selectedSpecies < 0 ? 0 : selectedSpecies);
 
-        NameValue.Text = PrintableField(state.Name, missing);
-        AgeValue.Text = state.Age is > 0
-            ? state.Age.Value.ToString()
+        NameValue.Text = PrintableField(details.Name, missing);
+        AgeValue.Text = details.Age is > 0
+            ? details.Age.Value.ToString()
             : missing;
 
-        JobTitleValue.Text = PrintableField(state.JobTitle, missing);
-        FingerprintValue.Text = state.CanEditBiometrics
-            ? state.Fingerprint ?? string.Empty
-            : PrintableField(state.Fingerprint, missing);
-        DnaValue.Text = state.CanEditBiometrics
-            ? state.DNA ?? string.Empty
-            : PrintableField(state.DNA, missing);
+        JobTitleValue.Text = PrintableField(details.JobTitle, missing);
+        FingerprintValue.Text = details.CanEditBiometrics
+            ? details.Fingerprint ?? string.Empty
+            : PrintableField(details.Fingerprint, missing);
+        DnaValue.Text = details.CanEditBiometrics
+            ? details.DNA ?? string.Empty
+            : PrintableField(details.DNA, missing);
 
         CloseRelatives.TextRope = new Rope.Leaf(PrintableField(portfolio?.CloseRelatives, missing));
         EmergencyContact.TextRope = new Rope.Leaf(PrintableField(portfolio?.EmergencyContact, missing));
         PhysiologicalTraits.TextRope = new Rope.Leaf(portfolio?.PhysiologicalTraits ?? string.Empty);
         PsychologicalTraits.TextRope = new Rope.Leaf(portfolio?.PsychologicalTraits ?? string.Empty);
-        Notes.TextRope = new Rope.Leaf(state.Notes ?? string.Empty);
+        Notes.TextRope = new Rope.Leaf(details.Notes ?? string.Empty);
 
+        _detailsKey = details.SelectedKey;
+        RecordDetails.Visible = true;
         _isPopulating = false;
         SaveButton.Disabled = true;
     }

@@ -3,6 +3,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client._Lust.MedicalRecords;
 
+/// <summary>
+/// Клиентский интерфейс медицинской консоли: открывает окно и гоняет сообщения с сервером.
+/// </summary>
 public sealed class LustMedicalRecordsBoundUserInterface : BoundUserInterface
 {
     private LustMedicalRecordsWindow? _window;
@@ -38,5 +41,11 @@ public sealed class LustMedicalRecordsBoundUserInterface : BoundUserInterface
             return;
 
         _window?.UpdateState(medicalState);
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        if (message is LustMedicalRecordsRecordDetailsMessage details)
+            _window?.UpdateRecordDetails(details);
     }
 }

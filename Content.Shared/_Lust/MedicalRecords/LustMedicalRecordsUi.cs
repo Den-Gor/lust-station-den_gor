@@ -15,12 +15,59 @@ public enum LustMedicalRecordsUiKey : byte
 
 /// <summary>
 /// Данные медицинской консоли, которые сервер отправляет клиенту.
+/// Содержит только листинг и выбор: детали записи едут отдельным
+/// направленным сообщением только проверенному актору.
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class LustMedicalRecordsUiState : BoundUserInterfaceState
 {
     public readonly Dictionary<uint, string>? RecordListing;
     public readonly uint? SelectedKey;
+    public readonly bool CanEditBiometrics;
+
+
+    /// <summary>
+    /// Создаёт пустое состояние, например, когда у станции нет записей.
+    /// </summary>
+    public LustMedicalRecordsUiState()
+    {
+        RecordListing = null;
+        SelectedKey = null;
+        CanEditBiometrics = false;
+    }
+
+    /// <summary>
+    /// Создаёт состояние со списком и текущим выбором.
+    /// </summary>
+    public LustMedicalRecordsUiState(Dictionary<uint, string> recordListing, uint? selectedKey)
+    {
+        RecordListing = recordListing;
+        SelectedKey = selectedKey;
+        CanEditBiometrics = false;
+    }
+
+    /// <summary>
+    /// Создаёт состояние со списком, выбором и флагом доступа к биометрии.
+    /// </summary>
+    public LustMedicalRecordsUiState(
+        Dictionary<uint, string> recordListing,
+        uint? selectedKey,
+        bool canEditBiometrics)
+    {
+        RecordListing = recordListing;
+        SelectedKey = selectedKey;
+        CanEditBiometrics = canEditBiometrics;
+    }
+}
+
+/// <summary>
+/// Детали выбранной медицинской карты. Отправляется направленным сообщением
+/// только актору, прошедшему проверку доступа, а не всем смотрящим.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class LustMedicalRecordsRecordDetailsMessage : BoundUserInterfaceMessage
+{
+    public readonly uint SelectedKey;
 
     public readonly string? Name;
     public readonly int? Age;
@@ -34,68 +81,30 @@ public sealed class LustMedicalRecordsUiState : BoundUserInterfaceState
     public readonly bool CanEditBiometrics;
     public readonly HumanoidCharacterProfile? HumanoidProfile;
 
-
-    /// <summary>
-    /// Создаёт пустое состояние, например, когда у станции нет записей.
-    /// </summary>
-    public LustMedicalRecordsUiState()
+    public LustMedicalRecordsRecordDetailsMessage(
+        uint selectedKey,
+        string? name,
+        int? age,
+        Gender? gender,
+        string? species,
+        string? jobTitle,
+        string? fingerprint,
+        string? dna,
+        string? notes,
+        bool canEditBiometrics,
+        HumanoidCharacterProfile? humanoidProfile)
     {
-        RecordListing = null;
-        SelectedKey = null;
-
-        Name = null;
-        Age = null;
-        Gender = null;
-        Species = null;
-        JobTitle = null;
-        Fingerprint = null;
-        DNA = null;
-
-        Notes = null;
-        CanEditBiometrics = false;
-        HumanoidProfile = null;
-    }
-
-    /// <summary>
-    /// Создаёт состояние со списком и текущим выбором.
-    /// </summary>
-    public LustMedicalRecordsUiState(Dictionary<uint, string> recordListing, uint? selectedKey)
-    {
-        RecordListing = recordListing;
         SelectedKey = selectedKey;
-        Name = null;
-        Age = null;
-        Gender = null;
-        Species = null;
-        JobTitle = null;
-        Fingerprint = null;
-        DNA = null;
-        Notes = null;
-        CanEditBiometrics = false;
-        HumanoidProfile = null;
-    }
-
-    public LustMedicalRecordsUiState(
-        Dictionary<uint, string> recordListing,
-        uint? selectedKey,
-        Content.Shared.StationRecords.GeneralStationRecord? generalRecord,
-        MedicalRecord? medicalRecord,
-        bool canEditBiometrics)
-    {
-        RecordListing = recordListing;
-        SelectedKey = selectedKey;
-
-        Name = generalRecord?.Name;
-        Age = generalRecord?.Age;
-        Gender = generalRecord?.Gender;
-        Species = generalRecord?.Species;
-        JobTitle = generalRecord?.JobTitle;
-        Fingerprint = generalRecord?.Fingerprint;
-        DNA = generalRecord?.DNA;
-
-        Notes = medicalRecord?.Notes;
+        Name = name;
+        Age = age;
+        Gender = gender;
+        Species = species;
+        JobTitle = jobTitle;
+        Fingerprint = fingerprint;
+        DNA = dna;
+        Notes = notes;
         CanEditBiometrics = canEditBiometrics;
-        HumanoidProfile = generalRecord?.HumanoidProfile;
+        HumanoidProfile = humanoidProfile;
     }
 }
 

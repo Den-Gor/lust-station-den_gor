@@ -125,7 +125,7 @@ public sealed record GeneralStationRecord
         if (original.HumanoidProfile is null)
             return original;
 
-        var portfolio = new PortfolioProfile(original.HumanoidProfile.Portfolio);
+        var portfolio = new PortfolioProfile(original.HumanoidProfile.Portfolio ?? new PortfolioProfile());
         portfolio.EnsureValid();
 
         return original with

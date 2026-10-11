@@ -26,8 +26,17 @@ public sealed partial class LustGeneralRecord : BoxContainer
     private readonly JobSystem _job;
     private readonly LobbyUIController _controller;
 
+    /// <summary>
+    /// Вызывается при нажатии Save. Аргументы — собранная из полей запись и её id.
+    /// </summary>
     public Action<GeneralStationRecord, uint>? OnSaveButtonPressed;
+    /// <summary>
+    /// Вызывается при нажатии Print. Аргумент — id записи.
+    /// </summary>
     public Action<uint>? OnPrintPressed;
+    /// <summary>
+    /// Вызывается при нажатии Delete. Аргумент — id записи.
+    /// </summary>
     public Action<uint>? OnDeletePressed;
 
     private EntityUid _previewDummy;
@@ -43,6 +52,12 @@ public sealed partial class LustGeneralRecord : BoxContainer
     // Копия этого хранится в серверной системе
     private const int MaxAgeLength = 6;
 
+    /// <summary>
+    /// Создаёт контрол просмотра и правки станционной записи: заливает поля,
+    /// строит превью персонажа, вешает кнопки и права доступа.
+    /// </summary>
+    /// <param name="record">Запись для отображения.</param>
+    /// <param name="id">Id записи в наборе станции, null — запись без кнопок действий.</param>
     public LustGeneralRecord(GeneralStationRecord record,
         bool canDelete,
         bool canRedactSensitiveData,

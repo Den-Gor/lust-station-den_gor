@@ -11,11 +11,18 @@ namespace Content.Client._Lust.CriminalRecords;
 [GenerateTypedNameReferences]
 public sealed partial class LustCriminalRecordPortfolioControl : Control
 {
+    /// <summary>
+    /// Создаёт read-only блок портфолио для криминальной консоли.
+    /// </summary>
     public LustCriminalRecordPortfolioControl()
     {
         RobustXamlLoader.Load(this);
     }
 
+    /// <summary>
+    /// Показывает портфолио. Только чтение: пустые и отсутствующие значения заменяются заглушкой.
+    /// </summary>
+    /// <param name="profile">Профиль сотрудника, может быть null — тогда везде заглушки.</param>
     public void SetProfile(HumanoidCharacterProfile? profile)
     {
         var portfolio = profile?.Portfolio;

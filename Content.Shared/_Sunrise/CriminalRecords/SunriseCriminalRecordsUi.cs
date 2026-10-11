@@ -80,7 +80,7 @@ public sealed class SunriseCriminalRecordsConsoleState : BoundUserInterfaceState
     /// <summary>The reason for the current security status.</summary>
     public readonly string? StatusReason;
     // Lust-edit-start
-    /// <summary> Данные партфолио.</summary>
+    /// <summary> Данные портфолио.</summary>
     public readonly HumanoidCharacterProfile? HumanoidProfile;
     // Lust-edit-end
 

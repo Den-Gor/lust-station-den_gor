@@ -8,7 +8,6 @@ using Content.Server.StationRecords.Systems;
 using Content.Shared._Lust.Preferences;
 using Content.Shared._Lust.MedicalRecords;
 using Content.Shared._Sunrise.Helpers;
-using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Emag.Systems;
@@ -80,8 +79,17 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
             return;
         }
 
+        // Повторный выбор той же записи: листинг не меняется, детали шлём только спросившему.
+        // Заодно разрываем петлю «стейт → клиент переспрашивает → стейт».
+        if (ent.Comp.ActiveKey == msg.SelectedKey)
+        {
+            SendRecordDetails(ent.Owner, ent.Comp, msg.Actor);
+            return;
+        }
+
         ent.Comp.ActiveKey = msg.SelectedKey;
         UpdateUserInterface(ent.Owner, ent.Comp, ent.Comp.BiometricsUnlocked);
+        SendRecordDetails(ent.Owner, ent.Comp, msg.Actor);
     }
     private void OnOpened(EntityUid uid, LustMedicalRecordsConsoleComponent component, BoundUIOpenedEvent args)
     {
@@ -89,6 +97,7 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
             return;
 
         UpdateUserInterface(uid, component, component.BiometricsUnlocked);
+        SendRecordDetails(uid, component, args.Actor);
     }
 
     private void OnRecordModified(
@@ -142,6 +151,8 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
         _records.AddRecordEntry(key, updatedRecord);
         _records.AddRecordEntry(key, medicalRecord);
         _records.Synchronize(key);
+        // Свежие детали — только сохранившему. Остальным смотрящим уйдёт листинг через RecordModified.
+        SendRecordDetails(ent.Owner, ent.Comp, msg.Actor);
         _audio.PlayPvs(ent.Comp.SuccessfulSound, ent.Owner);
     }
 
@@ -234,19 +245,48 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
         if (component.ActiveKey is not { } selectedKey || !listing.ContainsKey(selectedKey))
             component.ActiveKey = listing.Keys.First();
 
-        var recordKey = new StationRecordKey(component.ActiveKey.Value, station);
-        _records.TryGetRecord<GeneralStationRecord>(recordKey, out var generalRecord);
-        _records.TryGetRecord<MedicalRecord>(recordKey, out var medicalRecord);
-
+        // В общий стейт детали не кладём: их смотрит только проверенный актор через SendRecordDetails.
         _ui.SetUiState(
             uid,
             LustMedicalRecordsUiKey.Key,
             new LustMedicalRecordsUiState(
                 listing,
                 component.ActiveKey,
-                generalRecord,
-                medicalRecord,
                 canEditBiometrics));
+    }
+
+    /// <summary>
+    /// Отправляет детали выбранной записи направленным сообщением одному актору.
+    /// Вызывать только после проверки доступа вызывающей стороны.
+    /// </summary>
+    private void SendRecordDetails(EntityUid uid, LustMedicalRecordsConsoleComponent component, EntityUid actor)
+    {
+        if (_station.GetOwningStation(uid) is not { } station)
+            return;
+
+        if (component.ActiveKey is not { } selectedKey)
+            return;
+
+        var recordKey = new StationRecordKey(selectedKey, station);
+        _records.TryGetRecord<GeneralStationRecord>(recordKey, out var generalRecord);
+        _records.TryGetRecord<MedicalRecord>(recordKey, out var medicalRecord);
+
+        _ui.ServerSendUiMessage(
+            uid,
+            LustMedicalRecordsUiKey.Key,
+            new LustMedicalRecordsRecordDetailsMessage(
+                selectedKey,
+                generalRecord?.Name,
+                generalRecord?.Age,
+                generalRecord?.Gender,
+                generalRecord?.Species,
+                generalRecord?.JobTitle,
+                generalRecord?.Fingerprint,
+                generalRecord?.DNA,
+                medicalRecord?.Notes,
+                component.BiometricsUnlocked,
+                generalRecord?.HumanoidProfile),
+            actor);
     }
 
 
@@ -279,7 +319,7 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
             || !this.IsPowered(ent.Owner, EntityManager)
             || !TryComp<IdCardComponent>(args.Used, out _)
             || !_access.FindAccessTags(args.Used)
-                .Contains(new ProtoId<AccessLevelPrototype>("Captain")))
+                .Contains(ent.Comp.BiometricsAccess))
         {
             return;
         }
