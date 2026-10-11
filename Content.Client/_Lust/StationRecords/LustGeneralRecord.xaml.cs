@@ -145,7 +145,8 @@ public sealed partial class LustGeneralRecord : BoxContainer
     private void UpdateEditableInfo(GeneralStationRecord record)
     {
         NameEdit.Text = record.Name;
-        Age.Text = (record.HumanoidProfile?.AgeIsUnknown == true || record.Age <= 0) ? string.Empty : record.Age.ToString(); // кароче тут -1 используется как индикатор  того что  данных нет
+        // Возраст -1 и ниже означает отсутствие данных, показываем пустое поле.
+        Age.Text = record.Age <= 0 ? string.Empty : record.Age.ToString();
 
         for (var i = 0; i < _allGender.Length; i++)
         {
@@ -261,8 +262,8 @@ public sealed partial class LustGeneralRecord : BoxContainer
     }
 
     /// <summary>
-    /// Создает новую структуру, помещающую в себя из полей в интерфейсе для отправки на сервере для сохранения.
-    /// Перед этим проводит валидацию строк и проверяет, что данные не обосраны.
+    /// Собирает обновлённую запись из полей интерфейса для отправки на сервер.
+    /// Строки проходят санитизацию, возраст разбирается один раз.
     /// </summary>
     private GeneralStationRecord BuildUpdatedRecord(GeneralStationRecord original)
     {
@@ -286,12 +287,7 @@ public sealed partial class LustGeneralRecord : BoxContainer
             EmergencyContact = Rope.Collapse(LustEmergencyContact.TextRope),
         };
 
-        // возраст, введённый через консоль, делает возраст известным.
-        // Пустая строка означает «оператор не знает» и флаг не трогает.
-        var stillUnknown = !ageEntered && original.HumanoidProfile?.AgeIsUnknown == true;
-
         var profile = (original.HumanoidProfile ?? new HumanoidCharacterProfile())
-            .WithAgeIsUnknown(stillUnknown)
             .WithPortfolio(portfolio);
 
         var updated = original with

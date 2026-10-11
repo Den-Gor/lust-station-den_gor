@@ -66,15 +66,6 @@ public sealed partial class PortfolioEditor : Control
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
-        AgeUnknownButton.AddItem(Loc.GetString("humanoid-profile-editor-portfolio-age-unknown-yes"), 1);
-        AgeUnknownButton.AddItem(Loc.GetString("humanoid-profile-editor-portfolio-age-unknown-no"), 0);
-        AgeUnknownButton.SelectId(0);
-        AgeUnknownButton.OnItemSelected += args =>
-        {
-            AgeUnknownButton.SelectId(args.Id);
-            WriteAgeIsUnknown(args.Id == 1);
-        };
-
         foreach (var status in Enum.GetValues<MaritalStatus>())
         {
             MaritalStatusButton.AddItem(
@@ -165,8 +156,6 @@ public sealed partial class PortfolioEditor : Control
         WriteMulti(PsychologicalTraitsEdit, PsychologicalTraits.Get(portfolio));
         WriteMulti(ArrestHistoryEdit, ArrestHistory.Get(portfolio));
         WriteMulti(ConvictionHistoryEdit, ConvictionHistory.Get(portfolio));
-
-        AgeUnknownButton.SelectId(profile.AgeIsUnknown ? 1 : 0);
     }
 
     private void WriteField(PortfolioField field, string value)
@@ -295,14 +284,6 @@ public sealed partial class PortfolioEditor : Control
 
         WriteField(ConvictionHistory, value);
         WriteMulti(ConvictionHistoryEdit, value);
-    }
-
-    private void WriteAgeIsUnknown(bool value)
-    {
-        var next = new HumanoidCharacterProfile(_profile);
-        next.AgeIsUnknown = value;
-        _profile = next;
-        OnProfileChanged?.Invoke(_profile);
     }
 
     private static int PickMaritalStatus(PortfolioProfile portfolio)

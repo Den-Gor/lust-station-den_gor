@@ -3,12 +3,6 @@
                          xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
     <ScrollContainer VerticalExpand="True" ReturnMeasure="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8" SeparationOverride="4">
-            <BoxContainer Orientation="Horizontal">
-                    <Label Text="{Loc 'humanoid-profile-editor-portfolio-age-unknown'}" />
-                    <Control HorizontalExpand="True"/>
-                    <OptionButton Name="AgeUnknownButton" HorizontalAlignment="Right" />
-                </BoxContainer>
-
             <Label Text="{Loc 'humanoid-profile-editor-portfolio-distinguishing-features'}" />
             <BoxContainer Orientation="Horizontal" VerticalExpand="False">
                 <PanelContainer HorizontalExpand="True" MinHeight="60">

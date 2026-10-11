@@ -1239,10 +1239,6 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("age");
 
-                    b.Property<bool>("AgeIsUnknown")
-                        .HasColumnType("boolean")
-                        .HasColumnName("age_is_unknown");
-
                     b.Property<string>("BodyType")
                         .IsRequired()
                         .HasColumnType("text")

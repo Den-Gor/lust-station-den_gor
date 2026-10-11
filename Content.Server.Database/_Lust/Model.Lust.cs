@@ -6,8 +6,6 @@ namespace Content.Server.Database;
 
 public partial class Profile
 {
-    public bool AgeIsUnknown { get; set; }
-
     public ProfilePortfolio? PortfolioData { get; set; }
 }
 

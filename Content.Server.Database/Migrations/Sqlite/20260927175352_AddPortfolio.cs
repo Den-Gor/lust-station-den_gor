@@ -10,13 +10,6 @@ namespace Content.Server.Database.Migrations.Sqlite
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "age_is_unknown",
-                table: "profile",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.CreateTable(
                 name: "profile_portfolio",
                 columns: table => new
@@ -61,10 +54,6 @@ namespace Content.Server.Database.Migrations.Sqlite
         {
             migrationBuilder.DropTable(
                 name: "profile_portfolio");
-
-            migrationBuilder.DropColumn(
-                name: "age_is_unknown",
-                table: "profile");
         }
     }
 }

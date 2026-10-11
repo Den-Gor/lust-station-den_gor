@@ -5,7 +5,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._Lust.Preferences;
 
 /// <summary>
-/// Lust-edit: портфолио персонажа, по аналогии с SunriseCharacterProfile.
+/// Портфолио персонажа, по аналогии с SunriseCharacterProfile.
 /// Хранится объектом внутри HumanoidCharacterProfile, колонки БД остаются те же.
 /// </summary>
 [DataDefinition]

@@ -12,7 +12,7 @@ public sealed partial class ServerPreferencesManager
         Profile profile)
     {
         if (profile.PortfolioData is not { } portfolioData)
-            return humanoid.WithAgeIsUnknown(profile.AgeIsUnknown);
+            return humanoid;
 
         var portfolio = new PortfolioProfile
         {
@@ -31,8 +31,6 @@ public sealed partial class ServerPreferencesManager
             ConvictionHistory = portfolioData.ConvictionHistory,
         };
 
-        return humanoid
-            .WithAgeIsUnknown(profile.AgeIsUnknown)
-            .WithPortfolio(portfolio);
+        return humanoid.WithPortfolio(portfolio);
     }
 }

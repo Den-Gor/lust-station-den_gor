@@ -184,7 +184,7 @@ public sealed class LustMedicalRecordsSystem : EntitySystem
         var speciesName = _prototype.TryIndex<SpeciesPrototype>(record.Species, out var species)
             ? Loc.GetString(species.Name)
             : unrecognized;
-        var age = record.Age > 0 && record.HumanoidProfile?.AgeIsUnknown != true
+        var age = record.Age > 0
             ? record.Age.ToString()
             : unrecognized;
         var gender = Loc.GetString("station-records-gender", ("gender", record.Gender.ToString()));

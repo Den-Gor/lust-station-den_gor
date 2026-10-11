@@ -13,8 +13,6 @@ public abstract partial class ServerDbBase
             Profile = profile,
         };
 
-        profile.AgeIsUnknown = humanoid.AgeIsUnknown;
-
         var portfolio = humanoid.Portfolio;
         profile.PortfolioData.DistinguishingFeatures = portfolio.DistinguishingFeatures;
         profile.PortfolioData.Region = portfolio.Region;

@@ -1168,10 +1168,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("age");
 
-                    b.Property<bool>("AgeIsUnknown")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("age_is_unknown");
-
                     b.Property<string>("BodyType")
                         .IsRequired()
                         .HasColumnType("TEXT")

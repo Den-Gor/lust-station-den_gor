@@ -1,8 +1,5 @@
-### Lust-edit: character portfolio
+### Character portfolio
 humanoid-profile-editor-portfolio-tab = Portfolio
-humanoid-profile-editor-portfolio-age-unknown = Age is unknown
-humanoid-profile-editor-portfolio-age-unknown-yes = Yes
-humanoid-profile-editor-portfolio-age-unknown-no = No
 humanoid-profile-editor-portfolio-marital-single-text = Single
 humanoid-profile-editor-portfolio-marital-married-text = Married
 humanoid-profile-editor-portfolio-marital-divorced-text = Divorced

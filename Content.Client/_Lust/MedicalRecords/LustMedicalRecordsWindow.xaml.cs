@@ -142,7 +142,7 @@ public sealed partial class LustMedicalRecordsWindow : DefaultWindow
         SpeciesOption.SelectId(selectedSpecies < 0 ? 0 : selectedSpecies);
 
         NameValue.Text = PrintableField(state.Name, missing);
-        AgeValue.Text = state.Age is > 0 && profile?.AgeIsUnknown != true
+        AgeValue.Text = state.Age is > 0
             ? state.Age.Value.ToString()
             : missing;
 
