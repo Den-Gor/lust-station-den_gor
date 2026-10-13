@@ -7,9 +7,18 @@ namespace Content.Client._Lust.Canvas;
 [GenerateTypedNameReferences]
 public sealed partial class CanvasWindow : DefaultWindow
 {
+    private CanvasControl? _canvas;
+
     public CanvasWindow()
     {
         RobustXamlLoader.Load(this);
         Title = "Холст";
+    }
+
+    public void SetTools(CanvasToolState tools)
+    {
+        _canvas = new CanvasControl(tools);
+        CanvasHost.AddChild(_canvas);
+        UndoButton.OnPressed += _ => _canvas?.Undo();
     }
 }

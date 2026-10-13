@@ -4,9 +4,10 @@
     SetSize="520 600">
     <BoxContainer Name="ContentsRoot" Orientation="Vertical">
         <PanelContainer VerticalExpand="True" HorizontalExpand="True">
-            <Label Name="Placeholder" Text="Тут будет рисовалка" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Control Name="CanvasHost" VerticalExpand="True" HorizontalExpand="True"/>
         </PanelContainer>
-        <BoxContainer Name="EditButtons" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6">
+        <BoxContainer Name="EditButtons" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6" SeparationOverride="4">
+            <Button Name="UndoButton" Text="Отменить"/>
             <Button Name="SaveButton" Text="Сохранить"/>
         </BoxContainer>
     </BoxContainer>

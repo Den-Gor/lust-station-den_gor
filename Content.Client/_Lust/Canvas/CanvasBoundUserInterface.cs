@@ -12,11 +12,15 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        var canvasSystem = EntMan.System<CanvasClientSystem>();
         _window = this.CreateWindow<CanvasWindow>();
+        _window.SetTools(canvasSystem.Tools);
+        canvasSystem.NotifyCanvasOpened();
     }
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
+        EntMan.System<CanvasClientSystem>().NotifyCanvasClosed();
         _window?.Close();
         _window = null;
     }
