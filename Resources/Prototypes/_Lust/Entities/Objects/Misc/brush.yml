@@ -1,0 +1,12 @@
+﻿- type: entity
+  name:  brush
+  parent: Pen
+  id:  LustBrush
+  components:
+  - type: Tag
+    tags:
+    - LustDraw
+  - type: UseDelay
+    delay: 0
+
+

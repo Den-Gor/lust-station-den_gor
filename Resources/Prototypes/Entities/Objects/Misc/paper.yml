@@ -105,6 +105,10 @@
     interfaces:
       enum.PaperUiKey.Key:
         type: PaperBoundUserInterface
+      # Lust edit start - окно холста для рисования кистью
+      enum.CanvasUiKey.Key:
+        type: CanvasBoundUserInterface
+      # Lust edit end
   - type: FaxableObject
   - type: PaperVisualizer
   - type: PaperVisuals

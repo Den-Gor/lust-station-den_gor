@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._Lust.Canvas; // Lust added - ивент конвертации бумаги в холст
 using Content.Shared.Administration.Logs;
 using Content.Shared.UserInterface;
 using Content.Shared.Database;
@@ -112,6 +113,16 @@ public sealed partial class PaperSystem : EntitySystem
 
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
+        // Lust added start - hook: кисть может превратить бумагу в холст
+        var canvasAttempt = new CanvasConvertAttemptEvent(args.User, args.Used);
+        RaiseLocalEvent(entity.Owner, ref canvasAttempt);
+        if (canvasAttempt.Cancelled)
+        {
+            args.Handled = true;
+            return;
+        }
+        // Lust added end
+
         // only allow editing if there are no stamps or when using a cyberpen
         var editable = entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
         if (_tagSystem.HasTag(args.Used, WriteTag))

@@ -1,0 +1,13 @@
+<canvas:CanvasWindow xmlns="https://spacestation14.io"
+    xmlns:canvas="clr-namespace:Content.Client._Lust.Canvas"
+    MouseFilter="Stop" Resizable="True" MinSize="400 400"
+    SetSize="520 600">
+    <BoxContainer Name="ContentsRoot" Orientation="Vertical">
+        <PanelContainer VerticalExpand="True" HorizontalExpand="True">
+            <Label Name="Placeholder" Text="Тут будет рисовалка" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </PanelContainer>
+        <BoxContainer Name="EditButtons" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6">
+            <Button Name="SaveButton" Text="Сохранить"/>
+        </BoxContainer>
+    </BoxContainer>
+</canvas:CanvasWindow>
