@@ -15,6 +15,7 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
     private readonly ButtonGroup _toolGroup = new(false);
     private readonly StyleBoxFlat _previewStyle = new() { BackgroundColor = Color.Black };
     private bool _wired;
+    private ColorSwatch[] _swatches = [];
 
     public CanvasToolboxWindow()
     {
@@ -44,6 +45,13 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
 
         Preview.PanelOverride = _previewStyle;
 
+        _swatches = new[]
+        {
+            Swatch0, Swatch1, Swatch2, Swatch3, Swatch4,
+            Swatch5, Swatch6, Swatch7, Swatch8, Swatch9,
+            Swatch10, Swatch11,
+        };
+
         SvSquare.Changed += RefreshFromPicker;
         HueStrip.Changed += OnHueChanged;
         OpacitySlider.OnValueChanged += _ => RefreshFromPicker();
@@ -58,6 +66,11 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         {
             _wired = true;
             tools.Changed += RefreshColorWidgets;
+            for (var i = 0; i < _swatches.Length; i++)
+            {
+                var slot = i;
+                _swatches[slot].Picked += () => SelectSlot(slot);
+            }
         }
 
         SizeSlider.Value = tools.Size;
@@ -69,16 +82,46 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
     }
 
     /// <summary>
-    /// Подтянуть цветовые виджеты под Tools (пипетка, переоткрытие).
+    /// Функция выбора активной ячейки цвета
+    /// </summary>
+    private void SelectSlot(int slot)
+    {
+        if (_tools == null || slot < 0 || slot >= _tools.SavedColors.Count)
+            return;
+
+        _tools.SelectedSlot = slot;
+        var color = _tools.SavedColors[slot];
+        _tools.Color = color;
+        _tools.Opacity = color.A;
+        _tools.Touch();
+    }
+
+    /// <summary>
+    /// Обновление визуала виджета
     /// </summary>
     private void RefreshColorWidgets()
     {
         if (_tools == null)
             return;
 
+        // Любое изменение цвета (квадрат, пипетка, hex) пишется в выбранную ячейку
+        _tools.SavedColors[_tools.SelectedSlot] = _tools.Color;
+        for (var i = 0; i < _swatches.Length && i < _tools.SavedColors.Count; i++)
+        {
+            _swatches[i].SetColor(_tools.SavedColors[i]);
+            _swatches[i].SetSelected(i == _tools.SelectedSlot);
+        }
+
         var hsv = Color.ToHsv(_tools.Color);
-        HueStrip.SetHue(hsv.X);
-        SvSquare.SetHsv(hsv.X, hsv.Y, hsv.Z);
+        if (hsv.Y > 0.02f && hsv.Z > 0.02f)
+        {
+            HueStrip.SetHue(hsv.X);
+            SvSquare.SetHsv(hsv.X, hsv.Y, hsv.Z);
+        }
+        else
+        {
+            SvSquare.SetHsv(HueStrip.H, hsv.Y, hsv.Z);
+        }
         OpacitySlider.Value = _tools.Color.A * 100f;
         ApplyPreview(_tools.Color, updateHex: true);
     }

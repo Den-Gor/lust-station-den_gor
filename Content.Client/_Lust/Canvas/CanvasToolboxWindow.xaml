@@ -15,8 +15,29 @@
             </BoxContainer>
             <Label Name="SizeLabel" HorizontalAlignment="Left"/>
             <Slider Name="SizeSlider" MinValue="2" MaxValue="32" Value="2"/>
-            <canvas:ColorSvSquare Name="SvSquare" HorizontalAlignment="Center"/>
-            <canvas:ColorHueStrip Name="HueStrip" HorizontalAlignment="Center"/>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Text="{Loc 'lust-canvas-colors'}"/>
+                    <GridContainer Name="SwatchGrid" Columns="2" HSeparationOverride="4" VSeparationOverride="4">
+                        <canvas:ColorSwatch Name="Swatch0"/>
+                        <canvas:ColorSwatch Name="Swatch1"/>
+                        <canvas:ColorSwatch Name="Swatch2"/>
+                        <canvas:ColorSwatch Name="Swatch3"/>
+                        <canvas:ColorSwatch Name="Swatch4"/>
+                        <canvas:ColorSwatch Name="Swatch5"/>
+                        <canvas:ColorSwatch Name="Swatch6"/>
+                        <canvas:ColorSwatch Name="Swatch7"/>
+                        <canvas:ColorSwatch Name="Swatch8"/>
+                        <canvas:ColorSwatch Name="Swatch9"/>
+                        <canvas:ColorSwatch Name="Swatch10"/>
+                        <canvas:ColorSwatch Name="Swatch11"/>
+                    </GridContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <canvas:ColorSvSquare Name="SvSquare" HorizontalAlignment="Center"/>
+                    <canvas:ColorHueStrip Name="HueStrip" HorizontalAlignment="Center"/>
+                </BoxContainer>
+            </BoxContainer>
             <Label Text="{Loc 'lust-canvas-opacity'}"/>
             <Slider Name="OpacitySlider" MinValue="0" MaxValue="100" Value="100"/>
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">

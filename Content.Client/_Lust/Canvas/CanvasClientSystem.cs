@@ -10,12 +10,7 @@ public sealed class CanvasClientSystem : EntitySystem
     public void NotifyCanvasOpened()
     {
         OpenCanvases++;
-        if (_toolbox is { Disposed: false })
-            return;
-
-        _toolbox = new CanvasToolboxWindow();
-        _toolbox.SetTools(Tools);
-        _toolbox.OpenCenteredRight();
+        ShowToolbox();
     }
 
     public void NotifyCanvasClosed()
@@ -33,15 +28,31 @@ public sealed class CanvasClientSystem : EntitySystem
     /// </summary>
     public void ToggleToolbox()
     {
-        if (_toolbox is { Disposed: false })
+        if (_toolbox is { Disposed: false } box && box.IsOpen)
         {
-            _toolbox.Close();
+            box.Close();
             _toolbox = null;
             return;
         }
 
-        _toolbox = new CanvasToolboxWindow();
-        _toolbox.SetTools(Tools);
-        _toolbox.OpenCenteredRight();
+        ShowToolbox();
+    }
+
+    private void ShowToolbox()
+    {
+        if (_toolbox is not { Disposed: false } || !_toolbox.IsOpen)
+        {
+            _toolbox = new CanvasToolboxWindow();
+            _toolbox.SetTools(Tools);
+            var box = _toolbox;
+            box.OnClose += () =>
+            {
+                if (ReferenceEquals(_toolbox, box))
+                    _toolbox = null;
+            };
+        }
+
+        if (!_toolbox.IsOpen)
+            _toolbox.OpenCenteredRight();
     }
 }

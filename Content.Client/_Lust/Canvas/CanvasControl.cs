@@ -309,15 +309,15 @@ public sealed partial class CanvasControl : Control
     private void FloodFill(int sx, int sy)
     {
         var start = (sy * CanvasSize + sx) * 4;
-        var tr = _pixels[start];
-        var tg = _pixels[start + 1];
-        var tb = _pixels[start + 2];
+        var targetR = _pixels[start];
+        var targetG = _pixels[start + 1];
+        var targetB = _pixels[start + 2];
 
         var c = _tools.Color;
         var alpha = c.AByte / 255f;
 
         // Свой цвет игнорим
-        if (Math.Abs(c.RByte - tr) + Math.Abs(c.GByte - tg) + Math.Abs(c.BByte - tb) <= FillTolerance
+        if (Math.Abs(c.RByte - targetR) + Math.Abs(c.GByte - targetG) + Math.Abs(c.BByte - targetB) <= FillTolerance
             && alpha >= 1f)
             return;
 
@@ -336,7 +336,7 @@ public sealed partial class CanvasControl : Control
             visited[idx] = true;
 
             var i = idx * 4;
-            if (Math.Abs(_pixels[i] - tr) + Math.Abs(_pixels[i + 1] - tg) + Math.Abs(_pixels[i + 2] - tb) > FillTolerance)
+            if (Math.Abs(_pixels[i] - targetR) + Math.Abs(_pixels[i + 1] - targetG) + Math.Abs(_pixels[i + 2] - targetB) > FillTolerance)
                 continue;
 
             var r = (byte) (c.RByte * alpha + _pixels[i] * (1f - alpha));

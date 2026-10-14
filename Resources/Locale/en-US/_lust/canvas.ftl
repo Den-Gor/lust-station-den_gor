@@ -15,5 +15,6 @@ lust-canvas-tool-eyedropper = Eyedropper
 lust-canvas-size = Size: {$size}
 lust-canvas-opacity = Opacity
 lust-canvas-hex-placeholder = #rrggbb
+lust-canvas-colors = Colors
 lust-canvas-popup-canvas-open = You already have this paper's canvas open
 lust-canvas-popup-paper-open = You already have this paper open

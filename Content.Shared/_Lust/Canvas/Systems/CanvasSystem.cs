@@ -11,7 +11,7 @@ namespace Content.Shared._Lust.Canvas.Systems;
 public sealed partial class CanvasSystem : EntitySystem
 {
     [Dependency] private TagSystem _tag = default!;
-    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
@@ -40,7 +40,7 @@ public sealed partial class CanvasSystem : EntitySystem
         }
 
         // Чужой инструмент (ручка, штамп), а у САМОГО игрока открыт холст → не даем второе окно
-        if (_ui.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
+        if (_userInterface.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
         {
             _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
             args.Cancelled = true;
@@ -61,7 +61,7 @@ public sealed partial class CanvasSystem : EntitySystem
         }
 
         // У самого игрока открыт холст → второе окно (просмотр) не даем
-        if (_ui.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
+        if (_userInterface.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
         {
             if (!args.Silent)
                 _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
@@ -82,7 +82,7 @@ public sealed partial class CanvasSystem : EntitySystem
             _paper.SetContent(ent, "");
         }
 
-        _ui.OpenUi(ent.Owner, CanvasUiKey.Key, user);
+        _userInterface.OpenUi(ent.Owner, CanvasUiKey.Key, user);
         return true;
     }
 
@@ -99,7 +99,7 @@ public sealed partial class CanvasSystem : EntitySystem
         }
 
         // У самого игрока открыта бумага как текст → второе окно (холст) не даем
-        if (_ui.IsUiOpen(ent.Owner, PaperUiKey.Key, user))
+        if (_userInterface.IsUiOpen(ent.Owner, PaperUiKey.Key, user))
         {
             if (!quiet)
                 _popup.PopupClient(Loc.GetString("lust-canvas-popup-paper-open"), ent.Owner, user);
