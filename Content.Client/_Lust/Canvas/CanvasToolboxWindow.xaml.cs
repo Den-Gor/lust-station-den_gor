@@ -40,7 +40,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
                 return;
             _tools.Size = (int) SizeSlider.Value;
             SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", _tools.Size));
-            _tools.Touch();
         };
 
         Preview.PanelOverride = _previewStyle;
@@ -52,10 +51,18 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
             Swatch10, Swatch11,
         };
 
-        SvSquare.Changed += RefreshFromPicker;
-        HueStrip.Changed += OnHueChanged;
-        OpacitySlider.OnValueChanged += _ => RefreshFromPicker();
+        SvSquare.Changed += OnPickerMoved;
+        HueStrip.Changed += OnHueMoved;
+        OpacitySlider.OnValueChanged += _ => OnPickerMoved();
         HexEdit.OnTextEntered += _ => ApplyHex();
+        OnClose += UnwireTools;
+    }
+
+    private void UnwireTools()
+    {
+        if (_tools != null && _wired)
+            _tools.Changed -= ShowColor;
+        _wired = false;
     }
 
     public void SetTools(CanvasToolState tools)
@@ -65,7 +72,8 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         if (!_wired)
         {
             _wired = true;
-            tools.Changed += RefreshColorWidgets;
+            // Снаружи пишет только пипетка.
+            tools.Changed += ShowColor;
             for (var i = 0; i < _swatches.Length; i++)
             {
                 var slot = i;
@@ -73,73 +81,61 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
             }
         }
 
-        SizeSlider.Value = tools.Size;
+        SizeSlider.SetValueWithoutEvent(tools.Size);
         SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", tools.Size));
         GetToolButton(tools.Tool).Pressed = true;
 
-        RefreshColorWidgets();
-        RefreshFromPicker();
+        ShowColor();
     }
 
-    /// <summary>
-    /// Функция выбора активной ячейки цвета
-    /// </summary>
     private void SelectSlot(int slot)
     {
         if (_tools == null || slot < 0 || slot >= _tools.SavedColors.Count)
             return;
 
         _tools.SelectedSlot = slot;
-        var color = _tools.SavedColors[slot];
-        _tools.Color = color;
-        _tools.Opacity = color.A;
-        _tools.Touch();
+        _tools.SetExternal(_tools.SavedColors[slot]);
+        ShowColor();
     }
 
-    /// <summary>
-    /// Обновление визуала виджета
-    /// </summary>
-    private void RefreshColorWidgets()
+    private void OnPickerMoved()
     {
         if (_tools == null)
             return;
 
-        // Любое изменение цвета (квадрат, пипетка, hex) пишется в выбранную ячейку
-        _tools.SavedColors[_tools.SelectedSlot] = _tools.Color;
+        _tools.SetPicker(HueStrip.H, SvSquare.S, SvSquare.V, OpacitySlider.Value / 100f);
+        UpdateSwatches();
+        ApplyPreview(_tools.Color);
+    }
+
+    private void OnHueMoved()
+    {
+        SvSquare.SetHue(HueStrip.H);
+        OnPickerMoved();
+    }
+
+
+    private void ShowColor()
+    {
+        if (_tools == null)
+            return;
+
+        HueStrip.SetHue(_tools.Hue);
+        SvSquare.SetHsv(_tools.Hue, _tools.Saturation, _tools.Brightness);
+        OpacitySlider.SetValueWithoutEvent(_tools.Opacity * 100f);
+        UpdateSwatches();
+        ApplyPreview(_tools.Color);
+    }
+
+    private void UpdateSwatches()
+    {
+        if (_tools == null)
+            return;
         for (var i = 0; i < _swatches.Length && i < _tools.SavedColors.Count; i++)
         {
             _swatches[i].SetColor(_tools.SavedColors[i]);
             _swatches[i].SetSelected(i == _tools.SelectedSlot);
         }
-
-        var hsv = Color.ToHsv(_tools.Color);
-        if (hsv.Y > 0.02f && hsv.Z > 0.02f)
-        {
-            HueStrip.SetHue(hsv.X);
-            SvSquare.SetHsv(hsv.X, hsv.Y, hsv.Z);
-        }
-        else
-        {
-            SvSquare.SetHsv(HueStrip.H, hsv.Y, hsv.Z);
-        }
-        OpacitySlider.Value = _tools.Color.A * 100f;
-        ApplyPreview(_tools.Color, updateHex: true);
-    }
-
-    private void OnHueChanged()
-    {
-        SvSquare.SetHue(HueStrip.H);
-        RefreshFromPicker();
-    }
-
-    private void RefreshFromPicker()
-    {
-        if (_tools == null)
-            return;
-
-        var alpha = OpacitySlider.Value / 100f;
-        var color = Color.FromHsv(new Vector4(HueStrip.H, SvSquare.S, SvSquare.V, alpha));
-        ApplyColor(color, updateHex: true);
     }
 
     private void ApplyHex()
@@ -160,12 +156,8 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         if (text.Length == 8 && !TryParseHexByte(text, 6, out a))
             return;
 
-        var color = new Color(r, g, b, a);
-        var hsv = Color.ToHsv(color);
-        HueStrip.SetHue(hsv.X);
-        SvSquare.SetHsv(hsv.X, hsv.Y, hsv.Z);
-        OpacitySlider.Value = a / 255f * 100f;
-        ApplyColor(color, updateHex: false);
+        _tools.SetExternal(new Color(r, g, b, a));
+        ShowColor();
     }
 
     private static bool TryParseHexByte(string text, int start, out byte value)
@@ -194,23 +186,10 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         return -1;
     }
 
-    private void ApplyColor(Color color, bool updateHex)
-    {
-        if (_tools == null)
-            return;
-
-        _tools.Color = color;
-        _tools.Opacity = color.A;
-        _tools.Touch();
-
-        ApplyPreview(color, updateHex);
-    }
-
-    private void ApplyPreview(Color color, bool updateHex = true)
+    private void ApplyPreview(Color color)
     {
         _previewStyle.BackgroundColor = color;
-        if (updateHex)
-            HexEdit.Text = $"#{color.RByte:X2}{color.GByte:X2}{color.BByte:X2}";
+        HexEdit.Text = $"#{color.RByte:X2}{color.GByte:X2}{color.BByte:X2}";
     }
 
     private Button GetToolButton(CanvasTool tool)
@@ -231,7 +210,13 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         if (_tools == null)
             return;
         _tools.Tool = tool;
-        _tools.Touch();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            UnwireTools();
+        base.Dispose(disposing);
     }
 
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)

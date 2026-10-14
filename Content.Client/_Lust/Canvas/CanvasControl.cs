@@ -294,7 +294,7 @@ public sealed partial class CanvasControl : Control
 
         var i = (py * CanvasSize + px) * 4;
         var alpha = (byte) (_tools.Opacity * 255f);
-        _tools.Color = new Color(_pixels[i], _pixels[i + 1], _pixels[i + 2], alpha);
+        _tools.SetExternal(new Color(_pixels[i], _pixels[i + 1], _pixels[i + 2], alpha));
         _tools.Touch();
     }
 
