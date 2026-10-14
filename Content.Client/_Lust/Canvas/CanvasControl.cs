@@ -2,9 +2,7 @@
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
-using Robust.Shared.Maths;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Color = Robust.Shared.Maths.Color;
@@ -15,16 +13,16 @@ namespace Content.Client._Lust.Canvas;
 /// Пиксельный холст 256x256. Буфер правится на CPU, на GPU уходит через SetSubImage.
 /// Инструмент/цвет/размер читаются из общего <see cref="CanvasToolState"/>.
 /// </summary>
-public sealed class CanvasControl : Control
+public sealed partial class CanvasControl : Control
 {
     [Dependency] private IClyde _clyde = default!;
 
     public const int CanvasSize = 256;
 
-    private readonly CanvasToolState _tools; // общий на все окна
+    private readonly CanvasToolState _tools;
     private Image<Rgba32> _buffer;
-    private byte[] _pixels = new byte[CanvasSize * CanvasSize * 4]; // зеркало для чтения (геттер Image запрещен)
-    private readonly float[] _strokeAlpha = new float[CanvasSize * CanvasSize]; // макс. альфа за штрих
+    private byte[] _pixels = new byte[CanvasSize * CanvasSize * 4];
+    private readonly float[] _strokeAlpha = new float[CanvasSize * CanvasSize];
     private readonly OwnedTexture _texture;
     private readonly Stack<(Image<Rgba32> Image, byte[] Pixels)> _undo = new();
     private bool _drawing;
@@ -40,13 +38,19 @@ public sealed class CanvasControl : Control
         _tools = tools;
 
         _buffer = new Image<Rgba32>(CanvasSize, CanvasSize);
-        // Белый фон вручную: Mutate/Processing запрещены песочницей контента
+
         var white = new Rgba32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
         for (var i = 0; i < _pixels.Length; i++)
+        {
             _pixels[i] = byte.MaxValue;
+        }
+
         for (var y = 0; y < CanvasSize; y++)
         for (var x = 0; x < CanvasSize; x++)
+        {
             _buffer[x, y] = white;
+        }
+
         _texture = _clyde.CreateBlankTexture<Rgba32>((CanvasSize, CanvasSize));
         _texture.SetSubImage(Vector2i.Zero, _buffer);
 
@@ -60,7 +64,7 @@ public sealed class CanvasControl : Control
         var rect = CanvasRect();
         handle.DrawTextureRect(_texture, rect);
 
-        // Кольцо текущего размера кисти (только для круглых инструментов)
+        // Кольцо текущего размера кисти
         if (_hovering && _tools.Tool is CanvasTool.Pen or CanvasTool.Brush or CanvasTool.Eraser)
         {
             var radius = Math.Max(1, _tools.Size / 2) * rect.Size.X / CanvasSize;
@@ -70,8 +74,7 @@ public sealed class CanvasControl : Control
     }
 
     /// <summary>
-    /// Квадратная область холста по центру контрола: пиксели всегда квадратные,
-    /// даже если контейнер растянул контрол прямоугольником.
+    /// Квадратная область холста по центру контрола.
     /// </summary>
     private UIBox2 CanvasRect()
     {
@@ -86,7 +89,6 @@ public sealed class CanvasControl : Control
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
-        // Пипетка не меняет холст: без Undo и без ведения
         if (_tools.Tool == CanvasTool.Eyedropper)
         {
             PickColor(args.RelativePosition);
@@ -129,13 +131,11 @@ public sealed class CanvasControl : Control
 
     private void PaintAt(Vector2 relative)
     {
-        // Сырые координаты БЕЗ клампа в системе квадратной области
         var rect = CanvasRect();
         var p = new Vector2(
             (relative.X - rect.Left) / rect.Size.X * (CanvasSize - 1),
             (relative.Y - rect.Top) / rect.Size.Y * (CanvasSize - 1));
 
-        // Пипетка и заливка — точечные: только первый вызов штриха
         if (_tools.Tool == CanvasTool.Fill)
         {
             if (!_hasLastCell && Inside(p))
@@ -166,7 +166,7 @@ public sealed class CanvasControl : Control
     }
 
     /// <summary>
-    /// Отрезок, отсеченный границей холста (Лян-Барски). Снаружи — пустота, не край.
+    /// Линия штампов между точками, отсеченная границей холста (Лян-Барски).
     /// </summary>
     private void PaintClipped(Vector2 from, Vector2 to)
     {
@@ -184,9 +184,6 @@ public sealed class CanvasControl : Control
             || !Clip(dy, max - from.Y, ref t0, ref t1))
             return;
 
-        // Штампы с интервалом (как мягкая кисть в фотошопе): каждый следующий
-        // ложится ПОВЕРХ текущего, перекрытия дают сплошную сердцевину.
-        // Интервал мелкий, чтобы края не шли бусами.
         var radius = Math.Max(1, _tools.Size / 2);
         var spacing = Math.Max(1, radius / 4);
         var steps = Math.Max(1, (int) Math.Ceiling((to - from).Length()));
@@ -224,9 +221,7 @@ public sealed class CanvasControl : Control
     }
 
     /// <summary>
-    /// Штамп инструмента. Ручка — круглый жесткий, кисть — тот же круг с мягким
-    /// спадом к краю, без наслаивания внутри штриха (максимум за штрих).
-    /// Ластик — квадрат бумагой.
+    /// Один штамп инструмента в пикселе. Форма и база бленда зависят от инструмента.
     /// </summary>
     private void PaintCircle(int px, int py)
     {
@@ -236,17 +231,12 @@ public sealed class CanvasControl : Control
         var size = Math.Max(1, _tools.Size);
         var half = size / 2;
 
-        // Ластик — непрозрачная бумага, остальное — цвет тулбокса
         var c = eraser ? Color.White : _tools.Color;
         var alpha = eraser ? 1f : c.AByte / 255f;
 
         var hr = size / 2f;
         var even = size % 2 == 0;
 
-        // База бленда: ручка — старт штриха (ровная полупрозрачность без наслаивания),
-        // кисть/ластик — текущее (накопление штампов).
-        // Читаем из своего зеркала: геттер _buffer[x, y] запрещен песочницей.
-        // Исходник — старт штриха (верх стека): один штрих = один слой.
         var orig = _undo.Count > 0 ? _undo.Peek().Pixels : _pixels;
 
         for (var y = py - half; y < py - half + size; y++)
@@ -258,7 +248,6 @@ public sealed class CanvasControl : Control
             float coverage = 1f;
             if (pen)
             {
-                // Жесткий круг (центр четного — между пикселями)
                 var ox = Math.Abs(x - px + (even ? 0.5f : 0f)) / hr;
                 var oy = Math.Abs(y - py + (even ? 0.5f : 0f)) / hr;
                 if (ox * ox + oy * oy > 1f)
@@ -266,21 +255,17 @@ public sealed class CanvasControl : Control
             }
             else if (soft)
             {
-                // Тот же круг, что у ручки, но с мягким спадом к краю
                 var ox = Math.Abs(x - px + (even ? 0.5f : 0f)) / hr;
                 var oy = Math.Abs(y - py + (even ? 0.5f : 0f)) / hr;
                 var d = MathF.Sqrt(ox * ox + oy * oy);
                 if (d > 1f)
                     continue;
-                // Полная сила до середины, дальше спад к краю
+
                 coverage = Math.Clamp((1f - d) / 0.45f, 0f, 1f);
             }
 
             var stampAlpha = alpha * coverage;
 
-            // Один штрих — один слой: пиксель красится блендом поверх ИСХОДНОГО
-            // и только если новый штамп сильнее уже лежащего за этот штрих.
-            // Слабая кисть не темнеет от самоперекрытий, края не выцветают.
             var idx = y * CanvasSize + x;
             if (stampAlpha <= _strokeAlpha[idx])
                 continue;
@@ -299,7 +284,7 @@ public sealed class CanvasControl : Control
     }
 
     /// <summary>
-    /// Пипетка: цвет пикселя в тулбокс (альфу инструмента не трогаем).
+    /// Пипетка: цвет пикселя в тулбокс, холст не меняется.
     /// </summary>
     private void PickColor(Vector2 relative)
     {
@@ -313,10 +298,13 @@ public sealed class CanvasControl : Control
         _tools.Touch();
     }
 
-    private const int FillTolerance = 96; // сумма |dr|+|dg|+|db|
+    /// <summary>
+    /// Допуск заливки: сумма |dr|+|dg|+|db|.
+    /// </summary>
+    private const int FillTolerance = 96;
 
     /// <summary>
-    /// Заливка связной области (итеративная, без рекурсии).
+    /// Заливка связной области от точки (итеративно).
     /// </summary>
     private void FloodFill(int sx, int sy)
     {
@@ -327,7 +315,8 @@ public sealed class CanvasControl : Control
 
         var c = _tools.Color;
         var alpha = c.AByte / 255f;
-        // Заливка тем же цветом — нечего делать
+
+        // Свой цвет игнорим
         if (Math.Abs(c.RByte - tr) + Math.Abs(c.GByte - tg) + Math.Abs(c.BByte - tb) <= FillTolerance
             && alpha >= 1f)
             return;
@@ -372,13 +361,14 @@ public sealed class CanvasControl : Control
         if (_undo.Count <= 20)
             return;
 
-        // Выбрасываем дно стека (ToList идет сверху вниз, дно последнее)
         var list = _undo.ToList();
         list[^1].Image.Dispose();
         list.RemoveAt(list.Count - 1);
         _undo.Clear();
         for (var i = list.Count - 1; i >= 0; i--)
+        {
             _undo.Push(list[i]);
+        }
     }
 
     public void Undo()
@@ -386,7 +376,6 @@ public sealed class CanvasControl : Control
         if (_undo.Count == 0)
             return;
 
-        // Меняем буфер и зеркало на сохраненные: текстура хранит копию пикселей
         _buffer.Dispose();
         var prev = _undo.Pop();
         _buffer = prev.Image;
@@ -402,7 +391,10 @@ public sealed class CanvasControl : Control
         _texture.Dispose();
         _buffer.Dispose();
         foreach (var snap in _undo)
+        {
             snap.Image.Dispose();
+        }
+
         _undo.Clear();
     }
 }

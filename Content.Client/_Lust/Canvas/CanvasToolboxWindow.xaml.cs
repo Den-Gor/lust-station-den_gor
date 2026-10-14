@@ -4,7 +4,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
-using Robust.Shared.Maths;
+
 
 namespace Content.Client._Lust.Canvas;
 
@@ -16,10 +16,10 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
     private readonly StyleBoxFlat _previewStyle = new() { BackgroundColor = Color.Black };
     private bool _wired;
 
-    // Пустой конструктор обязателен: XAML умеет только new() без параметров
     public CanvasToolboxWindow()
     {
         RobustXamlLoader.Load(this);
+        SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", 2));
 
         PenButton.Group = _toolGroup;
         BrushButton.Group = _toolGroup;
@@ -38,7 +38,7 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
             if (_tools == null)
                 return;
             _tools.Size = (int) SizeSlider.Value;
-            SizeLabel.Text = $"Размер: {_tools.Size}";
+            SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", _tools.Size));
             _tools.Touch();
         };
 
@@ -54,16 +54,14 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
     {
         _tools = tools;
 
-        // Пипетка меняет цвет в обход виджетов — подтягиваем их (инстанс один, подписка разовая)
         if (!_wired)
         {
             _wired = true;
             tools.Changed += RefreshColorWidgets;
         }
 
-        // Синхронизируем виджеты с сохраненными настройками (окно пересоздается, Tools живет)
         SizeSlider.Value = tools.Size;
-        SizeLabel.Text = $"Размер: {tools.Size}";
+        SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", tools.Size));
         GetToolButton(tools.Tool).Pressed = true;
 
         RefreshColorWidgets();
@@ -72,7 +70,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
 
     /// <summary>
     /// Подтянуть цветовые виджеты под Tools (пипетка, переоткрытие).
-    /// Петли нет: значения сходятся за проход (сеттеры не стреляют без изменений).
     /// </summary>
     private void RefreshColorWidgets()
     {
@@ -111,7 +108,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         if (text.Length != 6 && text.Length != 8)
             return;
 
-        // Ручной парсинг: Convert.ToByte запрещен песочницей контента
         if (!TryParseHexByte(text, 0, out var r)
             || !TryParseHexByte(text, 2, out var g)
             || !TryParseHexByte(text, 4, out var b))
@@ -161,7 +157,7 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
             return;
 
         _tools.Color = color;
-        _tools.Opacity = color.A; // A уже 0..1
+        _tools.Opacity = color.A;
         _tools.Touch();
 
         ApplyPreview(color, updateHex);
@@ -195,7 +191,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
         _tools.Touch();
     }
 
-    // Таскание за шапку (крестика нет — окно живет пока открыт хоть один холст)
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
     {
         return relativeMousePos.Y < 34f ? DragMode.Move : DragMode.None;

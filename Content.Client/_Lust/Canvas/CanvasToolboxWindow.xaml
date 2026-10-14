@@ -4,24 +4,24 @@
     MouseFilter="Stop" MinSize="230 200">
     <PanelContainer StyleClasses="BackgroundPanel">
         <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="8 8 8 8">
-            <Label Name="HeaderLabel" Text="Инструменты" HorizontalAlignment="Center"/>
+            <Label Name="HeaderLabel" Text="{Loc 'lust-canvas-toolbox-header'}" HorizontalAlignment="Center"/>
             <BoxContainer Name="ToolRow" Orientation="Horizontal" SeparationOverride="4"
                 HorizontalAlignment="Center">
-                <Button Name="PenButton" Text="Ручка" ToggleMode="True" Pressed="True"/>
-                <Button Name="BrushButton" Text="Кисть" ToggleMode="True"/>
-                <Button Name="FillButton" Text="Заливка" ToggleMode="True"/>
-                <Button Name="EraserButton" Text="Ластик" ToggleMode="True"/>
-                <Button Name="EyedropperButton" Text="Пипетка" ToggleMode="True"/>
+                <Button Name="PenButton" Text="{Loc 'lust-canvas-tool-pen'}" ToggleMode="True" Pressed="True"/>
+                <Button Name="BrushButton" Text="{Loc 'lust-canvas-tool-brush'}" ToggleMode="True"/>
+                <Button Name="FillButton" Text="{Loc 'lust-canvas-tool-fill'}" ToggleMode="True"/>
+                <Button Name="EraserButton" Text="{Loc 'lust-canvas-tool-eraser'}" ToggleMode="True"/>
+                <Button Name="EyedropperButton" Text="{Loc 'lust-canvas-tool-eyedropper'}" ToggleMode="True"/>
             </BoxContainer>
-            <Label Name="SizeLabel" Text="Размер: 2"/>
+            <Label Name="SizeLabel" HorizontalAlignment="Left"/>
             <Slider Name="SizeSlider" MinValue="2" MaxValue="32" Value="2"/>
             <canvas:ColorSvSquare Name="SvSquare" HorizontalAlignment="Center"/>
             <canvas:ColorHueStrip Name="HueStrip" HorizontalAlignment="Center"/>
-            <Label Text="Прозрачность"/>
+            <Label Text="{Loc 'lust-canvas-opacity'}"/>
             <Slider Name="OpacitySlider" MinValue="0" MaxValue="100" Value="100"/>
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                 <PanelContainer Name="Preview" MinSize="48 24" VerticalAlignment="Center"/>
-                <LineEdit Name="HexEdit" PlaceHolder="#rrggbb" HorizontalExpand="True"/>
+                <LineEdit Name="HexEdit" PlaceHolder="{Loc 'lust-canvas-hex-placeholder'}" HorizontalExpand="True"/>
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>

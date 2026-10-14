@@ -3,7 +3,7 @@
 public sealed class CanvasClientSystem : EntitySystem
 {
     public readonly CanvasToolState Tools = new();
-    public int OpenCanvases; // количетсвоо открытых холстов
+    public int OpenCanvases;
 
     private CanvasToolboxWindow? _toolbox;
 
@@ -26,5 +26,22 @@ public sealed class CanvasClientSystem : EntitySystem
 
         _toolbox?.Close();
         _toolbox = null;
+    }
+
+    /// <summary>
+    /// Кнопка «Инструменты» на холсте: показать/спрятать тулбокс вручную.
+    /// </summary>
+    public void ToggleToolbox()
+    {
+        if (_toolbox is { Disposed: false })
+        {
+            _toolbox.Close();
+            _toolbox = null;
+            return;
+        }
+
+        _toolbox = new CanvasToolboxWindow();
+        _toolbox.SetTools(Tools);
+        _toolbox.OpenCenteredRight();
     }
 }

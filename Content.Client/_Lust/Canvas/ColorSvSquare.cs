@@ -1,9 +1,7 @@
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
-using Robust.Shared.Maths;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Color = Robust.Shared.Maths.Color;
@@ -14,7 +12,7 @@ namespace Content.Client._Lust.Canvas;
 /// Квадрат S/V как в фотошопе: X — насыщенность, Y — яркость (вверх светлее).
 /// Перестраивается только при смене Hue.
 /// </summary>
-public sealed class ColorSvSquare : Control
+public sealed partial class ColorSvSquare : Control
 {
     [Dependency] private IClyde _clyde = default!;
 

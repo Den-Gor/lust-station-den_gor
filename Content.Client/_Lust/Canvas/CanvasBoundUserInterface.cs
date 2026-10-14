@@ -7,7 +7,8 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
     private CanvasWindow? _window;
 
     public  CanvasBoundUserInterface(EntityUid owner, Enum  uiKey) : base(owner, uiKey)
-    {}
+    {
+    }
 
     protected override void Open()
     {
@@ -15,6 +16,7 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
         var canvasSystem = EntMan.System<CanvasClientSystem>();
         _window = this.CreateWindow<CanvasWindow>();
         _window.SetTools(canvasSystem.Tools);
+        _window.SetSystems(canvasSystem);
         canvasSystem.NotifyCanvasOpened();
     }
     protected override void Dispose(bool disposing)

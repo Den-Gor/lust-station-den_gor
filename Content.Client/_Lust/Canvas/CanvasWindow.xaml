@@ -1,14 +1,21 @@
 <canvas:CanvasWindow xmlns="https://spacestation14.io"
     xmlns:canvas="clr-namespace:Content.Client._Lust.Canvas"
-    MouseFilter="Stop" Resizable="True" MinSize="400 400"
-    SetSize="520 600">
+    MouseFilter="Stop" Resizable="True" MinSize="540 640"
+    SetSize="560 700">
     <BoxContainer Name="ContentsRoot" Orientation="Vertical">
+        <BoxContainer Name="TopBar" Orientation="Horizontal" Margin="6 6 6 0" SeparationOverride="4">
+            <Button Name="ToolsButton" Text="{Loc 'lust-canvas-tools'}"/>
+            <Control HorizontalExpand="True"/>
+            <Button Name="ExportButton" Text="{Loc 'lust-canvas-export'}" Disabled="True" ToolTip="{Loc 'lust-canvas-export-tooltip'}"/>
+            <Button Name="ImportButton" Text="{Loc 'lust-canvas-import'}" Disabled="True" ToolTip="{Loc 'lust-canvas-import-tooltip'}"/>
+        </BoxContainer>
         <PanelContainer VerticalExpand="True" HorizontalExpand="True">
             <Control Name="CanvasHost" VerticalExpand="True" HorizontalExpand="True"/>
         </PanelContainer>
-        <BoxContainer Name="EditButtons" Orientation="Horizontal" HorizontalAlignment="Right" Margin="6" SeparationOverride="4">
-            <Button Name="UndoButton" Text="Отменить"/>
-            <Button Name="SaveButton" Text="Сохранить"/>
+        <BoxContainer Name="EditButtons" Orientation="Horizontal" Margin="6" SeparationOverride="4">
+            <Button Name="UndoButton" Text="{Loc 'lust-canvas-undo'}"/>
+            <Control HorizontalExpand="True"/>
+            <Button Name="SaveButton" Text="{Loc 'lust-canvas-save'}"/>
         </BoxContainer>
     </BoxContainer>
 </canvas:CanvasWindow>

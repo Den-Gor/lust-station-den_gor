@@ -1,9 +1,7 @@
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
-using Robust.Shared.Maths;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Color = Robust.Shared.Maths.Color;
@@ -13,7 +11,7 @@ namespace Content.Client._Lust.Canvas;
 /// <summary>
 /// Радужная полоска Hue. Градиент статичный, строится один раз.
 /// </summary>
-public sealed class ColorHueStrip : Control
+public sealed partial class ColorHueStrip : Control
 {
     [Dependency] private IClyde _clyde = default!;
 

@@ -25,20 +25,24 @@ public sealed partial class CanvasSystem : EntitySystem
     private void OnCanvasConvertAttempt(Entity<PaperComponent> ent, ref CanvasConvertAttemptEvent args)
     {
         if (args.Cancelled)
+        {
             return;
+        }
 
         // Кисть → конвертация / переоткрытие своего редактора
         if (_tag.HasTag(args.Brush, "LustDraw"))
         {
             if (TryConvertToCanvas(ent, args.Brush, args.User))
+            {
                 args.Cancelled = true;
+            }
             return;
         }
 
         // Чужой инструмент (ручка, штамп), а у САМОГО игрока открыт холст → не даем второе окно
         if (_ui.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
         {
-            _popup.PopupClient("У вас уже открыт холст этой бумаги", ent.Owner, args.User);
+            _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
             args.Cancelled = true;
         }
     }
@@ -46,30 +50,36 @@ public sealed partial class CanvasSystem : EntitySystem
     private void OnPaperOpenAttempt(Entity<PaperComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
         if (args.Cancelled)
+        {
             return;
+        }
 
         // Обычная бумага без холста — не наше дело
         if (!HasComp<CanvasComponent>(ent))
+        {
             return;
+        }
 
         // У самого игрока открыт холст → второе окно (просмотр) не даем
         if (_ui.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
         {
             if (!args.Silent)
-                _popup.PopupClient("У вас уже открыт холст этой бумаги", ent.Owner, args.User);
+                _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
             args.Cancel();
         }
     }
 
     public bool TryConvertToCanvas(Entity<PaperComponent> ent, EntityUid brush, EntityUid user)
     {
-        if(!CanConvertToCanvas(ent,brush,user))
+        if (!CanConvertToCanvas(ent, brush, user))
+        {
             return false;
+        }
 
         if (!HasComp<CanvasComponent>(ent))
         {
             AddComp<CanvasComponent>(ent);
-            _paper.SetContent(ent,"");
+            _paper.SetContent(ent, "");
         }
 
         _ui.OpenUi(ent.Owner, CanvasUiKey.Key, user);
@@ -79,16 +89,20 @@ public sealed partial class CanvasSystem : EntitySystem
     public bool CanConvertToCanvas(Entity<PaperComponent> ent, EntityUid brush, EntityUid user, bool quiet = false)
     {
         if (!_tag.HasTag(brush, "LustDraw"))
+        {
             return false;
+        }
 
         if (ent.Comp.StampedBy.Count > 0)
+        {
             return false;
+        }
 
         // У самого игрока открыта бумага как текст → второе окно (холст) не даем
         if (_ui.IsUiOpen(ent.Owner, PaperUiKey.Key, user))
         {
             if (!quiet)
-                _popup.PopupClient("У вас уже открыта эта бумага", ent.Owner, user);
+                _popup.PopupClient(Loc.GetString("lust-canvas-popup-paper-open"), ent.Owner, user);
             return false;
         }
 
