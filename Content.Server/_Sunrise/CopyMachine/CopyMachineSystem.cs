@@ -13,7 +13,6 @@ using Content.Shared.Emag.Systems;
 using Content.Shared.Materials;
 using Content.Shared.Paper;
 using Content.Shared.Labels.EntitySystems;
-using Content.Shared.Popups; // Lust-edit
 using Content.Shared.Weapons.Melee.Events; // Lust-edit
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
@@ -21,7 +20,6 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random; // Lust-edit
 using Robust.Shared.Timing;
 
 namespace Content.Server._Sunrise.CopyMachine;
@@ -42,11 +40,6 @@ public sealed partial class CopyMachineSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audioSystem = default!;
     [Dependency] private LabelSystem _label = default!;
     [Dependency] private DocumentFormatSystem _documentFormat = default!;
-
-    // Lust-edit-start
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    // Lust-edit-end
 
     private readonly Dictionary<string, string> _documentContentByTemplateId = new();
 
@@ -207,24 +200,6 @@ public sealed partial class CopyMachineSystem : EntitySystem
         QueueUIUpdate(ent);
     }
 
-    // Lust-edit-start
-    private void OnAttacked(Entity<CopyMachineComponent> ent, ref AttackedEvent args)
-    {
-        if (!ent.Comp.IsJammed)
-            return;
-        if (_random.Prob(ent.Comp.UnjamChance))
-        {
-            ent.Comp.IsJammed = false;
-            Dirty(ent);
-            QueueUIUpdate(ent);
-            UpdateJamAppearance(ent, false);
-            _popup.PopupEntity(Loc.GetString("copy-machine-lust-unjammed"), ent, args.User, PopupType.Medium);
-            _audioSystem.PlayPvs(ent.Comp.UnjamSound, ent);
-        }
-
-    }
-    // Lust-edit-end
-
     private void OnMaterialAmountChanged(Entity<CopyMachineComponent> ent, ref MaterialAmountChangedEvent args) => QueueUIUpdate(ent);
 
     private void OnEntityInsertedIntoCopySlot(Entity<CopyMachineComponent> ent, ref EntInsertedIntoContainerMessage args)
@@ -351,49 +326,6 @@ public sealed partial class CopyMachineSystem : EntitySystem
 
         QueueUIUpdate(ent);
         _audioSystem.PlayPvs(ent.Comp.PrintSound, ent);
-    }
-
-    private void CompleteCurrentJob(Entity<CopyMachineComponent> ent)
-    {
-        var jobView = ent.Comp.CurrentJobView;
-        if (jobView != null)
-        {
-            // Lust-edit-start
-            if (ent.Comp.IsJammed)
-            {
-                Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
-            }
-            else if (_random.Prob(ent.Comp.JamChance))
-            {
-                // Заклинило прямо во время этого задания — лист испорчен, выдаём макулатуру вместо документа.
-                ent.Comp.IsJammed = true;
-                Dirty(ent);
-                QueueUIUpdate(ent);
-                UpdateJamAppearance(ent, true);
-                _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
-                _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
-                Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
-            }
-            else
-            {
-                var jobType = jobView.Type;
-                var templateId = jobView.TemplateId;
-                _ = jobType switch
-                {
-                    CopyMachineJobType.Print when templateId != null => TryPrintFromTemplate(ent, templateId),
-                    CopyMachineJobType.Copy => TryCopyFromSlotOrButtScan(ent),
-                    _ => false
-                };
-            }
-            // Lust-edit-end
-        }
-
-        ent.Comp.IsProcessing = false;
-        ent.Comp.CurrentJobView = null;
-        ent.Comp.NextPrintTime = TimeSpan.Zero;
-        UpdateRunningAppearance(ent, false);
-
-        QueueUIUpdate(ent);
     }
 
     public override void Update(float frameTime)
@@ -545,11 +477,4 @@ public sealed partial class CopyMachineSystem : EntitySystem
     {
         _appearance.SetData(uid, CopyMachineVisuals.IsRunning, isRunning);
     }
-
-    // Lust-edit-start
-    private void UpdateJamAppearance(EntityUid uid, bool isJammed)
-    {
-        _appearance.SetData(uid, CopyMachineVisuals.IsJammed, isJammed);
-    }
-    // Lust-edit-end
 }
