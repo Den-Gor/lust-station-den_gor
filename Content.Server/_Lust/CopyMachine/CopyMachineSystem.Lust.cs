@@ -13,7 +13,7 @@ public sealed partial class CopyMachineSystem
 
     private void OnAttacked(Entity<CopyMachineComponent> ent, ref AttackedEvent args)
     {
-        TryUnjam(ent, ref args);
+        TryUnjam(ent, args.User);
     }
 
     /// <summary>
@@ -21,15 +21,15 @@ public sealed partial class CopyMachineSystem
     /// </summary>
     /// <param name="ent"></param>
     /// <returns></returns>
-    public bool CanUnjam(Entity<CopyMachineComponent> ent) => ent.Comp.IsJammed;
+    private bool CanUnjam(Entity<CopyMachineComponent> ent) => ent.Comp.IsJammed;
 
     /// <summary>
     /// Функция вызываемая для попытки починки принтера
     /// </summary>
     /// <param name="ent"></param>
-    /// <param name="args"></param>
+    /// <param name="user"></param>
     /// <returns></returns>
-    public bool TryUnjam(Entity<CopyMachineComponent> ent, ref AttackedEvent args)
+    private bool TryUnjam(Entity<CopyMachineComponent> ent, EntityUid user)
     {
         if (!CanUnjam(ent))
             return false;
@@ -40,7 +40,7 @@ public sealed partial class CopyMachineSystem
         ent.Comp.IsJammed = false;
         Dirty(ent);
         UpdateJamAppearance(ent, false);
-        _popup.PopupEntity(Loc.GetString("copy-machine-lust-unjammed"), ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("copy-machine-lust-unjammed"), ent, user, PopupType.Medium);
         _audioSystem.PlayPvs(ent.Comp.UnjamSound, ent);
         return true;
     }
@@ -50,7 +50,7 @@ public sealed partial class CopyMachineSystem
     {
         if (ent.Comp.IsJammed)
         {
-            Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
+            SpawnAtPosition(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
             return true;
         }
         if (_random.Prob(ent.Comp.JamChance))
