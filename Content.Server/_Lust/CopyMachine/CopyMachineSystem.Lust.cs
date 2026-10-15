@@ -21,13 +21,7 @@ public sealed partial class CopyMachineSystem
     /// </summary>
     /// <param name="ent"></param>
     /// <returns></returns>
-    public bool CanUnjam(Entity<CopyMachineComponent> ent)
-    {
-        if (!ent.Comp.IsJammed)
-            return false;
-
-        return true;
-    }
+    public bool CanUnjam(Entity<CopyMachineComponent> ent) => ent.Comp.IsJammed;
 
     /// <summary>
     /// Функция вызываемая для попытки починки принтера
@@ -45,7 +39,6 @@ public sealed partial class CopyMachineSystem
 
         ent.Comp.IsJammed = false;
         Dirty(ent);
-        QueueUIUpdate(ent);
         UpdateJamAppearance(ent, false);
         _popup.PopupEntity(Loc.GetString("copy-machine-lust-unjammed"), ent, args.User, PopupType.Medium);
         _audioSystem.PlayPvs(ent.Comp.UnjamSound, ent);
@@ -65,11 +58,10 @@ public sealed partial class CopyMachineSystem
             // Заклинило прямо во время этого задания — лист испорчен, выдаём макулатуру вместо документа.
             ent.Comp.IsJammed = true;
             Dirty(ent);
-            QueueUIUpdate(ent);
             UpdateJamAppearance(ent, true);
             _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
             _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
-            Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
+            SpawnAtPosition(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
             return true;
         }
         return false;
