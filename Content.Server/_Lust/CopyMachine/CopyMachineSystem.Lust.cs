@@ -52,50 +52,27 @@ public sealed partial class CopyMachineSystem
         return true;
     }
 
-    /// <summary>
-    /// Перенесение функции и её почти полное изменение из санрайза в ласт
-    /// Функция занимается созданием напечатаного предмета
-    /// </summary>
-    /// <param name="ent"></param>
-    private void CompleteCurrentJob(Entity<CopyMachineComponent> ent)
+    // Функция проверяющая шанс заклина принтера, и если он заклиненый заменяющая спавн документов на комков
+    private bool TryHandleJam(Entity<CopyMachineComponent> ent)
     {
-        var jobView = ent.Comp.CurrentJobView;
-        if (jobView != null)
+        if (ent.Comp.IsJammed)
         {
-            if (ent.Comp.IsJammed)
-            {
-                Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
-            }
-            else if (_random.Prob(ent.Comp.JamChance))
-            {
-                // Заклинило прямо во время этого задания — лист испорчен, выдаём макулатуру вместо документа.
-                ent.Comp.IsJammed = true;
-                Dirty(ent);
-                QueueUIUpdate(ent);
-                UpdateJamAppearance(ent, true);
-                _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
-                _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
-                Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
-            }
-            else
-            {
-                var jobType = jobView.Type;
-                var templateId = jobView.TemplateId;
-                _ = jobType switch
-                {
-                    CopyMachineJobType.Print when templateId != null => TryPrintFromTemplate(ent, templateId),
-                    CopyMachineJobType.Copy => TryCopyFromSlotOrButtScan(ent),
-                    _ => false
-                };
-            }
+            Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
+            return true;
         }
-
-        ent.Comp.IsProcessing = false;
-        ent.Comp.CurrentJobView = null;
-        ent.Comp.NextPrintTime = TimeSpan.Zero;
-        UpdateRunningAppearance(ent, false);
-
-        QueueUIUpdate(ent);
+        if (_random.Prob(ent.Comp.JamChance))
+        {
+            // Заклинило прямо во время этого задания — лист испорчен, выдаём макулатуру вместо документа.
+            ent.Comp.IsJammed = true;
+            Dirty(ent);
+            QueueUIUpdate(ent);
+            UpdateJamAppearance(ent, true);
+            _popup.PopupEntity(Loc.GetString("copy-machine-lust-jammed"), ent, PopupType.Medium);
+            _audioSystem.PlayPvs(ent.Comp.JamSound, ent);
+            Spawn(ent.Comp.JammedPaperProtoId, Transform(ent).Coordinates);
+            return true;
+        }
+        return false;
     }
 
     private void UpdateJamAppearance(EntityUid uid, bool isJammed)

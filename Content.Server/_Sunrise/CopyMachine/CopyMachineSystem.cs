@@ -328,6 +328,29 @@ public sealed partial class CopyMachineSystem : EntitySystem
         _audioSystem.PlayPvs(ent.Comp.PrintSound, ent);
     }
 
+    private void CompleteCurrentJob(Entity<CopyMachineComponent> ent)
+    {
+        var jobView = ent.Comp.CurrentJobView;
+        if (jobView != null && !TryHandleJam(ent)) //  Lust-edit
+        {
+            var jobType = jobView.Type;
+            var templateId = jobView.TemplateId;
+            _ = jobType switch
+            {
+                CopyMachineJobType.Print when templateId != null => TryPrintFromTemplate(ent, templateId),
+                CopyMachineJobType.Copy => TryCopyFromSlotOrButtScan(ent),
+                _ => false
+            };
+        }
+
+        ent.Comp.IsProcessing = false;
+        ent.Comp.CurrentJobView = null;
+        ent.Comp.NextPrintTime = TimeSpan.Zero;
+        UpdateRunningAppearance(ent, false);
+
+        QueueUIUpdate(ent);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
