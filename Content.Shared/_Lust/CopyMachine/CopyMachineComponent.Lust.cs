@@ -20,10 +20,24 @@ public sealed partial class CopyMachineComponent
     public bool IsJammed;
 
     /// <summary>
+    /// Текущая печать бумаги уже испорчена
+    /// </summary>
+    public bool CurrentJobWillJam;
+
+    /// <summary>
+    /// Множитель дистанции выплевывания бумаги при печати во время починки
+    /// </summary>
+    public float JamPaperDropDistance = 1.5f;
+
+    /// <summary>
+    /// Скорость выплевывания бумаги при печати во время починки
+    /// </summary>
+    public float JamPaperDropSpeed = 2f;
+    /// <summary>
     /// Шанс на расклинивание
     /// </summary>
     [DataField]
-    public float UnjamChance = 0.2f;
+    public float UnjamChance = 0.35f;
     /// <summary>
     /// Предмет который будет выдовать принтер если заклинет
     /// </summary>

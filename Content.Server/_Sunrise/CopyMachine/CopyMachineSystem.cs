@@ -13,7 +13,7 @@ using Content.Shared.Emag.Systems;
 using Content.Shared.Materials;
 using Content.Shared.Paper;
 using Content.Shared.Labels.EntitySystems;
-using Content.Shared.Weapons.Melee.Events; // Lust-edit
+using Content.Shared.Weapons.Melee.Events; // Lust edit
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -66,8 +66,7 @@ public sealed partial class CopyMachineSystem : EntitySystem
         SubscribeLocalEvent<CopyMachineComponent, UnstrappedEvent>(OnEntityUnstrapped);
         SubscribeLocalEvent<CopyMachineComponent, GotEmaggedEvent>(OnEmagged);
         SubscribeLocalEvent<CopyMachineComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<CopyMachineComponent, AttackedEvent>(OnAttacked); // Lust-edit
-
+        SubscribeLocalEvent<CopyMachineComponent, AttackedEvent>(OnAttacked); // Lust edit
 
         _configManager.OnValueChanged(SunriseCCVars.DocumentTemplatePool, _ =>
         {
@@ -251,7 +250,7 @@ public sealed partial class CopyMachineSystem : EntitySystem
     {
         _itemSlots.AddItemSlot(ent, CopyMachineComponent.CopySlotId, ent.Comp.CopySlot);
         UpdateRunningAppearance(ent, false);
-        UpdateJamAppearance(ent, ent.Comp.IsJammed); // Lust-edit
+        UpdateJamAppearance(ent, ent.Comp.IsJammed); // Lust edit
 
         UpdateAvailableTemplates(ent);
 
@@ -325,13 +324,17 @@ public sealed partial class CopyMachineSystem : EntitySystem
         ent.Comp.CurrentJobView = new CopyMachineJobView(GetJobDisplayTitle(jobType, templateId), jobType, templateId);
 
         QueueUIUpdate(ent);
+        // Lust edit start
+        if (TryStartJamJob(ent))
+            return;
+        // Lust edit end
         _audioSystem.PlayPvs(ent.Comp.PrintSound, ent);
     }
 
     private void CompleteCurrentJob(Entity<CopyMachineComponent> ent)
     {
         var jobView = ent.Comp.CurrentJobView;
-        if (jobView != null && !TryHandleJam(ent)) //  Lust-edit
+        if (jobView != null && !TryCompleteJamJob(ent)) //  Lust edit
         {
             var jobType = jobView.Type;
             var templateId = jobView.TemplateId;
