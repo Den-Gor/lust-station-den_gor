@@ -11,3 +11,6 @@
 # Guns
 #- type: Tag
 #  id: MagazineMP5
+
+- type: Tag
+  id: LustDraw
