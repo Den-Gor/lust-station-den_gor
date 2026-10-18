@@ -1,0 +1,37 @@
+<canvas:CanvasToolboxWindow xmlns="https://spacestation14.io"
+    xmlns:canvas="clr-namespace:Content.Client._Lust.Canvas.UI"
+    xmlns:elements="clr-namespace:Content.Client._Lust.Canvas.UI.Elements"
+    xmlns:picker="clr-namespace:Content.Client._Lust.ColorPicker"
+    MouseFilter="Stop" MinSize="340 460">
+    <PanelContainer StyleClasses="BackgroundPanel">
+        <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="8 8 8 8">
+            <Label Name="HeaderLabel" Text="{Loc 'lust-canvas-toolbox-header'}" HorizontalAlignment="Center"/>
+            <BoxContainer Name="ToolRow" Orientation="Horizontal" SeparationOverride="4"
+                HorizontalAlignment="Center">
+                <Button Name="PenButton" Text="{Loc 'lust-canvas-tool-pen'}" ToggleMode="True" Pressed="True"/>
+                <Button Name="BrushButton" Text="{Loc 'lust-canvas-tool-brush'}" ToggleMode="True"/>
+                <Button Name="FillButton" Text="{Loc 'lust-canvas-tool-fill'}" ToggleMode="True"/>
+                <Button Name="EraserButton" Text="{Loc 'lust-canvas-tool-eraser'}" ToggleMode="True"/>
+                <Button Name="EyedropperButton" Text="{Loc 'lust-canvas-tool-eyedropper'}" ToggleMode="True"/>
+            </BoxContainer>
+            <Label Name="SizeLabel" HorizontalAlignment="Left"/>
+            <Slider Name="SizeSlider" MinValue="2" MaxValue="32" Value="2"/>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Text="{Loc 'lust-canvas-colors'}"/>
+                    <GridContainer Name="SwatchGrid" Columns="2" HSeparationOverride="4" VSeparationOverride="4">
+                    </GridContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <picker:HsvColorPicker Name="Picker" MinSize="220 230"/>
+                </BoxContainer>
+            </BoxContainer>
+            <Label Text="{Loc 'lust-canvas-opacity'}"/>
+            <Slider Name="OpacitySlider" MinValue="0" MaxValue="100" Value="100"/>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <PanelContainer Name="Preview" MinSize="48 24" VerticalAlignment="Center"/>
+                <LineEdit Name="HexEdit" PlaceHolder="{Loc 'lust-canvas-hex-placeholder'}" HorizontalExpand="True"/>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</canvas:CanvasToolboxWindow>
