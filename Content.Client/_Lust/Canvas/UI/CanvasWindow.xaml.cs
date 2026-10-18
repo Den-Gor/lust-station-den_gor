@@ -27,6 +27,7 @@ public sealed partial class CanvasWindow :  DefaultWindow
         _canvas = new CanvasControl(tools);
         CanvasHost.AddChild(_canvas);
         ToolsButton.OnPressed += _ => _systems?.ToggleToolbox();
+        UndoButton.OnPressed += _ => _canvas?.Undo();
     }
 
     public void SetSystems(CanvasClientSystem systems)
