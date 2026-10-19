@@ -1,5 +1,4 @@
 ﻿using Content.Shared._Lust.Canvas.Components;
-using Content.Shared._Lust.Canvas;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Content.Shared.Tag;

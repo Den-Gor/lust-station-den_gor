@@ -1,4 +1,6 @@
-﻿using Robust.Shared.Serialization;
+﻿using Lidgren.Network;
+using Robust.Shared.Network;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._Lust.Canvas;
 
@@ -8,14 +10,24 @@ public enum CanvasUiKey : byte
     Key
 }
 
-[Serializable, NetSerializable]
-public sealed class CanvasSaveMessage : BoundUserInterfaceMessage
+public sealed class CanvasSaveMessage : NetMessage
 {
-    public byte[]? PngData;
-    public int BaseRevision;
+    public override MsgGroups MsgGroup => MsgGroups.String;
 
-    public CanvasSaveMessage(byte[] png, int rev) { PngData = png; BaseRevision = rev; }
+    public NetEntity PaperUid;
+    public byte[] Data = Array.Empty<byte>();
+
+    public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
+    {
+        PaperUid = buffer.ReadNetEntity();
+        var length = buffer.ReadInt32();
+        Data = buffer.ReadBytes(length);
+    }
+
+    public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
+    {
+        buffer.Write(PaperUid);
+        buffer.Write(Data.Length);
+        buffer.Write(Data);
+    }
 }
-
-[Serializable, NetSerializable]
-public sealed class CanvasClearMessage : BoundUserInterfaceMessage { }

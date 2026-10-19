@@ -10,6 +10,8 @@ public sealed partial class CanvasWindow :  DefaultWindow
 {
     private CanvasControl? _canvas;
     private CanvasClientSystem? _systems;
+    private EntityUid _paper;
+
 
 
     public CanvasWindow()
@@ -28,10 +30,22 @@ public sealed partial class CanvasWindow :  DefaultWindow
         CanvasHost.AddChild(_canvas);
         ToolsButton.OnPressed += _ => _systems?.ToggleToolbox();
         UndoButton.OnPressed += _ => _canvas?.Undo();
+        SaveButton.OnPressed += _ =>
+        {
+            var png = _canvas?.Save();
+            if (png == null)
+                return;
+            _systems?.SendSave(_paper, png);
+        };
     }
 
     public void SetSystems(CanvasClientSystem systems)
     {
         _systems = systems;
+    }
+
+    public void SetPaper(EntityUid paper)
+    {
+        _paper = paper;
     }
 }

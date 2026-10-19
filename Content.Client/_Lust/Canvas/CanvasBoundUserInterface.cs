@@ -16,8 +16,10 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
         base.Open();
         var canvasSystem = EntMan.System<CanvasClientSystem>();
         _window = this.CreateWindow<CanvasWindow>();
+        _window.SetPaper(Owner);
         _window.SetTools(canvasSystem.Tools);
         _window.SetSystems(canvasSystem);
+
         canvasSystem.NotifyCanvasOpened();
     }
 

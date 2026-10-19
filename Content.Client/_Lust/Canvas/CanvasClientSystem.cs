@@ -1,13 +1,26 @@
 ﻿using Content.Client._Lust.Canvas.UI;
+using Content.Shared._Lust.Canvas;
+using Robust.Shared.Network;
 
 namespace Content.Client._Lust.Canvas;
 
-public sealed class CanvasClientSystem : EntitySystem
+public sealed partial class CanvasClientSystem : EntitySystem
 {
+    [Dependency] private INetManager _netManager = default!;
+
+    private ISawmill _sawmill = default!;
+
     public readonly CanvasToolState Tools = new();
+
     public int OpenCanvases;
 
     private CanvasToolboxWindow? _toolbox;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _sawmill = LogManager.GetSawmill("canvas.client");
+    }
 
     public void NotifyCanvasOpened()
     {
@@ -56,5 +69,22 @@ public sealed class CanvasClientSystem : EntitySystem
 
         if (!_toolbox.IsOpen)
             _toolbox.OpenCenteredRight();
+    }
+
+    public void SendSave(EntityUid paper, byte[] data)
+    {
+        if (!_netManager.IsConnected)
+        {
+            _sawmill.Warning("Cannot save canvas: client not connected to server");
+            return;
+        }
+
+        _netManager.ClientSendMessage(new CanvasSaveMessage
+        {
+            PaperUid = GetNetEntity(paper),
+            Data = data,
+        });
+
+        _sawmill.Debug($"Sent canvas save: {data.Length} bytes, paper: {ToPrettyString(paper)}");
     }
 }

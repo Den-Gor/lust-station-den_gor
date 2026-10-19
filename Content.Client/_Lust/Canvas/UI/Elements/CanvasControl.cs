@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.IO;
+using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
@@ -29,6 +30,8 @@ public sealed partial class CanvasControl : Control
     private Vector2 _lastStamp;
     private Vector2 _hoverPos;
     private bool _hovering;
+
+    private static readonly Rgba32 CanvasWhite = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
     public CanvasControl(CanvasToolState tools)
     {
@@ -468,7 +471,32 @@ public sealed partial class CanvasControl : Control
         _buffer.Dispose();
         _buffer = _undo[^1];
         _undo.RemoveAt(_undo.Count - 1);
-        _texture.SetSubImage(Vector2i.Zero, _buffer);    }
+        _texture.SetSubImage(Vector2i.Zero, _buffer);
+    }
+
+    /// <summary>
+    /// Серелизация картинки png
+    /// </summary>
+    public byte[]? Save()
+    {
+        var pixels = _buffer.GetPixelSpan();
+        var empty = true;
+        for (var i = 0; i < pixels.Length; i++)
+        {
+            if (pixels[i] != CanvasWhite)
+            {
+                empty = false;
+                break;
+            }
+        }
+
+        if (empty)
+            return null;
+
+        using var stream = new MemoryStream();
+        _buffer.SaveAsPng(stream);
+        return stream.ToArray();
+    }
 
     /// <summary>
     /// Экранные координаты мыши в пиксель холста возвращает false если курсор вне холста.
