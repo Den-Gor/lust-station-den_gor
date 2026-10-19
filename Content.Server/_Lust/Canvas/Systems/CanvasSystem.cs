@@ -29,10 +29,8 @@ public sealed partial class CanvasSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private NetTexturesManager _netTextures = default!;
 
     private ISawmill _sawmill = default!;
@@ -139,7 +137,7 @@ public sealed partial class CanvasSystem : EntitySystem
     private void NotifySaved(EntityUid paper, EntityUid actor)
     {
         _userInterface.CloseUi(paper, CanvasUiKey.Key, actor);
-        _userInterface.OpenUi(paper, PaperUiKey.Key, actor);
+        _userInterface.OpenUi(paper, CanvasUiKey.View, actor);
     }
 
     /// <summary>

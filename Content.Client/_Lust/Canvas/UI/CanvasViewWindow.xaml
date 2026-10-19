@@ -1,0 +1,8 @@
+<canvas:CanvasViewWindow xmlns="https://spacestation14.io"
+                      xmlns:canvas="clr-namespace:Content.Client._Lust.Canvas.UI"
+                      MouseFilter="Stop" Resizable="False"
+                      SetSize="544 572" Title="{Loc 'lust-canvas-view-title'}">
+    <PanelContainer>
+        <TextureRect Name="Image" MinSize="512 512" Stretch="Scale"/>
+    </PanelContainer>
+</canvas:CanvasViewWindow>

@@ -1,4 +1,6 @@
 ﻿using Content.Shared._Lust.Canvas.Components;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
@@ -19,9 +21,24 @@ public sealed partial class CanvasSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<PaperComponent, CanvasConvertAttemptEvent>(OnCanvasConvertAttempt);
         SubscribeLocalEvent<PaperComponent, ActivatableUIOpenAttemptEvent>(OnPaperOpenAttempt);
+        SubscribeLocalEvent<PaperComponent, UseInHandEvent>(OnPaperUseInHand,
+            after: [typeof(ActivatableUISystem)],
+            before: [typeof(IngestionSystem)]);
         SubscribeLocalEvent<CanvasComponent, BoundUIClosedEvent>(OnCanvasClosed);
+    }
+
+    /// <summary>
+    /// Защита от поедания рисунка
+    /// </summary>
+    private void OnPaperUseInHand(Entity<PaperComponent> ent, ref UseInHandEvent args)
+    {
+        if (!TryComp<CanvasComponent>(ent, out var canvas) || canvas.ImageId == null)
+            return;
+
+        args.Handled = true;
     }
 
     /// <summary>
@@ -71,20 +88,29 @@ public sealed partial class CanvasSystem : EntitySystem
         }
     }
 
-    private void OnPaperOpenAttempt(Entity<PaperComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+private void OnPaperOpenAttempt(Entity<PaperComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
         if (args.Cancelled)
             return;
 
-
         if (!HasComp<CanvasComponent>(ent))
             return;
 
-        // не даём пероткрыть бумагу обычной ручкой
+        if (args.Silent)
+            return;
+
+        // не даём переоткрыть бумагу обычной ручкой
         if (_userInterface.IsUiOpen(ent.Owner, CanvasUiKey.Key, args.User))
         {
-            if (!args.Silent)
-                _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
+            _popup.PopupClient(Loc.GetString("lust-canvas-popup-canvas-open"), ent.Owner, args.User);
+            args.Cancel();
+            return;
+        }
+
+        // Нарисованная бумага открывается как картинка, а не текст
+        if (TryComp<CanvasComponent>(ent, out var canvas) && canvas.ImageId != null)
+        {
+            _userInterface.OpenUi(ent.Owner, CanvasUiKey.View, args.User);
             args.Cancel();
         }
     }
@@ -118,7 +144,6 @@ public sealed partial class CanvasSystem : EntitySystem
     /// <param name="brush"></param>
     /// <param name="user"></param>
     /// <param name="quiet"></param>
-    /// <returns></returns>
     public bool CanConvertToCanvas(Entity<PaperComponent> ent, EntityUid brush, EntityUid user, bool quiet = false)
     {
         if (!_tag.HasTag(brush, "LustDraw"))

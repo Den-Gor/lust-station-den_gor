@@ -7,7 +7,8 @@ namespace Content.Shared._Lust.Canvas;
 [Serializable, NetSerializable]
 public enum CanvasUiKey : byte
 {
-    Key
+    Key,
+    View,
 }
 
 public sealed class CanvasSaveMessage : NetMessage

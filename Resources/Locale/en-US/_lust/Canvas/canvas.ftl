@@ -1,4 +1,5 @@
 ﻿lust-canvas-window-title = Canvas
+lust-canvas-view-title = Drawing
 lust-canvas-tools = Tools
 lust-canvas-export = Export
 lust-canvas-export-tooltip = File export — coming soon

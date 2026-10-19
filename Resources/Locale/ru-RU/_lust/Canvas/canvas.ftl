@@ -1,4 +1,5 @@
 ﻿lust-canvas-window-title = Холст
+lust-canvas-view-title = Рисунок
 lust-canvas-tools = Инструменты
 lust-canvas-export = Выгрузить
 lust-canvas-export-tooltip = Выгрузка в файл — в разработке

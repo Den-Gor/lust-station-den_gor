@@ -108,6 +108,8 @@
       # Lust edit start - окно холста для рисования кистью
       enum.CanvasUiKey.Key:
         type: CanvasBoundUserInterface
+      enum.CanvasUiKey.View:
+        type: CanvasBoundViewUserInterface
       # Lust edit end
   - type: FaxableObject
   - type: PaperVisualizer
