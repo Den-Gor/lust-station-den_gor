@@ -19,3 +19,4 @@ lust-canvas-hex-placeholder = #rrggbb
 lust-canvas-colors = Colors
 lust-canvas-popup-canvas-open = You already have this paper's canvas open
 lust-canvas-popup-paper-open = You already have this paper open
+lust-canvas-popup-stamped-edit = Cannot edit drawing on stamped paper

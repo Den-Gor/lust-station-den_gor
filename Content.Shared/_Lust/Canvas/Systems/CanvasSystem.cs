@@ -73,6 +73,14 @@ public sealed partial class CanvasSystem : EntitySystem
 
         if (_tag.HasTag(args.Brush, "LustDraw"))
         {
+            // Нельзя редактировать рисунок после печатей
+            if (ent.Comp.StampedBy.Count > 0)
+            {
+                _popup.PopupClient(Loc.GetString("lust-canvas-popup-stamped-edit"), ent.Owner, args.User);
+                args.Cancelled = true;
+                return;
+            }
+
             if (TryConvertToCanvas(ent, args.Brush, args.User))
             {
                 args.Cancelled = true;
@@ -110,6 +118,14 @@ private void OnPaperOpenAttempt(Entity<PaperComponent> ent, ref ActivatableUIOpe
         // Нарисованная бумага открывается как картинка, а не текст
         if (TryComp<CanvasComponent>(ent, out var canvas) && canvas.ImageId != null)
         {
+            // Если просмотр уже открыт закрываем его
+            if (_userInterface.IsUiOpen(ent.Owner, CanvasUiKey.View, args.User))
+            {
+                _userInterface.CloseUi(ent.Owner, CanvasUiKey.View, args.User);
+                args.Cancel();
+                return;
+            }
+
             _userInterface.OpenUi(ent.Owner, CanvasUiKey.View, args.User);
             args.Cancel();
         }

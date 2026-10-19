@@ -19,3 +19,4 @@ lust-canvas-hex-placeholder = #rrggbb
 lust-canvas-colors = Цвета
 lust-canvas-popup-canvas-open = У вас уже открыт холст этой бумаги
 lust-canvas-popup-paper-open = У вас уже открыта эта бумага
+lust-canvas-popup-stamped-edit = Нельзя редактировать рисунок на запечатанной бумаге
