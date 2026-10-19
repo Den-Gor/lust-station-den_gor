@@ -11,7 +11,7 @@ namespace Content.Client._Lust.ColorPicker;
 /// <summary>
 /// Радужная полоска Hue.
 /// </summary>
-public sealed class ColorHueStrip : Control
+public sealed partial class ColorHueStrip : Control
 {
     [Dependency] private IClyde _clyde = default!;
 

@@ -6,11 +6,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
-using Content.Shared.Inventory;
-using Content.Shared.Paper;
-using Content.Shared.Popups;
 using Content.Shared.Tag;
-using static Content.Shared.Paper.PaperComponent;
 using Robust.Server.Player;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -174,7 +170,7 @@ public sealed partial class CanvasSystem : EntitySystem
     /// </summary>
     private bool CheckDistance(EntityUid actor, EntityUid paper, ICommonSession session)
     {
-        if (_interaction.InRangeAndAccessible(actor, paper, SharedInteractionSystem.InteractionRange))
+        if (_interaction.InRangeAndAccessible(actor, paper))
             return true;
 
         _sawmill.Warning($"Canvas save rejected from {session.Name}: too far from {ToPrettyString(paper)}");

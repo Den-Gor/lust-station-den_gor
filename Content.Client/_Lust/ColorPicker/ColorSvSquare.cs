@@ -11,7 +11,7 @@ namespace Content.Client._Lust.ColorPicker;
 /// <summary>
 /// Квадрат S/V для выбора насыщености цвета
 /// </summary>
-public sealed class ColorSvSquare : Control
+public sealed partial class ColorSvSquare : Control
 {
     [Dependency] private IClyde _clyde = default!;
 

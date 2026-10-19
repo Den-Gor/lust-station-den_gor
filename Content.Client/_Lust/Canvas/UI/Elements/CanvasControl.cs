@@ -255,7 +255,7 @@ public sealed partial class CanvasControl : Control
     /// <summary>
     /// Константа размера прозрачного края кисти
     /// </summary>
-    private const float CoreFraction = 0.55f;
+    private const float CoreFraction = 0.65f;
 
     /// <summary>
     /// Создания штампа кисти
@@ -392,7 +392,9 @@ public sealed partial class CanvasControl : Control
             var left = seed.X;
 
             while (left > 0 && Matches(pixels[row + left - 1], start, toleranceSq))
+            {
                 left--;
+            }
 
             var spanUp = false;
             var spanDown = false;

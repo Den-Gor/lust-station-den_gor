@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Robust.Client.Graphics;
-using Robust.Client.Input;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
 
@@ -9,7 +8,7 @@ namespace Content.Client._Lust.Canvas.UI.Elements;
 public sealed partial class ColorSwatch : Control
 {
     private Color _color = Color.White;
-    private bool _selected = false;
+    private bool _selected;
 
     public event Action? Selected;
 

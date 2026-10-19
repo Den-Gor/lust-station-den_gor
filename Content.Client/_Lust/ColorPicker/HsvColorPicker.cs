@@ -39,7 +39,7 @@ public sealed class HsvColorPicker : BoxContainer
 
     public HsvColorPicker()
     {
-        Orientation = BoxContainer.LayoutOrientation.Vertical;
+        Orientation = LayoutOrientation.Vertical;
 
         AddChild(_square = new ColorSvSquare
         {

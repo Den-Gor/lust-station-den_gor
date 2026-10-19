@@ -1,9 +1,7 @@
 ﻿using System.Numerics;
 using Content.Client._Lust.ColorPicker;
-using Robust.Shared.Maths;
 
 namespace Content.Client._Lust.Canvas;
-
 
 public enum CanvasTool : byte {Pen, Brush, Fill, Eraser, Eyedropper}
 
@@ -26,11 +24,7 @@ public sealed class CanvasToolState
     /// <summary>
     /// Цвет выбранной ячейки. Запись идёт в эту же ячейку.
     /// </summary>
-    public Color Color
-    {
-        get => Palette[SelectedIndex].Color;
-        private set => Palette[SelectedIndex].SetExternal(value);
-    }
+    public Color Color => Palette[SelectedIndex].Color;
 
     /// <summary>
     /// Получение Hsv выбраной  ячейки
