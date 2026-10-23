@@ -10,7 +10,7 @@ namespace Content.Server._Sunrise.Heartbeat.Systems;
 public sealed partial class HeartbeatSystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private MobStateSystem _stateSystem = default!; // Lust edit
+    [Dependency] private MobStateSystem _mobState = default!; // Lust edit
 
     // Минимальное и максимальное время между ударами сердца
     private const float MinimumCooldown = 0.5f;
@@ -18,7 +18,7 @@ public sealed partial class HeartbeatSystem
 
     private void OnMobStateChanged(Entity<CritHeartbeatComponent> ent, ref MobStateChangedEvent args)
     {
-        if (!_stateSystem.IsCritical(ent)) // Lust edit
+        if (!_mobState.IsCritical(ent)) // Lust edit
         {
             RemComp<ActiveHeartbeatComponent>(ent);
             return;
