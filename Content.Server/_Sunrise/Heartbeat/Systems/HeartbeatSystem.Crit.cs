@@ -16,7 +16,7 @@ public sealed partial class HeartbeatSystem
 
     private void OnMobStateChanged(Entity<CritHeartbeatComponent> ent, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Critical || !IsTrueCrit(ent)) // Lust edit
+        if (args.NewMobState != MobState.Critical)
         {
             RemComp<ActiveHeartbeatComponent>(ent);
             return;
