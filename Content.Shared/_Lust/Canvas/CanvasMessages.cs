@@ -1,4 +1,5 @@
-﻿using Lidgren.Network;
+using Lidgren.Network;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -10,6 +11,9 @@ public enum CanvasUiKey : byte
     Key,
     View,
 }
+
+[Serializable, NetSerializable]
+public sealed class CanvasOpenViewMessage : BoundUserInterfaceMessage;
 
 public sealed class CanvasSaveMessage : NetMessage
 {

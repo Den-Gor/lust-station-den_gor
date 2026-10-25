@@ -6,6 +6,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
+using Content.Shared.Paper;
 using Content.Shared.Tag;
 using Robust.Server.Player;
 using Robust.Shared.Network;
@@ -118,6 +119,9 @@ public sealed partial class CanvasSystem : EntitySystem
 
         var paper = GetEntity(msg.PaperUid);
 
+        if (!CheckPaperIsUnstamped(paper, session))
+            return;
+
         if (!CheckRoundLimit(session))
             return;
 
@@ -153,6 +157,21 @@ public sealed partial class CanvasSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private bool CheckPaperIsUnstamped(EntityUid paper, ICommonSession session)
+    {
+        if (!TryComp<PaperComponent>(paper, out var paperComponent))
+        {
+            _sawmill.Warning($"Canvas save rejected from {session.Name}: entity is not paper");
+            return false;
+        }
+
+        if (paperComponent.StampedBy.Count == 0)
+            return true;
+
+        _sawmill.Warning($"Canvas save rejected from {session.Name}: paper is stamped");
+        return false;
     }
 
     /// <summary>

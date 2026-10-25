@@ -1,4 +1,5 @@
-﻿using Content.Client._Lust.Canvas.UI;
+using Content.Client._Lust.Canvas.UI;
+using Content.Shared._Lust.Canvas.Components;
 using Robust.Client.UserInterface;
 
 namespace Content.Client._Lust.Canvas;
@@ -19,6 +20,10 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
         _window.SetPaper(Owner);
         _window.SetTools(canvasSystem.Tools);
         _window.SetSystems(canvasSystem);
+        _window.SetBoundUserInterface(this);
+
+        if (EntMan.TryGetComponent<CanvasComponent>(Owner, out var canvas) && canvas.ImageId != null)
+            canvasSystem.RegisterEditor(Owner, _window);
 
         canvasSystem.NotifyCanvasOpened();
     }
@@ -26,7 +31,10 @@ public sealed class CanvasBoundUserInterface : BoundUserInterface
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        EntMan.System<CanvasClientSystem>().NotifyCanvasClosed();
+        var canvasSystem = EntMan.System<CanvasClientSystem>();
+        if (_window != null)
+            canvasSystem.UnregisterEditor(Owner, _window);
+        canvasSystem.NotifyCanvasClosed();
         _window?.Close();
         _window = null;
     }

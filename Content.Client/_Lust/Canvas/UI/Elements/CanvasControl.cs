@@ -1,5 +1,6 @@
-﻿using System.IO;
+using System.IO;
 using System.Numerics;
+using System.Buffers.Binary;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
@@ -21,6 +22,7 @@ public sealed partial class CanvasControl : Control
 
     private readonly CanvasToolState _tools;
     private Image<Rgba32> _buffer;
+    private Image<Rgba32> _baseline;
     private readonly float[] _strokeAlpha = new float[CanvasSize * CanvasSize];
     private readonly OwnedTexture _texture;
     private readonly List<Image<Rgba32>> _undo = [];
@@ -30,6 +32,11 @@ public sealed partial class CanvasControl : Control
     private Vector2 _lastStamp;
     private Vector2 _hoverPos;
     private bool _hovering;
+    private bool _readyToEdit = true;
+    private bool _hasLoadedImage;
+
+    public bool HasUnchangedLoadedImage =>
+        _hasLoadedImage && _buffer.GetPixelSpan().SequenceEqual(_baseline.GetPixelSpan());
 
     private static readonly Rgba32 CanvasWhite = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
@@ -47,6 +54,8 @@ public sealed partial class CanvasControl : Control
         {
             _buffer[x, y] = white;
         }
+
+        _baseline = _buffer.Clone();
 
         _texture = _clyde.CreateBlankTexture<Rgba32>((CanvasSize, CanvasSize));
         _texture.SetSubImage(Vector2i.Zero, _buffer);
@@ -82,6 +91,8 @@ public sealed partial class CanvasControl : Control
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
     {
         base.KeyBindDown(args);
+        if (!_readyToEdit)
+            return;
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
@@ -482,6 +493,9 @@ public sealed partial class CanvasControl : Control
     public byte[]? Save()
     {
         var pixels = _buffer.GetPixelSpan();
+        if (pixels.SequenceEqual(_baseline.GetPixelSpan()))
+            return null;
+
         var empty = true;
         for (var i = 0; i < pixels.Length; i++)
         {
@@ -492,12 +506,61 @@ public sealed partial class CanvasControl : Control
             }
         }
 
-        if (empty)
+        if (empty && !_hasLoadedImage)
             return null;
 
         using var stream = new MemoryStream();
         _buffer.SaveAsPng(stream);
         return stream.ToArray();
+    }
+
+    public void SetLoading(bool loading)
+    {
+        _readyToEdit = !loading;
+    }
+
+    /// <summary>Проверяет PNG и загружает его как исходное изображение для редактирования.</summary>
+    public void LoadImage(byte[] data)
+    {
+        _readyToEdit = false;
+
+        try
+        {
+            if (data.Length is < 24 or > Content.Shared._Lust.Canvas.CanvasSaveMessage.MaxDataLength
+                || data[0] != 0x89 || data[1] != 0x50 || data[2] != 0x4E || data[3] != 0x47
+                || data[4] != 0x0D || data[5] != 0x0A || data[6] != 0x1A || data[7] != 0x0A
+                || BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(16, 4)) != CanvasSize
+                || BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(20, 4)) != CanvasSize)
+            {
+                throw new InvalidDataException("Canvas PNG header is invalid");
+            }
+
+            using var stream = new MemoryStream(data, writable: false);
+            using var decoded = Image.Load<Rgba32>(stream);
+            if (decoded.Width != CanvasSize || decoded.Height != CanvasSize)
+                throw new InvalidDataException("Canvas PNG dimensions are invalid");
+
+            _buffer.Dispose();
+            _buffer = decoded.Clone();
+            _baseline.Dispose();
+            _baseline = _buffer.Clone();
+            _hasLoadedImage = true;
+            ClearUndo();
+            _texture.SetSubImage(Vector2i.Zero, _buffer);
+            _readyToEdit = true;
+        }
+        catch (Exception exception)
+        {
+            Logger.WarningS("canvas.client", $"Could not decode canvas PNG: {exception.Message}");
+        }
+    }
+
+    private void ClearUndo()
+    {
+        foreach (var snapshot in _undo)
+            snapshot.Dispose();
+
+        _undo.Clear();
     }
 
     /// <summary>
@@ -526,6 +589,7 @@ public sealed partial class CanvasControl : Control
         base.ExitedTree();
         _texture.Dispose();
         _buffer.Dispose();
+        _baseline.Dispose();
 
         foreach (var snap in _undo)
         {

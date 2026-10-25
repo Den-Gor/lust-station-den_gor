@@ -28,6 +28,19 @@ public sealed partial class CanvasSystem : EntitySystem
             after: [typeof(ActivatableUISystem)],
             before: [typeof(IngestionSystem)]);
         SubscribeLocalEvent<CanvasComponent, BoundUIClosedEvent>(OnCanvasClosed);
+        Subs.BuiEvents<CanvasComponent>(CanvasUiKey.Key, subs =>
+        {
+            subs.Event<CanvasOpenViewMessage>(OnOpenView);
+        });
+    }
+
+    private void OnOpenView(Entity<CanvasComponent> ent, ref CanvasOpenViewMessage args)
+    {
+        if (!_netManager.IsServer || ent.Comp.ImageId == null)
+            return;
+
+        _userInterface.CloseUi(ent.Owner, CanvasUiKey.Key, args.Actor);
+        _userInterface.OpenUi(ent.Owner, CanvasUiKey.View, args.Actor);
     }
 
     /// <summary>
@@ -148,6 +161,9 @@ private void OnPaperOpenAttempt(Entity<PaperComponent> ent, ref ActivatableUIOpe
             AddComp<CanvasComponent>(ent);
             _paper.SetContent(ent, "");
         }
+
+        if (_userInterface.IsUiOpen(ent.Owner, CanvasUiKey.View, user))
+            _userInterface.CloseUi(ent.Owner, CanvasUiKey.View, user);
 
         _userInterface.OpenUi(ent.Owner, CanvasUiKey.Key, user);
         return true;
