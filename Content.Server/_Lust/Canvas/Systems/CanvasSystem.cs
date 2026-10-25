@@ -34,9 +34,6 @@ public sealed partial class CanvasSystem : EntitySystem
     /// <summary>Минимальный интервал между сохранениями одной сессии</summary>
     private const float CooldownSeconds = 1f;
 
-    /// <summary>Максимальный размер присланного файла</summary>
-    private const int MaxBytes = 256 * 1024;
-
     /// <summary>Сколько рисунков сервер принял за текущий раунд</summary>
     private const int MaxSavesPerRound = 400;
 
@@ -85,9 +82,16 @@ public sealed partial class CanvasSystem : EntitySystem
             return;
         }
 
+        if (!msg.IsValid)
+        {
+            _lastSave[session] = now;
+            _sawmill.Warning($"Canvas save rejected from {session.Name}: invalid image payload length");
+            return;
+        }
+
         var data = msg.Data;
 
-        if (data.Length > MaxBytes)
+        if (data.Length > CanvasSaveMessage.MaxDataLength)
         {
             _sawmill.Warning($"Canvas save rejected from {session.Name}: too large ({data.Length} bytes)");
             return;
