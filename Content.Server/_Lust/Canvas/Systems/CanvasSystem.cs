@@ -47,6 +47,7 @@ public sealed partial class CanvasSystem : EntitySystem
     /// Счётчик рисунков за раунд
     /// </summary>
     private int _savesThisRound;
+    private bool _roundCleanupStarted;
 
     public override void Initialize()
     {
@@ -56,6 +57,8 @@ public sealed partial class CanvasSystem : EntitySystem
         _netManager.RegisterNetMessage<CanvasSaveMessage>(OnSave, accept: NetMessageAccept.Server);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<RoundStartedEvent>(OnRoundStarted);
+        SubscribeLocalEvent<CanvasComponent, ComponentShutdown>(OnCanvasShutdown);
     }
 
     /// <summary>
@@ -65,6 +68,17 @@ public sealed partial class CanvasSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _savesThisRound = 0;
+        _roundCleanupStarted = true;
+    }
+
+    private void OnRoundStarted(RoundStartedEvent ev)
+    {
+        _roundCleanupStarted = false;
+    }
+
+    private void OnCanvasShutdown(Entity<CanvasComponent> ent, ref ComponentShutdown args)
+    {
+        UnregisterImageIfUnused(ent.Comp.ImageId, ent.Owner);
     }
 
     /// <summary>
@@ -232,6 +246,7 @@ public sealed partial class CanvasSystem : EntitySystem
     private void SaveDrawing(EntityUid paper, EntityUid actor, ICommonSession session, byte[] data)
     {
         var canvas = Comp<CanvasComponent>(paper);
+        var previousImageId = canvas.ImageId;
 
         var imageId = Guid.NewGuid().ToString();
         var path = $"/NetTextures/Canvas/{imageId}.png";
@@ -244,10 +259,30 @@ public sealed partial class CanvasSystem : EntitySystem
         canvas.AuthorAccount = session.Name;
         Dirty(paper, canvas);
 
+        if (!string.Equals(previousImageId, imageId, StringComparison.Ordinal))
+            UnregisterImageIfUnused(previousImageId, paper);
+
         _sawmill.Info($"Canvas save from {session.Name} (char {Name(actor)}) on {ToPrettyString(paper)}: " +
                       $"{data.Length} bytes, path {path}");
 
         NotifySaved(paper, actor);
+    }
+
+    /// <summary>Удаляет PNG, если после удаления или замены холста на него больше никто не ссылается.</summary>
+    private void UnregisterImageIfUnused(string? imageId, EntityUid excludedEntity)
+    {
+        if (_roundCleanupStarted
+            || !Guid.TryParseExact(imageId, "D", out _))
+            return;
+
+        var query = EntityQueryEnumerator<CanvasComponent>();
+        while (query.MoveNext(out var uid, out var canvas))
+        {
+            if (uid != excludedEntity && string.Equals(canvas.ImageId, imageId, StringComparison.Ordinal))
+                return;
+        }
+
+        _netTextures.UnregisterDynamicResource($"/NetTextures/Canvas/{imageId}.png");
     }
 
     /// <summary>

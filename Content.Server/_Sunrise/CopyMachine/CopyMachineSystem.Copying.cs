@@ -69,6 +69,8 @@ public sealed partial class CopyMachineSystem : EntitySystem
 
         if (TryComp<LabelComponent>(sourcePaperEntity, out var sourceLabelComponent) && !string.IsNullOrWhiteSpace(sourceLabelComponent.CurrentLabel))
             _label.Label(paper.Owner, sourceLabelComponent.CurrentLabel);
+        // Lust edit - копируем ссылку на рисунок холста вместе с бумагой.
+        CopyCanvasDrawing(sourcePaperEntity.Value, paper.Owner);
 
         return true;
     }
