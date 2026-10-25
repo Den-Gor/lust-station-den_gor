@@ -1,0 +1,12 @@
+# Настройки лимитов сохранения и поведения инструментов рисования.
+- type: canvasConfig
+  id: LustDefault
+  saveCooldownSeconds: 1
+  maxSavesPerRound: 400
+  fillTolerance: 36
+  undoLimit: 20
+  brushCoreFraction: 0.65
+  paletteSlotCount: 12
+  minBrushSize: 2
+  maxBrushSize: 32
+  defaultBrushSize: 2

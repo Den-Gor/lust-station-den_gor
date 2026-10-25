@@ -264,11 +264,6 @@ public sealed partial class CanvasControl : Control
     }
 
     /// <summary>
-    /// Константа размера прозрачного края кисти
-    /// </summary>
-    private const float CoreFraction = 0.65f;
-
-    /// <summary>
     /// Создания штампа кисти
     /// </summary>
     private void StampBrush(int px, int py)
@@ -301,7 +296,7 @@ public sealed partial class CanvasControl : Control
                     continue;
 
                 var coverage = style.Soft
-                    ? 1f - Smoothstep(Math.Clamp((dist - CoreFraction) / (1f - CoreFraction), 0f, 1f))
+                    ? 1f - Smoothstep(Math.Clamp((dist - _tools.Config.BrushCoreFraction) / (1f - _tools.Config.BrushCoreFraction), 0f, 1f))
                     : 1f;
 
                 var stampAlpha = style.Alpha * coverage;
@@ -373,8 +368,6 @@ public sealed partial class CanvasControl : Control
     /// <summary>
     /// Порог разности цветов для заливки
     /// </summary>
-    private const int FillTolerance = 36;
-
     /// <summary>
     /// Заливка
     /// </summary>
@@ -390,7 +383,7 @@ public sealed partial class CanvasControl : Control
         if (start == fill)
             return;
 
-        var toleranceSq = FillTolerance * FillTolerance;
+        var toleranceSq = _tools.Config.FillTolerance * _tools.Config.FillTolerance;
 
         var pending = new Stack<Vector2i>();
         pending.Push(new Vector2i(sx, sy));
@@ -464,14 +457,12 @@ public sealed partial class CanvasControl : Control
     {
         _undo.Add(_buffer.Clone());
 
-        if (_undo.Count <= UndoLimit)
+        if (_undo.Count <= _tools.Config.UndoLimit)
             return;
 
         _undo[0].Dispose();
         _undo.RemoveAt(0);
     }
-
-    private const int UndoLimit = 20;
 
     /// <summary>
     /// Откат последнего изменения.

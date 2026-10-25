@@ -15,7 +15,7 @@
                 <Button Name="EyedropperButton" Text="{Loc 'lust-canvas-tool-eyedropper'}" ToggleMode="True"/>
             </BoxContainer>
             <Label Name="SizeLabel" HorizontalAlignment="Left"/>
-            <Slider Name="SizeSlider" MinValue="2" MaxValue="32" Value="2"/>
+            <Slider Name="SizeSlider"/>
             <BoxContainer Orientation="Horizontal" SeparationOverride="8">
                 <BoxContainer Orientation="Vertical" SeparationOverride="4">
                     <Label Text="{Loc 'lust-canvas-colors'}"/>

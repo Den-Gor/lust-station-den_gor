@@ -25,7 +25,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
     public CanvasToolboxWindow()
     {
         RobustXamlLoader.Load(this);
-        SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", 2));
 
         PenButton.Group = _toolGroup;
         BrushButton.Group = _toolGroup;
@@ -72,11 +71,14 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
 
         _tools = tools;
         _tools.Changed += Refresh;
+        SizeSlider.MinValue = tools.Config.MinBrushSize;
+        SizeSlider.MaxValue = tools.Config.MaxBrushSize;
+        SizeSlider.SetValueWithoutEvent(tools.Size);
 
         if (!_wired)
         {
             _wired = true;
-            for (var i = 0; i < CanvasToolState.SlotCount; i++)
+            for (var i = 0; i < tools.Palette.Count; i++)
             {
                 var slot = i;
                 var swatch = new ColorSwatch();
@@ -86,7 +88,6 @@ public sealed partial class CanvasToolboxWindow : BaseWindow
             }
         }
 
-        SizeSlider.SetValueWithoutEvent(tools.Size);
         SizeLabel.Text = Loc.GetString("lust-canvas-size", ("size", tools.Size));
         GetToolButton(tools.Tool).Pressed = true;
 

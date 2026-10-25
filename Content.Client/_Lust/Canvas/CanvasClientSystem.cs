@@ -3,6 +3,7 @@ using Content.Client._Sunrise;
 using Content.Shared._Lust.Canvas;
 using Content.Shared._Lust.Canvas.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._Lust.Canvas;
 
@@ -10,10 +11,14 @@ public sealed partial class CanvasClientSystem : EntitySystem
 {
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private NetTexturesManager _netTexturesManager = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private ISawmill _sawmill = default!;
 
-    public readonly CanvasToolState Tools = new();
+    [ValidatePrototypeId<CanvasConfigPrototype>]
+    private const string ConfigId = "LustDefault";
+
+    public CanvasToolState Tools { get; private set; } = default!;
 
     public int OpenCanvases;
 
@@ -23,6 +28,7 @@ public sealed partial class CanvasClientSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        Tools = new CanvasToolState(_prototypes.Index<CanvasConfigPrototype>(ConfigId));
         _sawmill = LogManager.GetSawmill("canvas.client");
         _netTexturesManager.ResourceLoaded += OnResourceLoaded;
     }

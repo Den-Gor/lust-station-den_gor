@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Content.Client._Lust.ColorPicker;
+using Content.Shared._Lust.Canvas;
 
 namespace Content.Client._Lust.Canvas;
 
@@ -13,11 +14,10 @@ public sealed class CanvasToolState
 {
     public CanvasTool Tool { get; set; } = CanvasTool.Pen;
 
-    public int Size { get; set; } = 2;
+    public int Size { get; set; }
 
-    public const int SlotCount = 12;
-
-    public List<ColorSlot> Palette { get; } = new(SlotCount);
+    public List<ColorSlot> Palette { get; }
+    public CanvasConfigPrototype Config { get; }
 
     public int SelectedIndex { get; private set; }
 
@@ -46,10 +46,13 @@ public sealed class CanvasToolState
     /// </summary>
     public event Action? Changed;
 
-    public CanvasToolState()
+    public CanvasToolState(CanvasConfigPrototype config)
     {
+        Config = config;
+        Size = config.DefaultBrushSize;
+        Palette = new List<ColorSlot>(config.PaletteSlotCount);
         Palette.Add(new ColorSlot(Color.Black));
-        for (var i = 1; i < SlotCount; i++)
+        for (var i = 1; i < config.PaletteSlotCount; i++)
         {
             Palette.Add(new ColorSlot(Color.White));
         }

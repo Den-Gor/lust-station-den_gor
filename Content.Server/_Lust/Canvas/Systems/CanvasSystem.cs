@@ -34,14 +34,14 @@ public sealed partial class CanvasSystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
     [Dependency] private NetTexturesManager _netTextures = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private ISawmill _sawmill = default!;
 
-    /// <summary>Минимальный интервал между сохранениями одной сессии</summary>
-    private const float CooldownSeconds = 1f;
+    [ValidatePrototypeId<CanvasConfigPrototype>]
+    private const string ConfigId = "LustDefault";
 
-    /// <summary>Сколько рисунков сервер принял за текущий раунд</summary>
-    private const int MaxSavesPerRound = 400;
+    private CanvasConfigPrototype _config = default!;
 
     /// <summary>Метка кисти для рисования.</summary>
     private static readonly ProtoId<TagPrototype> BrushTag = "LustDraw";
@@ -59,6 +59,7 @@ public sealed partial class CanvasSystem : EntitySystem
         base.Initialize();
 
         _sawmill = LogManager.GetSawmill("canvas");
+        _config = _prototypes.Index<CanvasConfigPrototype>(ConfigId);
         _netManager.RegisterNetMessage<CanvasSaveMessage>(OnSave, accept: NetMessageAccept.Server);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
@@ -96,7 +97,7 @@ public sealed partial class CanvasSystem : EntitySystem
             return;
 
         var now = _timing.CurTime;
-        if (_lastSave.TryGetValue(session, out var last) && (now - last).TotalSeconds < CooldownSeconds)
+        if (_lastSave.TryGetValue(session, out var last) && (now - last).TotalSeconds < _config.SaveCooldownSeconds)
             return;
 
         if (!msg.IsValid)
@@ -195,9 +196,9 @@ public sealed partial class CanvasSystem : EntitySystem
     /// </summary>
     private bool CheckRoundLimit(ICommonSession session)
     {
-        if (_savesThisRound >= MaxSavesPerRound)
+        if (_savesThisRound >= _config.MaxSavesPerRound)
         {
-            _sawmill.Warning($"Canvas save rejected from {session.Name}: round limit {MaxSavesPerRound} reached");
+            _sawmill.Warning($"Canvas save rejected from {session.Name}: round limit {_config.MaxSavesPerRound} reached");
             return false;
         }
 
