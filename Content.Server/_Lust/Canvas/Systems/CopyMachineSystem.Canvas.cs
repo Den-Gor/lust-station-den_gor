@@ -20,5 +20,6 @@ public sealed partial class CopyMachineSystem
         copiedCanvas.HasDrawing = true;
         copiedCanvas.AuthorAccount = sourceCanvas.AuthorAccount;
         Dirty(copiedPaper, copiedCanvas);
+        _appearance.SetData(copiedPaper, CanvasVisuals.HasDrawing, true);
     }
 }

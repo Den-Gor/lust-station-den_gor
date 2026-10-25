@@ -1,5 +1,7 @@
 ﻿using Robust.Shared.GameStates;
 
+using Robust.Shared.Serialization;
+
 namespace Content.Shared._Lust.Canvas.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -27,4 +29,10 @@ public sealed partial class CanvasComponent  : Component
 
     [ViewVariables]
     public string? ImagePath =>  ImageId  == null ? null : $"/NetTextures/Canvas/{ImageId}.png";
+}
+
+[Serializable, NetSerializable]
+public enum CanvasVisuals : byte
+{
+    HasDrawing,
 }

@@ -33,6 +33,7 @@ public sealed partial class CanvasSystem : EntitySystem
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
     [Dependency] private NetTexturesManager _netTextures = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -259,6 +260,7 @@ public sealed partial class CanvasSystem : EntitySystem
         canvas.HasDrawing = true;
         canvas.AuthorAccount = session.Name;
         Dirty(paper, canvas);
+        _appearance.SetData(paper, CanvasVisuals.HasDrawing, true);
 
         if (!string.Equals(previousImageId, imageId, StringComparison.Ordinal))
             UnregisterImageIfUnused(previousImageId, paper);

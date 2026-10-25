@@ -93,6 +93,13 @@
     - state: paper_words
       map: ["enum.PaperVisualLayers.Writing"]
       visible: false
+    # Lust edit start - визуальный индикатор рисунка на холсте
+    - state: paper_words
+      map: ["enum.CanvasVisualLayers.DrawingIndicator"]
+      visible: false
+      scale: 0.35, 0.35
+      offset: 0.32, 0.32
+    # Lust edit end
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
