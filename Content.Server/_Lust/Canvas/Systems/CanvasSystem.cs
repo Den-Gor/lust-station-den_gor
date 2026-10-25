@@ -1,7 +1,10 @@
 using System.Buffers.Binary;
 using Content.Server._Sunrise;
+using Content.Server.Administration.Logs;
 using Content.Shared._Lust.Canvas;
 using Content.Shared._Lust.Canvas.Components;
+using Content.Shared.Administration.Logs;
+using Content.Shared.Database;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.GameTicking;
@@ -23,6 +26,7 @@ public sealed partial class CanvasSystem : EntitySystem
 {
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -92,10 +96,7 @@ public sealed partial class CanvasSystem : EntitySystem
 
         var now = _timing.CurTime;
         if (_lastSave.TryGetValue(session, out var last) && (now - last).TotalSeconds < CooldownSeconds)
-        {
-            _sawmill.Debug($"Canvas save rejected: cooldown for {session.Name}");
             return;
-        }
 
         if (!msg.IsValid)
         {
@@ -262,8 +263,8 @@ public sealed partial class CanvasSystem : EntitySystem
         if (!string.Equals(previousImageId, imageId, StringComparison.Ordinal))
             UnregisterImageIfUnused(previousImageId, paper);
 
-        _sawmill.Info($"Canvas save from {session.Name} (char {Name(actor)}) on {ToPrettyString(paper)}: " +
-                      $"{data.Length} bytes, path {path}");
+        _adminLogger.Add(LogType.Action, LogImpact.Low,
+            $"{ToPrettyString(actor):player} created a canvas drawing on {ToPrettyString(paper):entity} (account {session.Name}); resource: {path}; size: {data.Length} bytes.");
 
         NotifySaved(paper, actor);
     }

@@ -96,7 +96,6 @@ public sealed partial class CanvasClientSystem : EntitySystem
             Data = data,
         });
 
-        _sawmill.Debug($"Sent canvas save: {data.Length} bytes, paper: {ToPrettyString(paper)}");
     }
 
     public void RegisterEditor(EntityUid paper, CanvasWindow window)

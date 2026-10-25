@@ -1,4 +1,6 @@
 ﻿using Content.Shared._Lust.Canvas.Components;
+using Content.Shared.Administration.Managers;
+using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Paper;
@@ -17,6 +19,7 @@ public sealed partial class CanvasSystem : EntitySystem
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private INetManager _netManager = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
 
     public override void Initialize()
     {
@@ -28,10 +31,19 @@ public sealed partial class CanvasSystem : EntitySystem
             after: [typeof(ActivatableUISystem)],
             before: [typeof(IngestionSystem)]);
         SubscribeLocalEvent<CanvasComponent, BoundUIClosedEvent>(OnCanvasClosed);
+        SubscribeLocalEvent<CanvasComponent, ExaminedEvent>(OnCanvasExamined);
         Subs.BuiEvents<CanvasComponent>(CanvasUiKey.Key, subs =>
         {
             subs.Event<CanvasOpenViewMessage>(OnOpenView);
         });
+    }
+
+    private void OnCanvasExamined(Entity<CanvasComponent> ent, ref ExaminedEvent args)
+    {
+        if (!_adminManager.IsAdmin(args.Examiner) || string.IsNullOrWhiteSpace(ent.Comp.AuthorAccount))
+            return;
+
+        args.PushText(Loc.GetString("lust-canvas-examine-author", ("author", ent.Comp.AuthorAccount)));
     }
 
     private void OnOpenView(Entity<CanvasComponent> ent, ref CanvasOpenViewMessage args)
