@@ -12,6 +12,15 @@
   - type: VisualOrganMarkings
     markingData:
       group: None
+  # Lust edit start
+  - type: OrganicDamageModifier
+    modifiers:
+      coefficients:
+        Slash: 0.99
+        Piercing: 0.99
+        Heat: 0.99
+        Shock: 1.01
+  # Lust edit end
 
 - type: entity
   id: LeftArmCyber
