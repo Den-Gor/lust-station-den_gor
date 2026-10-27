@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Implants.Components;
 using Content.Shared.Body;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
@@ -15,59 +14,53 @@ public sealed class OrganicDamageModifierSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<BodyComponent, DamageModifyEvent>(OnDamageModify);
+        SubscribeLocalEvent<BodyComponent, DamageModifyEvent>(OnBodyDamageModify);
+        SubscribeLocalEvent<OrganicDamageModifierComponent, BodyRelayedEvent<DamageModifyEvent>>(OnOrganDamageModify);
+
     }
 
     /// <summary>
-    /// Метод обрабочики ивента переберающий все органы имеющие OrganicDamageModifierComponent и собирает с них все модификаторы урона сумируя их
-    /// и применя их к урону идущему на BodyComponent
+    /// Метод обрабочики ивента переберающий все органы имеющие OrganicDamageModifierComponent и отправляющий им ивент
     /// </summary>
-    /// <param name="entity"></param>
+    /// <param name="ent"></param>
     /// <param name="args"></param>
-    private void OnDamageModify(Entity<BodyComponent> entity, ref DamageModifyEvent args)
+    private void OnBodyDamageModify(Entity<BodyComponent> ent, ref DamageModifyEvent args)
     {
-        if (entity.Comp.Organs is not { } organs)
+        if (ent.Comp.Organs is not { } organs)
             return;
 
-        var combined = new DamageModifierSet();
+        if (!HasAnyPositiveDamage(args.Damage))
+            return;
 
         foreach (var organ in organs.ContainedEntities)
         {
-            if (!TryComp<OrganicDamageModifierComponent>(organ, out var modifier))
-                continue;
-
-            AddModifiers(combined, modifier.Modifiers);
+            var relayed = new BodyRelayedEvent<DamageModifyEvent>(ent, args);
+            RaiseLocalEvent(organ, ref relayed);
+            args = relayed.Args;
         }
 
-        if (combined.Coefficients.Count == 0 && combined.FlatReduction.Count == 0)
-            return;
-
-        foreach (var type in combined.Coefficients.Keys.ToArray())
-        {
-            combined.Coefficients[type] = MathF.Max(0f, combined.Coefficients[type]);
-        }
-
-        args.Damage = DamageSpecifier.ApplyModifierSet(
-            args.Damage,
-            combined,
-            args.ArmorPenetration,
-            args.CanHeal);
     }
-
-    private static void AddModifiers(DamageModifierSet target, DamageModifierSet source)
+    /// <summary>
+    /// Метод вызываюемы под ивент DamageModifyEvent на органе имеющим OrganicDamageModifierComponent внутри персонажа
+    /// и применяет  ApplyModifierSet значений из  OrganicDamageModifierComponent на урон по персонажу
+    /// </summary>
+    private void OnOrganDamageModify(Entity<OrganicDamageModifierComponent> ent, ref BodyRelayedEvent<DamageModifyEvent> args)
     {
-        foreach (var (type, coefficient) in source.Coefficients)
-        {
-            target.Coefficients[type] =
-                target.Coefficients.GetValueOrDefault(type, 1f) + coefficient - 1f;
-        }
-
-        foreach (var (type, reduction) in source.FlatReduction)
-        {
-            target.FlatReduction[type] =
-                target.FlatReduction.GetValueOrDefault(type) + reduction;
-        }
+        args.Args.Damage = DamageSpecifier.ApplyModifierSet(
+            args.Args.Damage,
+            ent.Comp.Modifiers,
+            args.Args.ArmorPenetration,
+            args.Args.CanHeal);
     }
 
+    private static bool HasAnyPositiveDamage(DamageSpecifier damage)
+    {
+        foreach (var value in damage.DamageDict.Values)
+        {
+            if (value > 0f)
+                return true;
+        }
+        return false;
+    }
 }
 
