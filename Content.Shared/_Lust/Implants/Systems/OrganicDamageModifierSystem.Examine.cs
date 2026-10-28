@@ -34,7 +34,7 @@ public sealed partial class OrganicDamageModifierSystem
         if (ent.Comp.Modifiers.Coefficients.Count == 0 && ent.Comp.Modifiers.FlatReduction.Count == 0)
             return;
 
-        args.Message.AddMarkupOrThrow(Loc.GetString("lust-organic-modifier-examine-heading"));
+        args.Message.AddMarkupOrThrow(Loc.GetString("lust-organic-modifier-examine-damage"));
         AppendModifierLines(args.Message, ent.Comp.Modifiers);
     }
 

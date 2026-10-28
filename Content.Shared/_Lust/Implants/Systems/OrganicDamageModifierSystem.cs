@@ -130,9 +130,9 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
 
             foreach (var (type, coeff) in mod.Modifiers.Coefficients)
             {
-                target.Coefficients[type] = target.Coefficients.TryGetValue(type, out var existing)
-                    ? existing * coeff
-                    : coeff;
+                var existing = target.Coefficients.GetValueOrDefault(type, 1f);
+
+                target.Coefficients[type] = MathF.Max(0f, existing + coeff - 1f);
             }
 
             foreach (var (type, flat) in mod.Modifiers.FlatReduction)

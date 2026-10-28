@@ -70,7 +70,7 @@ public sealed class OrganicModifiersExamineSystem : EntitySystem
             args,
             component,
             message,
-            Loc.GetString("lust-organic-modifier-examine-heading"),
+            Loc.GetString("lust-organic-modifier-examine-damage"),
             "/Textures/Interface/VerbIcons/dot.svg.192dpi.png",
             Loc.GetString("lust-organic-modifier-examine-verb-message"));
     }
