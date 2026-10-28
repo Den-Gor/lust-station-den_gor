@@ -1,4 +1,5 @@
-﻿using Content.Shared._Lust.Implants.Components;
+﻿using System.Globalization;
+using Content.Shared._Lust.Implants.Components;
 using Content.Shared.Body;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -16,6 +17,8 @@ public sealed class OrganicModifierExamineSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private OrganicDamageModifierSystem _organicDamage = default!;
+
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -38,37 +41,15 @@ public sealed class OrganicModifierExamineSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
-        if (entity.Comp.Organs is not { } organs)
+        var combined = _organicDamage.GetCombined(entity);
+
+        if (combined.Coefficients.Count == 0 && combined.FlatReduction.Count == 0)
             return;
 
-        var coefficients = new Dictionary<string, float>();
-        var flatReductions = new Dictionary<string, float>();
-
-        foreach (var organ in organs.ContainedEntities)
-        {
-            if (!TryComp<OrganicDamageModifierComponent>(organ, out var modifier))
-                continue;
-
-            foreach (var (type, coefficient) in modifier.Modifiers.Coefficients)
-            {
-                coefficients[type] =
-                    coefficients.GetValueOrDefault(type, 1f) + coefficient - 1f;
-            }
-
-            foreach (var (type, reduction) in modifier.Modifiers.FlatReduction)
-            {
-                flatReductions[type] =
-                    flatReductions.GetValueOrDefault(type) + reduction;
-            }
-        }
-
-        if (coefficients.Count == 0 && flatReductions.Count == 0)
-            return;
-
-        AddModifierExamineVerb(
-            args,
-            entity.Comp,
-            BuildBodyModifierMessage(coefficients, flatReductions));
+        var message = new FormattedMessage();
+        message.AddMarkupOrThrow(Loc.GetString("lust-organic-modifier-examine-heading"));
+        AppendModifierLines(message, combined);
+        AddModifierExamineVerb(args, entity.Comp, message);
     }
 
     /// <summary>
@@ -110,69 +91,37 @@ public sealed class OrganicModifierExamineSystem : EntitySystem
 
     private void AppendModifierLines(FormattedMessage message, DamageModifierSet modifiers)
     {
+        foreach (var (type, coeff) in modifiers.Coefficients)
+        {
+            if (MathF.Abs(coeff - 1f) < 0.0001f) continue;
+            var damageType = GetDamageTypeName(type);
+            var percent = (1f - coeff) * 100f;
+            var valueStr = MathF.Abs(percent).ToString("0.##", CultureInfo.InvariantCulture);
+
+
+            message.PushNewline();
+            message.AddMarkupOrThrow(percent >= 0
+                ? Loc.GetString("armor-coefficient-value", ("type", damageType), ("value", valueStr))
+                : Loc.GetString("lust-organic-modifier-damage-increased", ("type", damageType), ("value", valueStr)));
+        }
+
         foreach (var (type, reduction) in modifiers.FlatReduction)
         {
+            if (MathF.Abs(reduction) < 0.0001f) continue;
+
             var damageType = GetDamageTypeName(type);
+            var valueStr = MathF.Abs(reduction).ToString("0.##", CultureInfo.InvariantCulture);
+
 
             message.PushNewline();
-            message.AddMarkupOrThrow(Loc.GetString("armor-reduction-value", ("type", damageType), ("value", reduction)));
-        }
-
-        foreach (var (type, coefficient) in modifiers.Coefficients)
-        {
-            var damageType = GetDamageTypeName(type);
-            var effectiveCoefficient = MathF.Max(0f, coefficient);
-            var percent = MathF.Round((1f - effectiveCoefficient) * 100, 1);
-            var line = percent >= 0
-                ? Loc.GetString("armor-coefficient-value", ("type", damageType), ("value", percent))
-                : Loc.GetString("lust-organic-modifier-damage-increased", ("type", damageType), ("value", MathF.Abs(percent)));
-
-            message.PushNewline();
-            message.AddMarkupOrThrow(line);
+            message.AddMarkupOrThrow(reduction >= 0
+                ? Loc.GetString("armor-reduction-value",
+                    ("type", damageType), ("value", valueStr))
+                : Loc.GetString("lust-organic-modifier-flat-increase",
+                    ("type", damageType), ("value", valueStr)));
         }
     }
 
-    /// <summary>
-    /// Получает списки коэфицентов модификаторов урона и редуции урона и формирует в сообщение
-    /// </summary>
-    /// <param name="coefficients"></param>
-    /// <param name="flatReductions"></param>
-    /// <returns></returns>
-    private FormattedMessage BuildBodyModifierMessage(
-        Dictionary<string, float> coefficients,
-        Dictionary<string, float> flatReductions)
-    {
-        var message = new FormattedMessage();
-        message.AddMarkupOrThrow(Loc.GetString("lust-organic-modifier-examine-heading"));
-
-        foreach (var (type, coefficient) in coefficients)
-        {
-            var damageType = GetDamageTypeName(type);
-            var percent = MathF.Round((1f - coefficient) * 100, 1);
-            var line = percent >= 0
-                ? Loc.GetString("armor-coefficient-value", ("type", damageType), ("value", percent))
-                : Loc.GetString("lust-organic-modifier-damage-increased", ("type", damageType), ("value", MathF.Abs(percent)));
-
-            message.PushNewline();
-            message.AddMarkupOrThrow(line);
-        }
-
-        foreach (var (type, reduction) in flatReductions)
-        {
-            if (reduction <= 0)
-                continue;
-
-            var damageType = GetDamageTypeName(type);
-
-            message.PushNewline();
-            message.AddMarkupOrThrow(Loc.GetString(
-                "lust-organic-modifier-total-flat-reduction-value",
-                ("type", damageType),
-                ("value", reduction)));
-        }
-
-        return message;
-    }
 
     private string GetDamageTypeName(string type)
     {

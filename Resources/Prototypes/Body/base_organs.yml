@@ -23,13 +23,6 @@
   parent: BaseItem
   components:
   - type: Organ
-  # Lust edit start
-  - type: OrganicDamageModifier
-    modifiers:
-      coefficients:
-        Slash: 0.99
-        Piercing: 0.99
-  # Lust edit end
 
 - type: entity
   parent: OrganBase
