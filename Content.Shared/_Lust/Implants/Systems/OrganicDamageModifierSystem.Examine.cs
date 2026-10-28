@@ -43,7 +43,8 @@ public sealed partial class OrganicDamageModifierSystem
     {
         foreach (var (type, coeff) in modifiers.Coefficients)
         {
-            if (MathF.Abs(coeff - 1f) < 0.0001f) continue;
+            if (MathF.Abs(coeff - 1f) < 0.0001f)
+                continue;
             var damageType = GetDamageTypeName(type);
             var percent = (1f - coeff) * 100f;
             var valueStr = MathF.Abs(percent).ToString("0.##", CultureInfo.InvariantCulture);
@@ -57,7 +58,8 @@ public sealed partial class OrganicDamageModifierSystem
 
         foreach (var (type, reduction) in modifiers.FlatReduction)
         {
-            if (MathF.Abs(reduction) < 0.0001f) continue;
+            if (MathF.Abs(reduction) < 0.0001f)
+                continue;
 
             var damageType = GetDamageTypeName(type);
             var valueStr = MathF.Abs(reduction).ToString("0.##", CultureInfo.InvariantCulture);
@@ -66,9 +68,11 @@ public sealed partial class OrganicDamageModifierSystem
             message.PushNewline();
             message.AddMarkupOrThrow(reduction >= 0
                 ? Loc.GetString("armor-reduction-value",
-                    ("type", damageType), ("value", valueStr))
+                    ("type", damageType),
+                    ("value", valueStr))
                 : Loc.GetString("lust-organic-modifier-flat-increase",
-                    ("type", damageType), ("value", valueStr)));
+                    ("type", damageType),
+                    ("value", valueStr)));
         }
     }
 

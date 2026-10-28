@@ -11,5 +11,5 @@ namespace Content.Shared._Lust.Implants.Components;
 public sealed partial class OrganicDamageModifierCacheComponent : Component
 {
     public DamageModifierSet Combined = new();
-    public bool Dirty = true;
+    public new bool Dirty = true;
 }

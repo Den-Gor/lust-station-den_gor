@@ -1,5 +1,4 @@
 ﻿using Content.Shared._Lust.Implants.Components;
-using Content.Shared._Lust.Implants.Events;
 using Content.Shared.Body;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;

@@ -20,6 +20,8 @@
         Piercing: 0.99
         Heat: 0.99
         Shock: 1.01
+  - type: OrganicSpeedModifier
+    movementMultiplier: 1.8
   # Lust edit end
 
 - type: entity
