@@ -1,4 +1,5 @@
-﻿using Content.Shared.Damage;
+﻿using Content.Shared._Lust.Implants.Systems;
+using Content.Shared.Damage;
 
 namespace Content.Shared._Lust.Implants.Components;
 
@@ -6,7 +7,7 @@ namespace Content.Shared._Lust.Implants.Components;
 /// Кеш агрегированных модификаторов органов. Живёт на теле.
 /// Пересчитывается лениво при первом DamageModifyEvent после инвалидации.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent,Access(typeof(OrganicDamageModifierSystem))]
 public sealed partial class OrganicDamageModifierCacheComponent : Component
 {
     public DamageModifierSet Combined = new();

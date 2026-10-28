@@ -1,4 +1,5 @@
 ﻿using Content.Shared._Lust.Implants.Components;
+using Content.Shared._Lust.Implants.Events;
 using Content.Shared.Body;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
@@ -9,7 +10,7 @@ namespace Content.Shared._Lust.Implants.Systems;
 /// <summary>
 /// Данная система высчитывает модификаторы урона органов и применяет их на урон входящий по игроку
 /// </summary>
-public sealed class OrganicDamageModifierSystem : EntitySystem
+public sealed partial class OrganicDamageModifierSystem : EntitySystem
 {
     private EntityQuery<OrganicDamageModifierComponent> _modifierQuery;
     private EntityQuery<BodyComponent> _bodyQuery;
@@ -28,10 +29,13 @@ public sealed class OrganicDamageModifierSystem : EntitySystem
 
         SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentStartup>(OnOrganModifierChanged);
         SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentShutdown>(OnOrganModifierChanged);
+
+        // Инициализируе эвенты ExamineVerb
+        InitializeExamine();
     }
 
     /// <summary>
-    /// Возвращает актуальный набор модификаторов на теле персонажа
+    /// Публичный API Возвращает актуальный набор модификаторов урона на BodyComponent
     /// </summary>
     public DamageModifierSet GetCombined(Entity<BodyComponent> body)
     {
