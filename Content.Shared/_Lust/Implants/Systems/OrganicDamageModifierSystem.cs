@@ -28,13 +28,10 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
 
         SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentStartup>(OnOrganModifierChanged);
         SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentShutdown>(OnOrganModifierChanged);
-
-        // Инициализируе эвенты ExamineVerb
-        InitializeExamine();
     }
 
     /// <summary>
-    /// Публичный API Возвращает актуальный набор модификаторов урона на BodyComponent
+    /// Api Возвращает актуальный набор модификаторов урона на BodyComponent
     /// </summary>
     public DamageModifierSet GetCombined(Entity<BodyComponent> body)
     {
@@ -42,11 +39,12 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
             return new DamageModifierSet();
 
         var cache = EnsureComp<OrganicDamageModifierCacheComponent>(body);
-        if (cache.Dirty)
+        if (cache.IsDirty)
             Rebuild(organs, cache);
 
         return cache.Combined;
     }
+
     /// <summary>
     /// Событие обрабочик урона, игнорирует полностью позетивный урон
     /// Ищит/создает  OrganicDamageModifierCacheComponent в BodyComponent и при cache.Dirty = true пересобирает cache модификаторов урона
@@ -54,26 +52,19 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
     /// </summary>
     /// <param name="ent"></param>
     /// <param name="args"></param>
-
     private void OnBodyDamageModify(Entity<BodyComponent> ent, ref DamageModifyEvent args)
     {
-        if (ent.Comp.Organs is not { } organs)
-            return;
-
         if (!HasAnyPositiveDamage(args.Damage))
             return;
 
-        var cache = EnsureComp<OrganicDamageModifierCacheComponent>(ent);
+        var combined = GetCombined(ent);
 
-        if (cache.Dirty)
-            Rebuild(organs, cache);
-
-        if (cache.Combined.Coefficients.Count == 0 && cache.Combined.FlatReduction.Count == 0)
+        if (combined.Coefficients.Count == 0 && combined.FlatReduction.Count == 0)
             return;
 
         args.Damage = DamageSpecifier.ApplyModifierSet(
             args.Damage,
-            cache.Combined,
+            combined,
             args.ArmorPenetration,
             args.CanHeal);
     }
@@ -109,7 +100,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
     private void Invalidate(Entity<BodyComponent> ent)
     {
         if (TryComp<OrganicDamageModifierCacheComponent>(ent, out var cache))
-            cache.Dirty = true;
+            cache.IsDirty = true;
     }
 
     /// <summary>
@@ -141,7 +132,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
             }
         }
 
-        cache.Dirty = false;
+        cache.IsDirty = false;
     }
 
     /// <summary>

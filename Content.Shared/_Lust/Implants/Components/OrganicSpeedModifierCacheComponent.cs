@@ -7,5 +7,5 @@ namespace Content.Shared._Lust.Implants.Components;
 public sealed partial class OrganicSpeedModifierCacheComponent : Component
 {
     public float MovementMultiplier = 1.0f;
-    public new bool Dirty = true;
+    public bool IsDirty = true;
 }

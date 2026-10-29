@@ -1,5 +1,4 @@
-﻿using Content.Shared._Lust.Implants.Events;
-using Content.Shared.Body;
+﻿using Content.Shared.Body;
 using Content.Shared.Examine;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
@@ -9,6 +8,8 @@ namespace Content.Shared._Lust.Implants.Systems;
 public sealed class OrganicModifiersExamineSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private OrganicDamageModifierSystem _damageModifier = default!;
+    [Dependency] private OrganicSpeedModifierSystem _speedModifier = default!;
 
     public override void Initialize()
     {
@@ -29,13 +30,14 @@ public sealed class OrganicModifiersExamineSystem : EntitySystem
             return;
 
         var message = new FormattedMessage();
-        var ev = new BodyModifiersExamineEvent(message);
-        RaiseLocalEvent(entity, ref ev);
 
-        if (ev.Message.Count == 0)
+        _damageModifier.AppendBodyExamine(entity, message);
+        _speedModifier.AppendBodyExamine(entity, message);
+
+        if (message.Count == 0)
             return;
 
-        AddVerb(args, entity.Comp, ev.Message);
+        AddVerb(args, entity.Comp, message);
     }
 
     /// <summary>
@@ -49,13 +51,14 @@ public sealed class OrganicModifiersExamineSystem : EntitySystem
             return;
 
         var message = new FormattedMessage();
-        var ev = new OrganModifiersExamineEvent(message);
-        RaiseLocalEvent(entity, ref ev);
 
-        if (ev.Message.Count == 0)
+        _damageModifier.AppendOrganExamine(entity, message);
+        _speedModifier.AppendOrganExamine(entity, message);
+
+        if (message.Count == 0)
             return;
 
-        AddVerb(args, entity.Comp, ev.Message);
+        AddVerb(args, entity.Comp, message);
     }
 
     /// <summary>
@@ -70,7 +73,7 @@ public sealed class OrganicModifiersExamineSystem : EntitySystem
             args,
             component,
             message,
-            Loc.GetString("lust-organic-modifier-examine-damage"),
+            Loc.GetString("lust-organic-modifier-examine-verb-text"),
             "/Textures/Interface/VerbIcons/dot.svg.192dpi.png",
             Loc.GetString("lust-organic-modifier-examine-verb-message"));
     }

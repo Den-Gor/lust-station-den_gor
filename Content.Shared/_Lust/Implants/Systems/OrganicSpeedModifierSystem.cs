@@ -18,36 +18,40 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
         _speedQuery = GetEntityQuery<OrganicSpeedModifierComponent>();
         _bodyQuery = GetEntityQuery<BodyComponent>();
 
-        // Точка входа: собираем множители со всех органов тела
         SubscribeLocalEvent<BodyComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
 
-        // Инвалидация: состав органов изменился
         SubscribeLocalEvent<OrganicSpeedModifierComponent, OrganGotInsertedEvent>(OnOrganChanged);
         SubscribeLocalEvent<OrganicSpeedModifierComponent, OrganGotRemovedEvent>(OnOrganChanged);
 
-        // Инвалидация: компонент добавили/убрали у органа в теле
         SubscribeLocalEvent<OrganicSpeedModifierComponent, ComponentStartup>(OnOrganComponentStartup);
         SubscribeLocalEvent<OrganicSpeedModifierComponent, ComponentShutdown>(OnOrganComponentShutdown);
+    }
+
+    /// <summary>
+    /// Возвращает актуальный множитель скорости для тела.
+    /// Пересобирает кеш, если он Dirty.
+    /// </summary>
+    public float GetCombined(Entity<BodyComponent> body)
+    {
+        if (body.Comp.Organs is not { } organs)
+            return 1f;
+
+        var cache = EnsureComp<OrganicSpeedModifierCacheComponent>(body);
+        if (cache.IsDirty)
+            Rebuild(organs, cache);
+
+        return cache.MovementMultiplier;
     }
 
     // Сбор множителей с органов
     private void OnRefreshSpeed(Entity<BodyComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.Organs is not { } organs)
+        var multiplier = GetCombined(ent);
+
+        if (MathF.Abs(multiplier - 1f) < 0.0001f)
             return;
 
-        var cache = EnsureComp<OrganicSpeedModifierCacheComponent>(ent);
-
-        if (cache.Dirty)
-        {
-            Rebuild(organs, cache);
-            cache.Dirty = false;
-        }
-
-        if (MathF.Abs(cache.MovementMultiplier - 1f) < 0.0001f)
-            return;
-
-        args.ModifySpeed(cache.MovementMultiplier, cache.MovementMultiplier);
+        args.ModifySpeed(multiplier, multiplier);
     }
 
     // Ручной вызов обновления скорости при изменении органов
@@ -69,20 +73,35 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
             InvalidateAndRefresh(body);
     }
 
+    /// <summary>
+    /// получение органа из тела
+    /// </summary>
+    /// <param name="organ"></param>
+    /// <param name="body"></param>
+    /// <returns></returns>
     private bool TryGetParentBody(EntityUid organ, out EntityUid body)
     {
         body = Transform(organ).ParentUid;
         return _bodyQuery.HasComponent(body);
     }
 
+    /// <summary>
+    /// Инвалидация кэша
+    /// </summary>
+    /// <param name="body"></param>
     private void InvalidateAndRefresh(EntityUid body)
     {
         if (TryComp<OrganicSpeedModifierCacheComponent>(body, out var cache))
-            cache.Dirty = true;
+            cache.IsDirty = true;
 
         _movementSpeed.RefreshMovementSpeedModifiers(body);
     }
 
+    /// <summary>
+    /// Пересобирает кэш модификаторов скорости со всех органов
+    /// </summary>
+    /// <param name="organs"></param>
+    /// <param name="cache"></param>
     private void Rebuild(Container organs, OrganicSpeedModifierCacheComponent cache)
     {
         var bonus = 0f;
@@ -96,5 +115,6 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
         }
 
         cache.MovementMultiplier = MathF.Max(0.1f, 1f + bonus);
+        cache.IsDirty = false;
     }
 }
