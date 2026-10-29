@@ -10,6 +10,9 @@ namespace Content.Shared._Lust.Implants.Components;
 [RegisterComponent,Access(typeof(OrganicDamageModifierSystem))]
 public sealed partial class OrganicDamageModifierCacheComponent : Component
 {
+    [ViewVariables(VVAccess.ReadOnly)]
     public DamageModifierSet Combined = new();
+
+    [ViewVariables(VVAccess.ReadOnly)]
     public bool IsDirty = true;
 }

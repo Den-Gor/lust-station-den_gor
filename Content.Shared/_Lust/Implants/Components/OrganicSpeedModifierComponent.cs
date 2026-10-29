@@ -5,6 +5,6 @@ namespace Content.Shared._Lust.Implants.Components;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class OrganicSpeedModifierComponent : Component
 {
-    [DataField]
+    [DataField,ViewVariables(VVAccess.ReadOnly)]
     public float MovementMultiplier = 1.0f;
 }

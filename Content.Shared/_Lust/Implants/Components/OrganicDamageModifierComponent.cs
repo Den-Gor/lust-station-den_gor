@@ -10,6 +10,6 @@ namespace Content.Shared._Lust.Implants.Components;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class OrganicDamageModifierComponent : Component
 {
-    [DataField]
+    [DataField,ViewVariables(VVAccess.ReadOnly)]
     public DamageModifierSet Modifiers = new();
 }
