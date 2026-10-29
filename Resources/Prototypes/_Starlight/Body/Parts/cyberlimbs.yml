@@ -22,6 +22,8 @@
         Shock: 1.01
   - type: OrganicSpeedModifier
     movementMultiplier: 1.8
+  - type: OrganicImplant
+    passiveDrain:  5.0
   # Lust edit end
 
 - type: entity
