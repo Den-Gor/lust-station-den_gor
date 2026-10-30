@@ -18,7 +18,8 @@
   defaultSoundsBySex:
   - MaleFelinid
   - FemaleFelinid
-  # - MaleFelinid # lust commited
+  - MaleFelinid
+  - FemaleFelinid # Lust-Edit
   voices:
   - MaleFelinid
   - FemaleFelinid
