@@ -81,13 +81,13 @@ public sealed partial class SpeciesPrototype : IPrototype
     public SpeciesNaming Naming { get; private set; } = SpeciesNaming.FirstLast;
 
     [DataField]
-    public List<Sex> Sexes { get; private set; } = new() { Sex.Male, Sex.Female };
+    public List<Sex> Sexes { get; private set; } = new() { Sex.Male, Sex.Female, Sex.Futanari }; // Lust edit - добавляем Futanari в доступные значения пола
 
     /// <summary>
-    ///     Emote sounds prototype conversion id for every sex. This is ALWAYS in the order: Male; Female; Unsexed.
+    ///     Emote sounds prototype conversion id for every sex, indexed by the numeric value of Sex: Male; Female; Unsexed; Futanari.
     /// </summary>
     [DataField]
-    public ProtoId<EmoteSoundsPrototype>[] DefaultSoundsBySex = ["MaleHuman", "FemaleHuman", "MaleHuman"];
+    public ProtoId<EmoteSoundsPrototype>[] DefaultSoundsBySex = ["MaleHuman", "FemaleHuman", "MaleHuman", "FemaleHuman"]; // Lust edit - добавляем голос по умолчанию для Futanari
 
     /// <summary>
     ///     List of user selectable voices in the menu. This should at least have the same sound banks as the defaults.

@@ -224,12 +224,17 @@
   - type: NightVision
     enabled: false
     action: ActionToggleNightVision
-  - type: ToggleableNightVision
+  #- type: ToggleableNightVision
   # Lust-Start
   - type: ActionGrant
     actions:
     - ActionViewLaws
   - type: StandingState
+#  - type: NightVision
+#    enabled: false
+#    action: ActionToggleNightVision
+#    prioritized: false
+#    lightingColor: '#D61B1B26'
   # Lust-End
 
 - type: entity

@@ -175,7 +175,7 @@ public sealed partial class NewLifeSystem : SharedNewLifeSystem
         // Lust-Start
         var preferences = _prefsManager.GetPreferences(player.UserId);
         if (!preferences.Characters.TryGetValue(selectedCharacterId, out var selectedProfile)
-            || !_prototypeManager.Resolve(roleProto, out JobPrototype? selectedJob)
+            || !ProtoMan.Resolve(roleProto, out JobPrototype? selectedJob)
             || selectedJob.SpeciesBlacklist.Contains(selectedProfile.Species))
         {
             eui.StateDirty();

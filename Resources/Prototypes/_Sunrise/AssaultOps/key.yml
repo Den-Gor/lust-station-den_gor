@@ -14,13 +14,7 @@
   - type: WarpPoint
     follow: true
     location: location-icarus-key
-    # Lust-Start
-    blacklist:
-      tags:
-      - GhostOnlyWarp
-    # Lust-End
   - type: SubdermalImplant
   - type: Tag
     tags:
     - SubdermalImplant
-    - GhostOnlyWarp # Lust-Edit

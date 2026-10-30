@@ -120,19 +120,24 @@
     nameFormat: name-format-regal-rat
   - type: NameIdentifier
     group: null  # Strips the numeric identifier from the rat king's name, since they already have randomly-generated names anyway
-  - type: Grammar
-    attributes:
-      proper: true
-      gender: male
+# lust-edit-start
+#  - type: Grammar
+#    attributes:
+#      proper: true
+#      gender: male
+# lust-edit-end
   - type: GuideHelp
     guides:
     - MinorAntagonists
+# lust-edit-start
   - type: Grammar
     attributes:
+      proper: true
       gender: female
-  - type: Sharp
+  # lust-edit-end
   - type: Tool
-    qualities: [ Slicing ]
+    qualities:
+    - Slicing
   # Sunrise-start
   - type: FlashImmunity
   - type: Bloodstream

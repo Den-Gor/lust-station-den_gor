@@ -18,11 +18,6 @@ namespace Content.Server.Chemistry.EntitySystems
         /// </summary>
         private const int MaxPerRequest = 50;
 
-        /// <summary>
-        /// Максимальное количество предметов(таблетки, патчи, которые можно заспавнить за 1 нажатие
-        /// </summary>
-        private const int MaxPerRequest = 50;
-
         private void OnCreatePatchesMessage(Entity<ChemMasterComponent> chemMaster, ref ChemMasterCreatePatchesMessage message)
         {
             var user = message.Actor;
