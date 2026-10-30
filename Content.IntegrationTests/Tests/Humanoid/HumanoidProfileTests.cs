@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
@@ -191,6 +192,7 @@ public sealed class HumanoidProfileTests : GameTest
         await Server.WaitAssertion(() =>
         {
             var proto = SProtoMan.Index<SpeciesPrototype>(species);
+            Assert.That(proto.DefaultSoundsBySex, Has.Length.EqualTo(Enum.GetValues<Sex>().Length), "Species should declare a defaultSoundsBySex for every sex");
 
             // Species like skeletons don't need UI entries
             if (!proto.RoundStart)
@@ -203,7 +205,6 @@ public sealed class HumanoidProfileTests : GameTest
             {
                 Assert.That(sexedProtos.IsSubsetOf(voiceProtos), "Species with modified `DefaultSoundsBySex` should have an entry added to the `voice` field in the `speciesPrototype`");
                 Assert.That(voiceProtos.Union(sexedProtos).Any(), "Species should have sex mappings for at least one voice set in speciesPrototype");
-                Assert.That(proto.DefaultSoundsBySex, Has.Length.EqualTo(3), "Species should declare a defaultSoundsBySex for every sex");
             }
         });
     }
