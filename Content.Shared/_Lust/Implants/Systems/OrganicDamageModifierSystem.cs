@@ -11,15 +11,11 @@ namespace Content.Shared._Lust.Implants.Systems;
 /// </summary>
 public sealed partial class OrganicDamageModifierSystem : EntitySystem
 {
-    private EntityQuery<OrganicDamageModifierComponent> _modifierQuery;
-    private EntityQuery<BodyComponent> _bodyQuery;
-
+    [Dependency] private EntityQuery<OrganicDamageModifierComponent> _modifierQuery = default!;
+    [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
     public override void Initialize()
     {
         base.Initialize();
-
-        _modifierQuery = GetEntityQuery<OrganicDamageModifierComponent>();
-        _bodyQuery = GetEntityQuery<BodyComponent>();
 
         SubscribeLocalEvent<BodyComponent, DamageModifyEvent>(OnBodyDamageModify);
 

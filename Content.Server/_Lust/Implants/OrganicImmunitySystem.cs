@@ -1,11 +1,15 @@
-﻿using Content.Shared._Lust.Implants;
+﻿using Content.Server.Body.Systems;
+using Content.Shared._Lust.Implants;
 using Content.Shared._Lust.Implants.Components;
 using Content.Shared.Body;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Drunk;
+using Content.Shared.Jittering;
 using Content.Shared.Medical;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-
 namespace Content.Server._Lust.Implants;
 
 /// <summary>
@@ -17,15 +21,22 @@ public sealed class OrganicImmunitySystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private VomitSystem _vomit = default!;
+    [Dependency] private EntityQuery<OrganicImplantComponent> _implantQuery = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
-    private EntityQuery<OrganicImplantComponent> _implantQuery;
 
+    private static readonly EntProtoId StutterProto = "StatusEffectStutter";
+
+
+    private static readonly ProtoId<CyberPsychosisConfigPrototype> ConfigId = "LustCyberPsychosis";
 
     public override void Initialize()
     {
         base.Initialize();
-        _implantQuery = GetEntityQuery<OrganicImplantComponent>();
-
         // Инвалидация при изменении состава имплантов
         SubscribeLocalEvent<OrganicImplantComponent, OrganGotInsertedEvent>(OnImplantInserted);
         SubscribeLocalEvent<OrganicImplantComponent, OrganGotRemovedEvent>(OnImplantRemoved);
@@ -83,24 +94,49 @@ public sealed class OrganicImmunitySystem : EntitySystem
             var net = immunity.BaseRegen - immunity.CachedDrain;
             var newCurrent = Math.Clamp(immunity.Current + net, 0f, immunity.Max);
 
-            if (MathF.Abs(newCurrent - immunity.Current) < 0.0001f)
-                continue;
+            if (MathF.Abs(newCurrent - immunity.Current) >= 0.0001f)
+            {
+                immunity.Current = newCurrent;
+                var oldTier = immunity.CurrentTier;
+                UpdateTier(immunity);
+                if (immunity.CurrentTier != oldTier)
+                    immunity.SymptomCooldowns.Clear();
 
-            immunity.Current = newCurrent;
-            var oldTier = immunity.CurrentTier;
+                Dirty(uid, immunity);
+            }
+            // нанесение урона
+            ApplyTierDamage(uid, immunity);
 
-            UpdateTier(immunity);
-            Dirty(uid, immunity);
-
-            if (immunity.CurrentTier != oldTier && immunity.CurrentTier > oldTier)
-                ApplyRandomSymptom((uid, immunity));
-
+            // Каст симптомов
             if (now >= immunity.NextSymptomCheck)
             {
                 immunity.NextSymptomCheck = now + TimeSpan.FromSeconds(5);
                 TrySymptoms((uid, immunity));
             }
         }
+    }
+
+    /// <summary>
+    /// Функция нанисение урона, урон берется из прототипа в соответсвии с текщей стадией
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="immunity"></param>
+    private void ApplyTierDamage(EntityUid uid, OrganicImmunityComponent immunity)
+    {
+        if (!_prototypes.TryIndex(ConfigId, out var config))
+            return;
+
+        if (!config.Tiers.TryGetValue(immunity.CurrentTier, out var tierConfig))
+            return;
+
+        if (tierConfig.DamagePerSecond.Empty)
+            return;
+
+        _damageable.TryChangeDamage(
+            uid,
+            tierConfig.DamagePerSecond,
+            ignoreResistances: true,
+            interruptsDoAfters: false);
     }
 
     /// <summary>
@@ -128,44 +164,90 @@ public sealed class OrganicImmunitySystem : EntitySystem
     /// <param name="immunity"></param>
     private void UpdateTier(OrganicImmunityComponent immunity)
     {
-        immunity.CurrentTier = immunity.Current switch
+        if (!_prototypes.TryIndex(ConfigId, out var config))
         {
-            >= 70f => OrganicImmunityTier.Healthy,
-            >= 50f => OrganicImmunityTier.Mild,
-            >= 20f => OrganicImmunityTier.Moderate,
-            >= 10f => OrganicImmunityTier.Severe,
-            _ => OrganicImmunityTier.Critical,
-        };
+            immunity.CurrentTier = OrganicImmunityTier.Critical;
+            return;
+        }
+
+        var bestThreshold = float.MinValue;
+        var result = OrganicImmunityTier.Critical;
+
+        foreach (var (tier, cfg) in config.Tiers)
+        {
+            if (cfg.Threshold <= immunity.Current && cfg.Threshold > bestThreshold)
+            {
+                bestThreshold = cfg.Threshold;
+                result = tier;
+            }
+        }
+
+        immunity.CurrentTier = result;
     }
 
     /// <summary>
-    /// Проверка появиться ли симтом
+    /// Функция попытка применить симптом на игрока
     /// </summary>
     /// <param name="ent"></param>
     private void TrySymptoms(Entity<OrganicImmunityComponent> ent)
     {
-        var chance = ent.Comp.CurrentTier switch
-        {
-            OrganicImmunityTier.Healthy   => 0f,
-            OrganicImmunityTier.Mild      => 0.05f,
-            OrganicImmunityTier.Moderate  => 0.15f,
-            OrganicImmunityTier.Severe    => 0.30f,
-            OrganicImmunityTier.Critical  => 0.50f,
-            _ => 0f,
-        };
-
-        if (chance <= 0f || !_random.Prob(chance))
+        if (!_prototypes.TryIndex(ConfigId, out var config))
             return;
 
-        ApplyRandomSymptom(ent);
+        if (!config.Tiers.TryGetValue(ent.Comp.CurrentTier, out var tierConfig))
+            return;
+
+        if (tierConfig.Symptoms.Count == 0)
+            return;
+
+        foreach (var entry in tierConfig.Symptoms)
+        {
+            if (entry.Chance <= 0f)
+                continue;
+
+            if (!_random.Prob(entry.Chance))
+                continue;
+
+            if (entry.Cooldown > TimeSpan.Zero && IsOnCooldown(ent, entry.Symptom))
+                continue;
+
+            ApplySymptom(ent, entry);
+
+            if (entry.Cooldown > TimeSpan.Zero)
+                SetCooldown(ent, entry.Symptom, entry.Cooldown);
+        }
     }
+    private bool IsOnCooldown(Entity<OrganicImmunityComponent> ent, Symptom symptom)
+        => ent.Comp.SymptomCooldowns.TryGetValue(symptom, out var until)
+           && _timing.CurTime < until;
 
+    private void SetCooldown(Entity<OrganicImmunityComponent> ent, Symptom symptom, TimeSpan duration)
+        => ent.Comp.SymptomCooldowns[symptom] = _timing.CurTime + duration;
 
-    private void ApplyRandomSymptom(Entity<OrganicImmunityComponent> ent)
+    /// <summary>
+    /// Функция накладывает симптом на игрока
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="entry"></param>
+    private void ApplySymptom(Entity<OrganicImmunityComponent> ent, CyberPsychosisConfigPrototype.SymptomEntry entry)
     {
+        var uid = ent.Owner;
 
+        switch (entry.Symptom)
+        {
+            case Symptom.Jitter:
+                _jitter.DoJitter(uid, entry.Duration, refresh: false);
+                break;
+            case Symptom.Stutter:
+                _status.TryAddStatusEffectDuration(uid, StutterProto, entry.Duration);
+                break;
+            case Symptom.Vomit:
+                _vomit.Vomit(uid);
+                break;
+            case Symptom.Bleed:
+                _bloodstream.TryModifyBleedAmount(uid, entry.BleedAmount);
+                break;
+        }
     }
-
-
 }
 

@@ -24,8 +24,14 @@ public sealed partial class OrganicImmunityComponent : Component
     [DataField, AutoNetworkedField,ViewVariables(VVAccess.ReadOnly)]
     public OrganicImmunityTier CurrentTier = OrganicImmunityTier.Healthy;
 
-    [ViewVariables] public float CachedDrain;
-    [ViewVariables] public bool DrainDirty = true;
+    [ViewVariables]
+    public float CachedDrain;
+
+    [ViewVariables]
+    public bool DrainDirty = true;
+
+    [ViewVariables]
+    public Dictionary<Symptom, TimeSpan> SymptomCooldowns = new();
 
     public float Net => BaseRegen - CachedDrain;
 }

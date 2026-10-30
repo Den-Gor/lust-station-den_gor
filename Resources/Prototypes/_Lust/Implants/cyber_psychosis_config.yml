@@ -1,0 +1,84 @@
+﻿- type: cyberPsychosisConfig
+  id: LustCyberPsychosis
+  tiers:
+    Healthy:
+      threshold: 70
+      symptoms: []
+
+    Mild:
+      threshold: 50
+      symptoms:
+      - symptom: Bleed
+        chance: 0.05
+        cooldown: 90
+        bleedAmount: 1
+      - symptom: Jitter
+        chance: 0.20
+        duration: 8
+        cooldown: 30
+      - symptom: Vomit
+        chance: 0.05
+        cooldown: 90
+
+    Moderate:
+      threshold: 20
+      symptoms:
+      - symptom: Bleed
+        chance: 0.10
+        cooldown: 60
+        bleedAmount: 2
+      - symptom: Jitter
+        chance: 0.35
+        duration: 12
+        cooldown: 20
+      - symptom: Stutter
+        chance: 0.35
+        duration: 15
+        cooldown: 15
+      - symptom: Vomit
+        chance: 0.08
+        cooldown: 60
+
+    Severe:
+      threshold: 10
+      damagePerSecond:
+        types:
+          Cellular: 0.1
+      symptoms:
+      - symptom: Bleed
+        chance: 0.15
+        cooldown: 20
+        bleedAmount: 5
+      - symptom: Jitter
+        chance: 0.15
+        duration: 12
+        cooldown: 25
+      - symptom: Stutter
+        chance: 0.5
+        duration: 30
+        cooldown: 10
+      - symptom: Vomit
+        chance: 0.10
+        cooldown: 120
+
+    Critical:
+      threshold: 0
+      damagePerSecond:
+        types:
+          Cellular: 0.6
+      symptoms:
+      - symptom: Bleed
+        chance: 0.25
+        cooldown: 20
+        bleedAmount: 8
+      - symptom: Jitter
+        chance: 0.20
+        duration: 20
+        cooldown: 20
+      - symptom: Stutter
+        chance: 0.6
+        duration: 45
+        cooldown: 8
+      - symptom: Vomit
+        chance: 0.25
+        cooldown: 200

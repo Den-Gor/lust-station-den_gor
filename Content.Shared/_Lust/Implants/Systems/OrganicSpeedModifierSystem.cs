@@ -8,15 +8,12 @@ namespace Content.Shared._Lust.Implants.Systems;
 public sealed partial class OrganicSpeedModifierSystem : EntitySystem
 {
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
-
-    private EntityQuery<OrganicSpeedModifierComponent> _speedQuery;
-    private EntityQuery<BodyComponent> _bodyQuery;
+    [Dependency] private EntityQuery<OrganicSpeedModifierComponent> _speedQuery = default!;
+    [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _speedQuery = GetEntityQuery<OrganicSpeedModifierComponent>();
-        _bodyQuery = GetEntityQuery<BodyComponent>();
 
         SubscribeLocalEvent<BodyComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
 

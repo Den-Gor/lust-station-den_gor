@@ -23,7 +23,7 @@
   - type: OrganicSpeedModifier
     movementMultiplier: 1.8
   - type: OrganicImplant
-    passiveDrain:  5.0
+    passiveDrain:  1.0
   # Lust edit end
 
 - type: entity
