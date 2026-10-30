@@ -6,6 +6,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Drunk;
 using Content.Shared.Jittering;
 using Content.Shared.Medical;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -24,13 +25,11 @@ public sealed class OrganicImmunitySystem : EntitySystem
     [Dependency] private EntityQuery<OrganicImplantComponent> _implantQuery = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
-    [Dependency] private SharedDrunkSystem _drunk = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-
+    [Dependency] private MobStateSystem _mobState = default!;
 
     private static readonly EntProtoId StutterProto = "StatusEffectStutter";
-
 
     private static readonly ProtoId<CyberPsychosisConfigPrototype> ConfigId = "LustCyberPsychosis";
 
@@ -81,6 +80,9 @@ public sealed class OrganicImmunitySystem : EntitySystem
         while (query.MoveNext(out var uid, out var immunity, out var body))
         {
             if (now < immunity.NextTick)
+                continue;
+
+            if (_mobState.IsDead(uid))
                 continue;
 
             immunity.NextTick = now + TimeSpan.FromSeconds(1);
