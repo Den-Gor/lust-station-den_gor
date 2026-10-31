@@ -55,7 +55,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
 
         var combined = GetCombined(ent);
 
-        if (combined.Coefficients.Count == 0 && combined.FlatReduction.Count == 0)
+        if (combined.Coefficients.Count == 0 && combined.FlatReductions.Count == 0)
             return;
 
         args.Damage = DamageSpecifier.ApplyModifierSet(
@@ -108,7 +108,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
     {
         var target = cache.Combined;
         target.Coefficients.Clear();
-        target.FlatReduction.Clear();
+        target.FlatReductions.Clear();
 
         foreach (var organ in organs.ContainedEntities)
         {
@@ -122,9 +122,9 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
                 target.Coefficients[type] = MathF.Max(0f, existing + coeff - 1f);
             }
 
-            foreach (var (type, flat) in mod.Modifiers.FlatReduction)
+            foreach (var (type, flat) in mod.Modifiers.FlatReductions)
             {
-                target.FlatReduction[type] = target.FlatReduction.GetValueOrDefault(type) + flat;
+                target.FlatReductions[type] = target.FlatReductions.GetValueOrDefault(type) + flat;
             }
         }
 

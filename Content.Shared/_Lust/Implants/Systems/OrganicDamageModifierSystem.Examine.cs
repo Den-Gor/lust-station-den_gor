@@ -22,7 +22,7 @@ public sealed partial class OrganicDamageModifierSystem
 
         var combined = GetCombined((body, bodyComp));
 
-        if (combined.Coefficients.Count == 0 && combined.FlatReduction.Count == 0)
+        if (combined.Coefficients.Count == 0 && combined.FlatReductions.Count == 0)
             return;
 
         AppendSectionHeader(message, "lust-organic-modifier-examine-damage");
@@ -39,7 +39,7 @@ public sealed partial class OrganicDamageModifierSystem
         if (!_modifierQuery.TryGetComponent(organ, out var mod))
             return;
 
-        if (mod.Modifiers.Coefficients.Count == 0 && mod.Modifiers.FlatReduction.Count == 0)
+        if (mod.Modifiers.Coefficients.Count == 0 && mod.Modifiers.FlatReductions.Count == 0)
             return;
 
         AppendSectionHeader(message, "lust-organic-modifier-examine-damage");
@@ -62,7 +62,7 @@ public sealed partial class OrganicDamageModifierSystem
                 : Loc.GetString("lust-organic-modifier-damage-increased", ("type", damageType), ("value", valueStr)));
         }
 
-        foreach (var (type, reduction) in modifiers.FlatReduction)
+        foreach (var (type, reduction) in modifiers.FlatReductions)
         {
             if (MathF.Abs(reduction) < 0.0001f)
                 continue;
