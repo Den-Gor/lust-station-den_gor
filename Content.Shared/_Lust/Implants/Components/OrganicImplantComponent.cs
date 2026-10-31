@@ -9,8 +9,4 @@ public sealed partial  class OrganicImplantComponent :  Component
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float PassiveDrain = 0.1f;
-
-    [DataField,ViewVariables(VVAccess.ReadOnly)]
-    public DamageSpecifier EmpReaction = new();
-
 }

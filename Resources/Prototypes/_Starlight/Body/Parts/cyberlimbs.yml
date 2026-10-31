@@ -24,6 +24,11 @@
     movementMultiplier: 1.8
   - type: OrganicImplant
     passiveDrain:  1.0
+  - type: OrganicEmp
+    empReaction:
+      types:
+        Shock: 15
+        Heat: 5
   # Lust edit end
 
 - type: entity
