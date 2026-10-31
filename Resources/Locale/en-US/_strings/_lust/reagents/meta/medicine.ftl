@@ -33,3 +33,14 @@ reagent-desc-lust-salicylicacid = Powerful healing agent that restores bruises, 
 
 reagent-name-lust-oxanderm = oxanderm
 reagent-desc-lust-oxanderm = Powerful healing agent that restores thermal, electrical, cold, and acid burns. Accumulation of 25 units or more causes thermal damage instead of healing.
+
+reagent-name-lust-neurostabilin = neurostabilin
+reagent-desc-lust-neurostabilin = A murky, bitter swamp-yellow liquid with a sharp chemical smell. It calms the nervous system and suppresses the autoimmune response, allowing implants to take root without rejection. In large doses it causes cellular damage and spasms.
+
+reagent-physical-desc-lust-translucent = murky swamp-yellow
+
+reagent-effect-guidebook-lust-neurostabilin =
+    { $chance ->
+        [1] Restores immunity
+        *[other] Restores immunity with a { $chance } chance
+    }

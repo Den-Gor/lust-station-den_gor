@@ -6,6 +6,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Jittering;
 using Content.Shared.Medical;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Rejuvenate;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -42,6 +43,9 @@ public sealed class OrganicImmunitySystem : EntitySystem
 
         SubscribeLocalEvent<OrganicImplantComponent, ComponentStartup>(OnImplantStartup);
         SubscribeLocalEvent<OrganicImplantComponent, ComponentShutdown>(OnImplantShutdown);
+
+        SubscribeLocalEvent<OrganicImmunityComponent, RejuvenateEvent>(OnRejuvenate);
+
 
     }
     private void OnImplantInserted(Entity<OrganicImplantComponent> ent, ref OrganGotInsertedEvent args)
@@ -254,5 +258,20 @@ public sealed class OrganicImmunitySystem : EntitySystem
                 break;
         }
     }
+
+    /// <summary>
+    /// Событие вылечивания от админов
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="args"></param>
+    private void OnRejuvenate(Entity<OrganicImmunityComponent> ent, ref RejuvenateEvent args)
+    {
+        ent.Comp.Current = ent.Comp.Max;
+        ent.Comp.CurrentTier = OrganicImmunityTier.Healthy;
+        ent.Comp.SymptomCooldowns.Clear();
+        ent.Comp.DrainDirty = true;
+        Dirty(ent);
+    }
+
 }
 

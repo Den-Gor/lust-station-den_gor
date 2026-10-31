@@ -77,3 +77,15 @@
       amount: 1
   products:
     LustOxanderm: 4
+
+- type: reaction
+  id: LustNeurostabilin
+  reactants:
+    Dylovene:
+      amount: 1
+    Cryptobiolin:
+      amount: 1
+    Psicodine:
+      amount: 1
+  products:
+    LustNeurostabilin: 3

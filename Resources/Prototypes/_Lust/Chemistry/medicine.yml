@@ -174,3 +174,73 @@
             Shock: -1
             Cold: -1
             Caustic: -1
+
+- type: reagent
+  id: LustNeurostabilin
+  name: reagent-name-lust-neurostabilin
+  group: Medicine
+  desc: reagent-desc-lust-neurostabilin
+  physicalDesc: reagent-physical-desc-lust-translucent
+  flavor: bitter
+  color: "#ccda72"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:LustNeurostabilinEffect
+        immunityPerUnit: 5
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          max: 14.99
+      - !type:HealthChange
+        damage:
+          types:
+            Cellular: 0.5
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 15
+      - !type:Jitter
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 15
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectSeeingRainbow
+        type: Add
+        time: 5
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 15
+    Digestion:
+      metabolismRate: 0.1
+      effects:
+      - !type:LustNeurostabilinEffect
+        immunityPerUnit: 1.55
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          max: 10
+      - !type:HealthChange
+        damage:
+          types:
+            Cellular: 0.15
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 10.1
+      - !type:Jitter
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 10.1
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectSeeingRainbow
+        type: Add
+        time: 5
+        conditions:
+        - !type:ReagentCondition
+          reagent: LustNeurostabilin
+          min: 10.1
