@@ -10,4 +10,5 @@ public enum Symptom : byte
     Stutter,    // спутанная речь
     Vomit,      // рвота
     Bleed,      // кровотечение
+    Woozy,
 }

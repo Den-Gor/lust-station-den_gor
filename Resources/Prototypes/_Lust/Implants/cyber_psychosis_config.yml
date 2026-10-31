@@ -23,6 +23,10 @@
     Moderate:
       threshold: 20
       symptoms:
+      - symptom: Woozy
+        chance: 0.05
+        cooldown: 60
+        duration: 100
       - symptom: Bleed
         chance: 0.10
         cooldown: 60
@@ -45,6 +49,10 @@
         types:
           Cellular: 0.1
       symptoms:
+      - symptom: Woozy
+        chance: 0.20
+        cooldown: 30
+        duration: 150
       - symptom: Bleed
         chance: 0.15
         cooldown: 20
@@ -67,6 +75,10 @@
         types:
           Cellular: 0.6
       symptoms:
+      - symptom: Woozy
+        chance: 0.35
+        cooldown: 60
+        duration: 250
       - symptom: Bleed
         chance: 0.25
         cooldown: 20

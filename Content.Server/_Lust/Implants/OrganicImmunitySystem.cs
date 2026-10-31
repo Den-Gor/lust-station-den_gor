@@ -3,7 +3,6 @@ using Content.Shared._Lust.Implants;
 using Content.Shared._Lust.Implants.Components;
 using Content.Shared.Body;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Drunk;
 using Content.Shared.Jittering;
 using Content.Shared.Medical;
 using Content.Shared.Mobs.Systems;
@@ -30,6 +29,7 @@ public sealed class OrganicImmunitySystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
 
     private static readonly EntProtoId StutterProto = "StatusEffectStutter";
+    private static readonly EntProtoId WoozyProto = "StatusEffectWoozy";
 
     private static readonly ProtoId<CyberPsychosisConfigPrototype> ConfigId = "LustCyberPsychosis";
 
@@ -248,6 +248,9 @@ public sealed class OrganicImmunitySystem : EntitySystem
                 break;
             case Symptom.Bleed:
                 _bloodstream.TryModifyBleedAmount(uid, entry.BleedAmount);
+                break;
+            case Symptom.Woozy:
+                _status.TryAddStatusEffectDuration(uid, WoozyProto, entry.Duration);
                 break;
         }
     }
