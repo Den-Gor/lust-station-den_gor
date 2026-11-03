@@ -72,6 +72,11 @@
       - Back # Sunrise edit
       #- UndergarmentTop # Sunrise edit
       # - UndergarmentBottom # Sunrise edit
+  # Lust edit start
+  - type: Tag
+    tags:
+    - OrganExtractorForbidden
+  # Lust edit end
 
 - type: entity
   parent:
@@ -105,6 +110,7 @@
   - type: Tag
     tags:
     - Head
+    - OrganExtractorForbidden # Lust edit
 
 - type: entity
   parent:

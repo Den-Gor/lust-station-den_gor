@@ -130,6 +130,12 @@ public sealed partial class LimbSystem : SharedLimbSystem
         {
             _sunriseBody.SetBaseLayerData(body.Owner, layer, baseLayer.Data);
         }
+        // lust edit start
+        else
+        {
+            ApplyVisualOrganData(body.Owner, layer, limb.Owner);  // Фикс бага с отображением
+        }
+        // lust edit end
 
         _sunriseBody.SetLayersVisibility(body.Owner, [layer], true);
     }

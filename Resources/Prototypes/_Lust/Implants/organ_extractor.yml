@@ -1,0 +1,56 @@
+﻿- type: entity
+  parent: BaseItem
+  id: LustOrganImplanter
+  components:
+  - type: Sprite
+    sprite: _Lust/Objects/Devices/organ_extractor.rsi
+    layers:
+    - state: icon1
+      map: [ "base" ]
+    - state: icon
+      map: [ "icon" ]
+      visible: false
+  - type: ItemMapper
+    mapLayers:
+      icon:
+        whitelist:
+          components:
+          - Organ
+  - type: Appearance
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      Left:
+      - state: inhand-left
+      Right:
+      - state: inhand-right
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      organ_slot: !type:ContainerSlot { }
+  - type: OrganImplanter
+    duration: 6
+    damage:
+      types:
+        Slash: 5
+    bleedAmount: 10
+    slot:
+      name: lust-organ-extractor-slot-name
+      ejectOnInteract: false
+      whitelist:
+        components:
+        - Organ
+      blacklist:
+        tags:
+        - OrganExtractorForbidden
+
+- type: entity
+  parent: LustOrganImplanter
+  id: LustAdminOrganImplanter
+  suffix: ДЕБАГ
+  components:
+  - type: OrganImplanter
+    infinite: true
+    bleedAmount: 0
+    damage:
+      types: { }
