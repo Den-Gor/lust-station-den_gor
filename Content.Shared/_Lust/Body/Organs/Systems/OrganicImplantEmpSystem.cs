@@ -1,4 +1,4 @@
-﻿using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Organs.Components;
 using Content.Shared.Body;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -6,7 +6,7 @@ using Content.Shared.Emp;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.Body.Organs.Systems;
 
 /// <summary>
 /// Обрабатывает ЭМИ-импульсы по телам с кибер-имплантами.

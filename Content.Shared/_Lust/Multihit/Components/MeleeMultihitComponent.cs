@@ -31,6 +31,6 @@ public sealed partial class MeleeMultihitComponent : Component
     /// <summary>
     /// Вайтлист
     /// </summary>
-    [DataField]
+    [DataField,ViewVariables(VVAccess.ReadOnly)]
     public EntityWhitelist? WeaponWhitelist;
 }

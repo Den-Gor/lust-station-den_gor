@@ -1,8 +1,9 @@
-﻿using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Implants.Components;
+using Content.Shared._Lust.Body.Organs.Components;
 using Content.Shared.Damage;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Lust.Implants;
+namespace Content.Shared._Lust.Body.Implants;
 /// <summary>
 ///  Таблица оторжения имплантов пороги тиров и симптомы по каждому тиру.
 /// </summary>

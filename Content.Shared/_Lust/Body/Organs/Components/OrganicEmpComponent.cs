@@ -1,7 +1,7 @@
 ﻿using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.Body.Organs.Components;
 
 /// <summary>
 /// Отдельный компонент для EMP-реакции импланта.

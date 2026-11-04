@@ -1,7 +1,7 @@
-﻿using Content.Shared._Lust.Implants.Systems;
+﻿using Content.Shared._Lust.Body.Organs.Systems;
 using Content.Shared.Damage;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.Body.Organs.Components;
 
 
 [RegisterComponent, Access(typeof(OrganicImplantEmpSystem))]

@@ -1,9 +1,6 @@
-﻿using Content.Shared._Lust.Implants.Systems;
-using Robust.Shared.GameStates;
+﻿namespace Content.Shared._Lust.Body.Organs.Components;
 
-namespace Content.Shared._Lust.Implants.Components;
-
-[RegisterComponent,Access(typeof(OrganicSpeedModifierSystem))]
+[RegisterComponent,Access(typeof(Systems.OrganicSpeedModifierSystem))]
 public sealed partial class OrganicSpeedModifierCacheComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]

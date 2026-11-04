@@ -1,10 +1,10 @@
-﻿using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Organs.Components;
 using Content.Shared.Body;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.Containers;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.Body.Organs.Systems;
 
 /// <summary>
 /// Данная система высчитывает модификаторы урона органов и применяет их на урон входящий по игроку

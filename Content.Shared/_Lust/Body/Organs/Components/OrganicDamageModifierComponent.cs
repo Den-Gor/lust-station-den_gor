@@ -1,7 +1,7 @@
 ﻿using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.Body.Organs.Components;
 
 /// <summary>
 /// Данной компонент хранит в себе модификатор урона, при добавление его органом, органы будут

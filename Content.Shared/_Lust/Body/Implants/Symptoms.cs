@@ -1,4 +1,4 @@
-﻿namespace Content.Shared._Lust.Implants;
+﻿namespace Content.Shared._Lust.Body.Implants;
 
 /// <summary>
 /// Симптомы оторжения имплантов. Каждый соответствует одному

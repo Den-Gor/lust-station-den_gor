@@ -1,9 +1,8 @@
 ﻿using Content.Server._Starlight.Medical.Limbs;
 using Content.Server.Chat.Systems;
 using Content.Server.Starlight.Medical.Surgery;
-using Content.Shared._Lust.Implants.Components;
-using Content.Shared._Lust.Implants.Events;
-using Content.Shared._Lust.Implants.Systems;
+using Content.Shared._Lust.CyberImplants.Components;
+using Content.Shared._Lust.CyberImplants.Systems;
 using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Containers.ItemSlots;
@@ -13,7 +12,7 @@ using Content.Shared.Starlight.Medical.Surgery.Events;
 using Content.Shared.Starlight.Medical.Surgery.Steps.Parts;
 using Robust.Shared.Containers;
 
-namespace Content.Server._Lust.Implants;
+namespace Content.Server._Lust.CyberImplants.Systems;
 
 /// <summary>
 /// Серверная система занимается выниманием прошлых органов и дабовлением новых
@@ -34,7 +33,7 @@ public sealed partial class OrganImplanterSystem : EntitySystem
         base.Initialize();
 
         // Подписка на событие завершения do-after экстрактора
-        SubscribeLocalEvent<OrganImplanterComponent, OrganImplanterDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<OrganImplanterComponent, Shared._Lust.CyberImplants.Events.OrganImplanterDoAfterEvent>(OnDoAfter);
     }
 
     /// <summary>
@@ -173,7 +172,7 @@ public sealed partial class OrganImplanterSystem : EntitySystem
     /// </summary>
     /// <param name="ent">Имплантер.</param>
     /// <param name="args">Аргументы события do-after.</param>
-    private void OnDoAfter(Entity<OrganImplanterComponent> ent, ref OrganImplanterDoAfterEvent args)
+    private void OnDoAfter(Entity<OrganImplanterComponent> ent, ref Shared._Lust.CyberImplants.Events.OrganImplanterDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || args.Target is not { Valid: true } target)
             return;

@@ -4,7 +4,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.CyberImplants.Components;
 
 /// <summary>
 /// Компонент предмета имлантера органов.
@@ -58,7 +58,7 @@ public sealed partial class OrganImplanterComponent : Component
     /// Количество кровотечения накладываемое на цель после операции.
     /// </summary>
     [DataField]
-    public float BleedAmount = 0f;
+    public float BleedAmount;
 
     /// <summary>
     /// Звук  имплантирования

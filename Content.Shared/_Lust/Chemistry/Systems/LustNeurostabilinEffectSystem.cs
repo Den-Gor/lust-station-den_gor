@@ -1,5 +1,5 @@
-﻿using Content.Shared._Lust.Chemistry.ReagentEffects;
-using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Implants.Components;
+using Content.Shared._Lust.Chemistry.ReagentEffects;
 using Content.Shared.EntityEffects;
 
 namespace Content.Shared._Lust.Chemistry.Systems;

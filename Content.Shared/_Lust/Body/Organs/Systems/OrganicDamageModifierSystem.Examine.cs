@@ -4,7 +4,7 @@ using Content.Shared.Damage.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.Body.Organs.Systems;
 
 public sealed partial class OrganicDamageModifierSystem
 {

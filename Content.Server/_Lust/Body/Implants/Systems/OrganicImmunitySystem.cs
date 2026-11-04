@@ -1,5 +1,5 @@
-﻿using Content.Shared._Lust.Implants;
-using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Implants;
+using Content.Shared._Lust.Body.Implants.Components;
 using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage.Systems;
@@ -11,7 +11,8 @@ using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-namespace Content.Server._Lust.Implants;
+
+namespace Content.Server._Lust.Body.Implants.Systems;
 
 /// <summary>
 /// Система измениение имунитета от имплантов

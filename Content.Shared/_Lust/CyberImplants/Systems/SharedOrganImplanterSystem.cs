@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using Content.Shared._Lust.Implants.Components;
-using Content.Shared._Lust.Implants.Events;
 using Content.Shared.Body;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
@@ -11,7 +9,7 @@ using Content.Shared.Popups;
 using Content.Shared.Starlight.Medical.Surgery;
 using Content.Shared.Starlight.Medical.Surgery.Steps.Parts;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.CyberImplants.Systems;
 
 /// <summary>
 /// Система старта do-after события для иплантера органов
@@ -28,10 +26,10 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     {
         base.Initialize();
         // Инициализация слота компонента при создании
-        SubscribeLocalEvent<OrganImplanterComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<Components.OrganImplanterComponent, ComponentInit>(OnComponentInit);
 
         // Обработка использования предмета в руке (after interact)
-        SubscribeLocalEvent<OrganImplanterComponent, AfterInteractEvent>(OnAfterInteract);
+        SubscribeLocalEvent<Components.OrganImplanterComponent, AfterInteractEvent>(OnAfterInteract);
     }
 
     /// <summary>
@@ -64,7 +62,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// </summary>
     /// <param name="comp">Компонент имплантатор.</param>
     /// <returns>True, если использован и не бесконечный.</returns>
-    public static bool IsUsed(OrganImplanterComponent comp) => comp.Used && !comp.Infinite;
+    public static bool IsUsed(Components.OrganImplanterComponent comp) => comp.Used && !comp.Infinite;
 
     /// <summary>
     /// Попытка найти орган, хранящийся в слоте имплантантор.
@@ -77,7 +75,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
         organ = default;
 
         // Получаем слот по id слота
-        if (!_itemSlots.TryGetSlot(uid, OrganImplanterComponent.SlotId, out var slot))
+        if (!_itemSlots.TryGetSlot(uid, Components.OrganImplanterComponent.SlotId, out var slot))
             return false;
 
         // Проверяем есть ли предмет в этом слоте
@@ -99,7 +97,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// <param name="user">Тот кто использует имплантер.</param>
     /// <param name="silent">Если true не показывать pop-up сообщения об ошибках.</param>
     /// <returns>True, если использование разрешено.</returns>
-    public bool CanUse(Entity<OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
+    public bool CanUse(Entity<Components.OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
     {
         // Проверка есть ли у тела место для органов
         if (!_surgery.TryGetBodyContainer(target, out _))
@@ -162,7 +160,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// <param name="user">Пользователь.</param>
     /// <param name="silent">Не показывать попапы при отказе.</param>
     /// <returns>True, если операцию можно начать.</returns>
-    public bool CanStartExtraction(Entity<OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
+    public bool CanStartExtraction(Entity<Components.OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
     {
         if (IsUsed(ent.Comp))
         {
@@ -182,7 +180,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// <param name="user">пользователь имлпантера </param>
     /// <param name="silent">Не показывать попапы при отказе.</param>
     /// <returns> True, если do-after успешно запущен. </returns>
-    public bool TryStartExtraction(Entity<OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
+    public bool TryStartExtraction(Entity<Components.OrganImplanterComponent> ent, EntityUid target, EntityUid user, bool silent)
     {
         if (!CanStartExtraction(ent, target, user, silent))
             return false;
@@ -191,7 +189,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
             EntityManager,
             user,
             ent.Comp.Duration,
-            new OrganImplanterDoAfterEvent(),
+            new Events.OrganImplanterDoAfterEvent(),
             ent.Owner,
             target: target,
             used: ent.Owner)
@@ -239,12 +237,12 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// </summary>
     /// <param name="ent">имплантер</param>
     /// <param name="args"></param>
-    private void OnComponentInit(Entity<OrganImplanterComponent> ent, ref ComponentInit args)
+    private void OnComponentInit(Entity<Components.OrganImplanterComponent> ent, ref ComponentInit args)
     {
         if (ent.Comp.StartingOrgan != null)
             ent.Comp.Slot.StartingItem = ent.Comp.StartingOrgan;
 
-        _itemSlots.AddItemSlot(ent.Owner, OrganImplanterComponent.SlotId, ent.Comp.Slot);
+        _itemSlots.AddItemSlot(ent.Owner, Components.OrganImplanterComponent.SlotId, ent.Comp.Slot);
     }
 
     /// <summary>
@@ -252,7 +250,7 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     /// </summary>
     /// <param name="ent"></param>
     /// <param name="args"></param>
-    private void OnAfterInteract(Entity<OrganImplanterComponent> ent, ref AfterInteractEvent args)
+    private void OnAfterInteract(Entity<Components.OrganImplanterComponent> ent, ref AfterInteractEvent args)
     {
         if (args.Target is not { Valid: true } target || !args.CanReach || args.Handled)
             return;

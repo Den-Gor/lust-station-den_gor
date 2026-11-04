@@ -3,7 +3,7 @@ using Content.Shared.Examine;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.Body.Organs.Systems;
 
 public sealed class OrganicModifiersExamineSystem : EntitySystem
 {

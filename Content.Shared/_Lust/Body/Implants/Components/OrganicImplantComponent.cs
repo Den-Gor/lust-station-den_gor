@@ -1,7 +1,6 @@
-﻿using Content.Shared.Damage;
-using Robust.Shared.GameStates;
+﻿using Robust.Shared.GameStates;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.Body.Implants.Components;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial  class OrganicImplantComponent :  Component

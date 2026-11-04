@@ -1,9 +1,9 @@
-﻿using Content.Shared._Lust.Implants.Components;
+﻿using Content.Shared._Lust.Body.Organs.Components;
 using Content.Shared.Body;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Containers;
 
-namespace Content.Shared._Lust.Implants.Systems;
+namespace Content.Shared._Lust.Body.Organs.Systems;
 
 public sealed partial class OrganicSpeedModifierSystem : EntitySystem
 {

@@ -1,13 +1,12 @@
-﻿using Content.Shared._Lust.Implants.Systems;
-using Content.Shared.Damage;
+﻿using Content.Shared.Damage;
 
-namespace Content.Shared._Lust.Implants.Components;
+namespace Content.Shared._Lust.Body.Organs.Components;
 
 /// <summary>
 /// Кеш агрегированных модификаторов органов. Живёт на теле.
 /// Пересчитывается лениво при первом DamageModifyEvent после инвалидации.
 /// </summary>
-[RegisterComponent,Access(typeof(OrganicDamageModifierSystem))]
+[RegisterComponent,Access(typeof(Systems.OrganicDamageModifierSystem))]
 public sealed partial class OrganicDamageModifierCacheComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]
