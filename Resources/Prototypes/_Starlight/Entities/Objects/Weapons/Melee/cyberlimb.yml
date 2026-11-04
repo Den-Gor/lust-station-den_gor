@@ -90,6 +90,18 @@
     speedModifier: 1.25
     pryPowered: true
     useSound: /Audio/Items/jaws_pry.ogg
+  # Lust edit start
+  - type: Tag
+    tags:
+    - LustMantisBlade
+  - type: MeleeMultihit
+    damageMultiplier: 0.6
+    delay: 0.25
+    maxExtraHits: 1
+    weaponWhitelist:
+      tags:
+      - LustMantisBlade
+  # Lust edit end
 
 #Mantis Blade Max-Guard
 - type: entity
@@ -129,6 +141,18 @@
     speedModifier: 1
     pryPowered: false
     useSound: /Audio/Items/jaws_pry.ogg
+  # Lust edit start
+  - type: Tag
+    tags:
+    - LustMantisBlade
+  - type: MeleeMultihit
+    damageMultiplier: 0.6
+    delay: 0.25
+    maxExtraHits: 1
+    weaponWhitelist:
+      tags:
+      - LustMantisBlade
+  # Lust edit end
 
 - type: entity
   name: G.O.R.I.L.L.A. gauntlet
