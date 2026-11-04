@@ -33,6 +33,8 @@
     damage:
       types:
         Slash: 5
+    startSound:
+      path: /Audio/_Lust/CyberImplants/auto_reaper.ogg
     bleedAmount: 10
     slot:
       name: lust-organ-extractor-slot-name

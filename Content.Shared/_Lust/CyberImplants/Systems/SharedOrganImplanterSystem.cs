@@ -8,6 +8,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Starlight.Medical.Surgery;
 using Content.Shared.Starlight.Medical.Surgery.Steps.Parts;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared._Lust.CyberImplants.Systems;
 
@@ -21,6 +22,8 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     [Dependency] private MarkingManager _markings = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedSurgerySystem _surgery = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+
 
     public override void Initialize()
     {
@@ -184,6 +187,8 @@ public sealed partial class SharedOrganImplanterSystem : EntitySystem
     {
         if (!CanStartExtraction(ent, target, user, silent))
             return false;
+
+        _audio.PlayPredicted(ent.Comp.StartSound, ent.Owner, user);
 
         var doAfter = new DoAfterArgs(
             EntityManager,
