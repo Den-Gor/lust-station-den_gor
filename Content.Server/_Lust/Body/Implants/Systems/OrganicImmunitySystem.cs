@@ -17,7 +17,7 @@ namespace Content.Server._Lust.Body.Implants.Systems;
 /// <summary>
 /// Система измениение имунитета от имплантов
 /// </summary>
-public sealed class OrganicImmunitySystem : EntitySystem
+public sealed partial class OrganicImmunitySystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -35,31 +35,36 @@ public sealed class OrganicImmunitySystem : EntitySystem
 
     private static readonly ProtoId<CyberPsychosisConfigPrototype> ConfigId = "LustCyberPsychosis";
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        // Инвалидация при изменении состава имплантов
-        SubscribeLocalEvent<OrganicImplantComponent, OrganGotInsertedEvent>(OnImplantInserted);
-        SubscribeLocalEvent<OrganicImplantComponent, OrganGotRemovedEvent>(OnImplantRemoved);
-
-        SubscribeLocalEvent<OrganicImplantComponent, ComponentStartup>(OnImplantStartup);
-        SubscribeLocalEvent<OrganicImplantComponent, ComponentShutdown>(OnImplantShutdown);
-
-        SubscribeLocalEvent<OrganicImmunityComponent, RejuvenateEvent>(OnRejuvenate);
-
-
-    }
+    [SubscribeLocalEvent]
     private void OnImplantInserted(Entity<OrganicImplantComponent> ent, ref OrganGotInsertedEvent args)
         => InvalidateDrain(args.Target);
 
+    [SubscribeLocalEvent]
     private void OnImplantRemoved(Entity<OrganicImplantComponent> ent, ref OrganGotRemovedEvent args)
         => InvalidateDrain(args.Target);
 
+    [SubscribeLocalEvent]
     private void OnImplantStartup(Entity<OrganicImplantComponent> ent, ref ComponentStartup args)
         => InvalidateParent(ent);
 
+    [SubscribeLocalEvent]
     private void OnImplantShutdown(Entity<OrganicImplantComponent> ent, ref ComponentShutdown args)
         => InvalidateParent(ent);
+
+    /// <summary>
+    /// Событие вылечивания от админов
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="args"></param>
+    [SubscribeLocalEvent]
+    private void OnRejuvenate(Entity<OrganicImmunityComponent> ent, ref RejuvenateEvent args)
+    {
+        ent.Comp.Current = ent.Comp.Max;
+        ent.Comp.CurrentTier = OrganicImmunityTier.Healthy;
+        ent.Comp.SymptomCooldowns.Clear();
+        ent.Comp.DrainDirty = true;
+        Dirty(ent);
+    }
 
     private void InvalidateDrain(EntityUid body)
     {
@@ -258,20 +263,6 @@ public sealed class OrganicImmunitySystem : EntitySystem
                 _status.TryAddStatusEffectDuration(uid, WoozyProto, entry.Duration);
                 break;
         }
-    }
-
-    /// <summary>
-    /// Событие вылечивания от админов
-    /// </summary>
-    /// <param name="ent"></param>
-    /// <param name="args"></param>
-    private void OnRejuvenate(Entity<OrganicImmunityComponent> ent, ref RejuvenateEvent args)
-    {
-        ent.Comp.Current = ent.Comp.Max;
-        ent.Comp.CurrentTier = OrganicImmunityTier.Healthy;
-        ent.Comp.SymptomCooldowns.Clear();
-        ent.Comp.DrainDirty = true;
-        Dirty(ent);
     }
 
 }

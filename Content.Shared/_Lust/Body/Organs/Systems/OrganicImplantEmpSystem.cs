@@ -12,27 +12,12 @@ namespace Content.Shared._Lust.Body.Organs.Systems;
 /// Обрабатывает ЭМИ-импульсы по телам с кибер-имплантами.
 /// Суммарный EmpReaction кешируется на теле и пересобирается только при изменении органов.
 /// </summary>
-public sealed class OrganicImplantEmpSystem : EntitySystem
+public sealed partial class OrganicImplantEmpSystem : EntitySystem
 {
     [Dependency] private EntityQuery<OrganicEmpComponent> _implantQuery = default!;
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     private readonly EntProtoId _sparkEffect = "EffectSparks";
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        // Горячий путь — событие приходит на КАЖДОЕ тело в радиусе ЭМИ
-        SubscribeLocalEvent<BodyComponent, EmpPulseEvent>(OnBodyEmpPulse);
-
-        // Инвалидация — по тем же событиям, что у тебя в других системах
-        SubscribeLocalEvent<OrganicEmpComponent, OrganGotInsertedEvent>(OnOrganInserted);
-        SubscribeLocalEvent<OrganicEmpComponent, OrganGotRemovedEvent>(OnOrganRemoved);
-
-        SubscribeLocalEvent<OrganicEmpComponent, ComponentStartup>(OnImplantComponentChanged);
-        SubscribeLocalEvent<OrganicEmpComponent, ComponentShutdown>(OnImplantComponentChanged);
-    }
 
     /// <summary>
     /// API возвращает актуальный суммарный EmpReaction на теле.
@@ -49,6 +34,12 @@ public sealed class OrganicImplantEmpSystem : EntitySystem
         return cache.Combined;
     }
 
+    /// <summary>
+    /// Метод обрабочик ивента собатывает по тем на кого сработало emp
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="args"></param>
+    [SubscribeLocalEvent]
     private void OnBodyEmpPulse(Entity<BodyComponent> ent, ref EmpPulseEvent args)
     {
         var combined = GetCombined(ent);
@@ -63,21 +54,28 @@ public sealed class OrganicImplantEmpSystem : EntitySystem
         SpawnAtPosition(_sparkEffect, Transform(ent.Owner).Coordinates);
     }
 
+    /// <summary>
+    /// Обробочики ивентов об добавление / удаление органов // добавление удаление компонента у органа
+    /// </summary>
+    [SubscribeLocalEvent]
     private void OnOrganInserted(Entity<OrganicEmpComponent> ent, ref OrganGotInsertedEvent args)
     {
         if (_bodyQuery.TryGetComponent(args.Target, out var body))
             Invalidate((args.Target, body));
     }
 
+    [SubscribeLocalEvent]
     private void OnOrganRemoved(Entity<OrganicEmpComponent> ent, ref OrganGotRemovedEvent args)
     {
         if (_bodyQuery.TryGetComponent(args.Target, out var body))
             Invalidate((args.Target, body));
     }
 
+    [SubscribeLocalEvent]
     private void OnImplantComponentChanged(Entity<OrganicEmpComponent> ent, ref ComponentStartup args)
         => InvalidateParentBody(ent.Owner);
 
+    [SubscribeLocalEvent]
     private void OnImplantComponentChanged(Entity<OrganicEmpComponent> ent, ref ComponentShutdown args)
         => InvalidateParentBody(ent.Owner);
 

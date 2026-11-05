@@ -5,25 +5,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._Lust.Body.Organs.Systems;
 
-public sealed class OrganicModifiersExamineSystem : EntitySystem
+public sealed partial class OrganicModifiersExamineSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private OrganicDamageModifierSystem _damageModifier = default!;
     [Dependency] private OrganicSpeedModifierSystem _speedModifier = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<BodyComponent, GetVerbsEvent<ExamineVerb>>(OnBodyExamine);
-        SubscribeLocalEvent<OrganComponent, GetVerbsEvent<ExamineVerb>>(OnOrganExamine);
-    }
 
     /// <summary>
     /// Осмотр тела
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="args"></param>
+    [SubscribeLocalEvent]
     private void OnBodyExamine(Entity<BodyComponent> entity, ref GetVerbsEvent<ExamineVerb> args)
     {
         if (!args.CanInteract || !args.CanAccess)
@@ -45,6 +38,7 @@ public sealed class OrganicModifiersExamineSystem : EntitySystem
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="args"></param>
+    [SubscribeLocalEvent]
     private void OnOrganExamine(Entity<OrganComponent> entity, ref GetVerbsEvent<ExamineVerb> args)
     {
         if (!args.CanInteract || !args.CanAccess)

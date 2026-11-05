@@ -13,18 +13,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
 {
     [Dependency] private EntityQuery<OrganicDamageModifierComponent> _modifierQuery = default!;
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
-    public override void Initialize()
-    {
-        base.Initialize();
 
-        SubscribeLocalEvent<BodyComponent, DamageModifyEvent>(OnBodyDamageModify);
-
-        SubscribeLocalEvent<OrganicDamageModifierComponent, OrganGotInsertedEvent>(OnOrganInserted);
-        SubscribeLocalEvent<OrganicDamageModifierComponent, OrganGotRemovedEvent>(OnOrganRemoved);
-
-        SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentStartup>(OnOrganModifierChanged);
-        SubscribeLocalEvent<OrganicDamageModifierComponent, ComponentShutdown>(OnOrganModifierChanged);
-    }
 
     /// <summary>
     /// Api Возвращает актуальный набор модификаторов урона на BodyComponent
@@ -48,6 +37,7 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
     /// </summary>
     /// <param name="ent"></param>
     /// <param name="args"></param>
+    [SubscribeLocalEvent]
     private void OnBodyDamageModify(Entity<BodyComponent> ent, ref DamageModifyEvent args)
     {
         if (!HasAnyPositiveDamage(args.Damage))
@@ -68,21 +58,25 @@ public sealed partial class OrganicDamageModifierSystem : EntitySystem
     /// <summary>
     /// Обробочики ивентов об добавление / удаление органов // добавление удаление компонента у органа
     /// </summary>
+    [SubscribeLocalEvent]
     private void OnOrganInserted(Entity<OrganicDamageModifierComponent> ent, ref OrganGotInsertedEvent args)
     {
         if (_bodyQuery.TryGetComponent(args.Target, out var body))
             Invalidate((args.Target, body));
     }
 
+    [SubscribeLocalEvent]
     private void OnOrganRemoved(Entity<OrganicDamageModifierComponent> ent, ref OrganGotRemovedEvent args)
     {
         if (_bodyQuery.TryGetComponent(args.Target, out var body))
             Invalidate((args.Target, body));
     }
 
+    [SubscribeLocalEvent]
     private void OnOrganModifierChanged(Entity<OrganicDamageModifierComponent> ent, ref ComponentStartup args)
         => InvalidateParentBody(ent);
 
+    [SubscribeLocalEvent]
     private void OnOrganModifierChanged(Entity<OrganicDamageModifierComponent> ent, ref ComponentShutdown args)
         => InvalidateParentBody(ent);
 

@@ -11,19 +11,6 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
     [Dependency] private EntityQuery<OrganicSpeedModifierComponent> _speedQuery = default!;
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<BodyComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
-
-        SubscribeLocalEvent<OrganicSpeedModifierComponent, OrganGotInsertedEvent>(OnOrganChanged);
-        SubscribeLocalEvent<OrganicSpeedModifierComponent, OrganGotRemovedEvent>(OnOrganChanged);
-
-        SubscribeLocalEvent<OrganicSpeedModifierComponent, ComponentStartup>(OnOrganComponentStartup);
-        SubscribeLocalEvent<OrganicSpeedModifierComponent, ComponentShutdown>(OnOrganComponentShutdown);
-    }
-
     /// <summary>
     /// Возвращает актуальный множитель скорости для тела.
     /// Пересобирает кеш, если он Dirty.
@@ -40,7 +27,12 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
         return cache.MovementMultiplier;
     }
 
-    // Сбор множителей с органов
+    /// <summary>
+    /// Обробочик ивента перебора множетелей скорости
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="args"></param>
+    [SubscribeLocalEvent]
     private void OnRefreshSpeed(Entity<BodyComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
         var multiplier = GetCombined(ent);
@@ -52,18 +44,22 @@ public sealed partial class OrganicSpeedModifierSystem : EntitySystem
     }
 
     // Ручной вызов обновления скорости при изменении органов
+    [SubscribeLocalEvent]
     private void OnOrganChanged(Entity<OrganicSpeedModifierComponent> ent, ref OrganGotInsertedEvent args)
         => InvalidateAndRefresh(args.Target);
 
+    [SubscribeLocalEvent]
     private void OnOrganChanged(Entity<OrganicSpeedModifierComponent> ent, ref OrganGotRemovedEvent args)
         => InvalidateAndRefresh(args.Target);
 
+    [SubscribeLocalEvent]
     private void OnOrganComponentStartup(Entity<OrganicSpeedModifierComponent> ent, ref ComponentStartup args)
     {
         if (TryGetParentBody(ent, out var body))
             InvalidateAndRefresh(body);
     }
 
+    [SubscribeLocalEvent]
     private void OnOrganComponentShutdown(Entity<OrganicSpeedModifierComponent> ent, ref ComponentShutdown args)
     {
         if (TryGetParentBody(ent, out var body))

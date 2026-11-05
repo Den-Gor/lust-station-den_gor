@@ -2,6 +2,7 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Starlight.Medical.Surgery;
 using Content.Shared._Lust.CyberImplants.Components;
+using Content.Shared._Lust.CyberImplants.Events;
 using Content.Shared._Lust.CyberImplants.Systems;
 using Content.Shared.Body;
 using Content.Shared.Body.Systems;
@@ -28,12 +29,60 @@ public sealed partial class OrganImplanterSystem : EntitySystem
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private ChatSystem _chat = default!;
 
-    public override void Initialize()
+    /// <summary>
+    /// Обработчик завершения do-after операции экстрактора: извлекает старый орган и вставляет новый.
+    /// </summary>
+    /// <param name="ent">Имплантер.</param>
+    /// <param name="args">Аргументы события do-after.</param>
+    [SubscribeLocalEvent]
+    private void OnDoAfter(Entity<OrganImplanterComponent> ent, ref OrganImplanterDoAfterEvent args)
     {
-        base.Initialize();
+        if (args.Cancelled || args.Handled || args.Target is not { Valid: true } target)
+            return;
 
-        // Подписка на событие завершения do-after экстрактора
-        SubscribeLocalEvent<OrganImplanterComponent, Shared._Lust.CyberImplants.Events.OrganImplanterDoAfterEvent>(OnDoAfter);
+        //  Если имлпантер уже использовали и он не бесконечный отклонить
+        if (SharedOrganImplanterSystem.IsUsed(ent.Comp))
+            return;
+
+        // Возможно ли использовать имплантер
+        if(!_organImplanter.CanUse(ent, target,  args.User,true))
+            return;
+
+        // Проверка еслить орган в иплантере
+        if(!_organImplanter.TryGetStoredOrgan(ent.Owner, out var newOrgan))
+            return;
+
+        // Получаем контейнер слота имплантера
+        if(ent.Comp.Slot.ContainerSlot is not {} slotContainer)
+            return;
+
+        // пытаемся извлечь орган и слота имплантера
+        if(!_container.Remove(newOrgan,slotContainer))
+            return;
+
+        // Пытаемя заменить орган. При неудаче — вернуть орган обратно в слот
+        if (!TryReplaceOrgan(target, newOrgan))
+        {
+            _container.Insert(newOrgan, slotContainer);
+            return;
+        }
+
+        _chat.TryEmoteWithChat(target, "Scream");
+
+        if (ent.Comp.Damage.DamageDict.Count > 0)
+            _damageable.TryChangeDamage(target, ent.Comp.Damage, origin: ent.Owner);
+
+        if (ent.Comp.BleedAmount > 0f)
+            _bloodstream.TryModifyBleedAmount(target, ent.Comp.BleedAmount);
+
+        // Пометить экстрактор использованным (если не бесконечный) и заблокировать слот
+        if (!ent.Comp.Infinite)
+        {
+            ent.Comp.Used = true;
+            Dirty(ent.Owner, ent.Comp);
+            _itemSlots.SetLock(ent.Owner, OrganImplanterComponent.SlotId, true);
+        }
+
     }
 
     /// <summary>
@@ -165,60 +214,5 @@ public sealed partial class OrganImplanterSystem : EntitySystem
 
         //  Тробуем иплантировать обычные органы
         return TryReplaceBodyOrgan(target, newOrgan, newOrganComp);
-    }
-
-    /// <summary>
-    /// Обработчик завершения do-after операции экстрактора: извлекает старый орган и вставляет новый.
-    /// </summary>
-    /// <param name="ent">Имплантер.</param>
-    /// <param name="args">Аргументы события do-after.</param>
-    private void OnDoAfter(Entity<OrganImplanterComponent> ent, ref Shared._Lust.CyberImplants.Events.OrganImplanterDoAfterEvent args)
-    {
-        if (args.Cancelled || args.Handled || args.Target is not { Valid: true } target)
-            return;
-
-        //  Если имлпантер уже использовали и он не бесконечный отклонить
-        if (SharedOrganImplanterSystem.IsUsed(ent.Comp))
-            return;
-
-        // Возможно ли использовать имплантер
-        if(!_organImplanter.CanUse(ent, target,  args.User,true))
-            return;
-
-        // Проверка еслить орган в иплантере
-        if(!_organImplanter.TryGetStoredOrgan(ent.Owner, out var newOrgan))
-            return;
-
-        // Получаем контейнер слота имплантера
-        if(ent.Comp.Slot.ContainerSlot is not {} slotContainer)
-            return;
-
-        // пытаемся извлечь орган и слота имплантера
-        if(!_container.Remove(newOrgan,slotContainer))
-            return;
-
-        // Пытаемя заменить орган. При неудаче — вернуть орган обратно в слот
-        if (!TryReplaceOrgan(target, newOrgan))
-        {
-            _container.Insert(newOrgan, slotContainer);
-            return;
-        }
-
-        _chat.TryEmoteWithChat(target, "Scream");
-
-        if (ent.Comp.Damage.DamageDict.Count > 0)
-            _damageable.TryChangeDamage(target, ent.Comp.Damage, origin: ent.Owner);
-
-        if (ent.Comp.BleedAmount > 0f)
-            _bloodstream.TryModifyBleedAmount(target, ent.Comp.BleedAmount);
-
-        // Пометить экстрактор использованным (если не бесконечный) и заблокировать слот
-        if (!ent.Comp.Infinite)
-        {
-            ent.Comp.Used = true;
-            Dirty(ent.Owner, ent.Comp);
-            _itemSlots.SetLock(ent.Owner, OrganImplanterComponent.SlotId, true);
-        }
-
     }
 }
