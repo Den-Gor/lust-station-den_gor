@@ -815,6 +815,7 @@ namespace Content.Shared.Preferences
             }
 
             EnsureSunriseProfileValid(speciesPrototype, sex, session, collection, sponsorPrototypes); // Sunrise-Edit
+            Portfolio.EnsureValid(); // Lust-edit
 
             PreferenceUnavailable = prefsUnavailableMode;
 
