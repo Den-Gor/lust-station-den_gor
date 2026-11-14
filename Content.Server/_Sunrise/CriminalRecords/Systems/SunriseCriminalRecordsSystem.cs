@@ -319,6 +319,7 @@ public sealed partial class SunriseCriminalRecordsSystem : SharedSunriseCriminal
         SecurityStatus status = SecurityStatus.None;
         string? statusReason = null;
         List<CriminalCase> cases = new();
+        HumanoidCharacterProfile? humanoidProfile = null; // Lust edit
 
         if (component.SelectedKey != null)
         {
