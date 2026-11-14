@@ -66,12 +66,14 @@ public sealed partial class PortfolioEditor : Control
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        MaritalStatusButton.Clear();
         foreach (var status in Enum.GetValues<MaritalStatus>())
         {
             MaritalStatusButton.AddItem(
                 Loc.GetString($"humanoid-profile-editor-portfolio-marital-{status.ToString().ToLowerInvariant()}-text"),
                 (int) status);
         }
+
         MaritalStatusButton.OnItemSelected += args =>
         {
             MaritalStatusButton.SelectId(args.Id);

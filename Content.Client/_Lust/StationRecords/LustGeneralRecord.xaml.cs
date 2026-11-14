@@ -232,16 +232,16 @@ public sealed partial class LustGeneralRecord : BoxContainer
 
         var marital = portfolio.MaritalStatusValue;
 
-        for (var i = 0; i < _allMaritalStatus.Length; i++)
+        LustMaritalStatus.Clear();
+        foreach (var status in Enum.GetValues<MaritalStatus>())
         {
-            var status = _allMaritalStatus[i];
             LustMaritalStatus.AddItem(
-                _loc.GetString($"humanoid-profile-editor-portfolio-marital-{status.ToString().ToLowerInvariant()}-text"),
-                i);
-
-            if (status == marital)
-                LustMaritalStatus.SelectId(i);
+                _loc.GetString(
+                    "humanoid-profile-editor-portfolio-marital-status-text",
+                    ("status", status)),
+                (int) status);
         }
+        LustMaritalStatus.SelectId((int) marital);
     }
 
     /// <summary>
