@@ -144,8 +144,10 @@ public sealed partial class GeneralStationRecordConsoleSystem
         var documentName = Loc.GetString("printed-station-records-document-name", ("name", record.Name));
         _metaData.SetEntityName(printed, documentName);
 
+        var portfolio = record.HumanoidProfile?.Portfolio; // lust edit
+
         var text = Loc.GetString(
-            "printed-station-records-content",
+            "lust-printed-station-records-content", // lust edit
             ("name", record.Name),
             ("job", GetJobName(record.JobPrototype)),
             ("department", GetDepartmentName(record.JobPrototype)),
@@ -154,7 +156,18 @@ public sealed partial class GeneralStationRecordConsoleSystem
             ("species", GetSpeciesName(record.Species)),
             ("dna", record.DNA ?? Loc.GetString("printed-station-records-unrecognized")),
             ("fingerprint", record.Fingerprint ?? Loc.GetString("printed-station-records-unrecognized")),
-            ("personality", GetPersonality(record.Personality)));
+            ("personality", GetPersonality(record.Personality)),
+            //  Lust edit start
+            ("distinguishingFeatures", PrintableField(portfolio?.DistinguishingFeatures)),
+            ("education", PrintableField(portfolio?.Education)),
+            ("workExperience", PrintableField(portfolio?.WorkExperience)),
+            ("region", PrintableField(portfolio?.Region)),
+            ("planetOrColony", PrintableField(portfolio?.PlanetOrColony)),
+            ("address", PrintableField(portfolio?.Address)),
+            ("maritalStatus", PrintableMaritalStatus(portfolio?.MaritalStatusValue)),
+            ("closeRelatives", PrintableField(portfolio?.CloseRelatives)),
+            ("emergencyContact", PrintableField(portfolio?.EmergencyContact)));
+            // Lust edit end
 
         _paper.SetContent((printed, paperComp), text);
         _audio.PlayPvs(ent.Comp.SoundPrint, ent,
